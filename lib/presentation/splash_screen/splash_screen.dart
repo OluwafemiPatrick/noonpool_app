@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:noonpool/helpers/constants.dart';
+import 'package:noonpool/helpers/page_route.dart';
+import 'package:noonpool/onboarding/onboarding.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -56,7 +58,9 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   void route() {
-    // todo navigate to other screens
+    Navigator.of(context).push(CustomPageRoute(
+      screen: const OnBoardingScreen(),
+    ));
   }
 
   Future startTime() async {

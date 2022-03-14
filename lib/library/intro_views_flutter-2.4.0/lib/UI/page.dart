@@ -50,69 +50,14 @@ class PageIntro extends StatelessWidget {
       children: <Widget>[
         _ImagePageTransform(
             percentVisible: percentVisible, pageViewModel: pageViewModel),
-        Container(
-          margin: const EdgeInsets.only(top: kDefaultMargin),
-          padding: const EdgeInsets.all(kDefaultPadding / 2),
-          alignment: Alignment.center,
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Flexible(
-                  flex: 1,
-                  child: _TitlePageTransform(
-                    percentVisible: percentVisible,
-                    pageViewModel: pageViewModel,
-                  ),
-                ), //Transform
-                const SizedBox(
-                  height: kDefaultMargin / 2,
-                ),
-                Flexible(
-                  flex: 2,
-                  child: _BodyPageTransform(
-                    percentVisible: percentVisible,
-                    pageViewModel: pageViewModel,
-                  ),
-                ),
-              ] //Transform
-              ),
-        )
+        const SizedBox(
+          height: kDefaultMargin*1.5,
+        ),
+        _TitlePageTransform(
+          percentVisible: percentVisible,
+          pageViewModel: pageViewModel,
+        ),
       ],
-    );
-  }
-}
-
-/// Body for the Page.
-class _BodyPageTransform extends StatelessWidget {
-  final double percentVisible;
-
-  final PageViewModel pageViewModel;
-
-  const _BodyPageTransform({
-    Key? key,
-    required this.percentVisible,
-    required this.pageViewModel,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Transform(
-      //Used for vertical transformation
-      transform:
-          Matrix4.translationValues(0.0, 30.0 * (1 - percentVisible), 0.0),
-      child: Padding(
-        padding: const EdgeInsets.only(
-          bottom: 15.0,
-          left: 10.0,
-          right: 10.0,
-        ),
-        child: DefaultTextStyle.merge(
-          style: pageViewModel.bodyTextStyle,
-          textAlign: TextAlign.center,
-          child: pageViewModel.body,
-        ),
-      ), //Padding
     );
   }
 }

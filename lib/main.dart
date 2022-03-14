@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:noonpool/presentation/splash_screen/splash_screen.dart';
 
 import 'helpers/constants.dart';
 
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
       title: appName,
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
-      home: Container(),
+      home: const SplashScreen(),
     );
   }
 }

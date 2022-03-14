@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:noonpool/helpers/outlined_button.dart';
 import 'package:noonpool/library/intro_views_flutter-2.4.0/lib/Models/page_view_model.dart';
 import 'package:noonpool/library/intro_views_flutter-2.4.0/lib/intro_views_flutter.dart';
@@ -19,7 +20,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     final textTheme = Theme.of(context).textTheme;
     final bodyText2 = textTheme.bodyText2;
 
-    final pages = buildPages(bodyText2!);
+    final pages =
+        buildPages(bodyText2!.copyWith(color: kPrimaryColor, fontSize: 20));
     return IntroViewsFlutter(
       pages,
       getStartedButton: buildCreateAccountButton(bodyText2),
@@ -55,94 +57,68 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
   /// * SETTING THE ONBOARDING PAGES *
   List<PageViewModel> buildPages(TextStyle bodyText2) {
-    final _fontHeaderStyle = bodyText2.copyWith(
-        fontSize: 25, fontWeight: FontWeight.w500, letterSpacing: 1.5);
-
-    var _imageAssetSize = 250.0;
-    final _fontDescriptionStyle =
-        bodyText2.copyWith(fontSize: 15, fontWeight: FontWeight.w400);
-
+    var defaultSize = MediaQuery.of(context).size.width - 60;
     List<PageViewModel> pages = [
-/*      PageViewModel(
-        iconColor: kDarkGrey,
-        bubbleBackgroundColor: kDarkGrey,
-        title: Text('', style: _fontHeaderStyle),
-        body: Padding(
-          padding: const EdgeInsets.only(bottom: kDefaultMargin / 2),
+      PageViewModel(
+        iconColor: kPrimaryColor,
+        bubbleBackgroundColor: kPrimaryColor,
+        title: Padding(
+          padding: const EdgeInsets.only(
+              left: kDefaultMargin, right: kDefaultMargin),
           child: Text(
-            'Protect your crypto assets from hackers and scammers',
+            'View mining profits at a glance',
             overflow: TextOverflow.fade,
-            style: _fontDescriptionStyle,
-            textAlign: TextAlign.center,
+            style: bodyText2,
+            textAlign: TextAlign.start,
           ),
         ),
-        mainImage: Image.asset(
-          'assets/icons/onboarding_1.png',
-          fit: BoxFit.cover,
-          height: _imageAssetSize,
-          width: _imageAssetSize,
+        body: Container(),
+        mainImage: SvgPicture.asset(
+          'assets/onboarding/onboarding_1.svg',
+          height: defaultSize,
+          width: defaultSize,
         ),
       ),
       PageViewModel(
-        iconColor: kDarkGrey,
-        bubbleBackgroundColor: kDarkGrey,
-        title: Text('', style: _fontHeaderStyle),
-        body: Padding(
-          padding: const EdgeInsets.only(bottom: kDefaultMargin / 2),
+        iconColor: kPrimaryColor,
+        bubbleBackgroundColor: kPrimaryColor,
+        title: Padding(
+          padding: const EdgeInsets.only(
+              left: kDefaultMargin, right: kDefaultMargin),
           child: Text(
-            'Send, buy, receive, and swap crypto and NFT assets',
+            'Built in cryptocurrency wallet for managing assets',
             overflow: TextOverflow.fade,
-            style: _fontDescriptionStyle,
-            textAlign: TextAlign.center,
+            style: bodyText2,
+            textAlign: TextAlign.start,
           ),
         ),
-        mainImage: Image.asset(
-          'assets/icons/onboarding_2.png',
-          height: _imageAssetSize,
-          fit: BoxFit.cover,
-          width: _imageAssetSize,
+        body: Container(),
+        mainImage: SvgPicture.asset(
+          'assets/onboarding/onboarding_2.svg',
+          height: defaultSize,
+          width: defaultSize,
         ),
       ),
       PageViewModel(
-        iconColor: kDarkGrey,
-        bubbleBackgroundColor: kDarkGrey,
-        title: Text('', style: _fontHeaderStyle),
-        body: Padding(
-          padding: const EdgeInsets.only(bottom: kDefaultMargin / 2),
+        iconColor: kPrimaryColor,
+        bubbleBackgroundColor: kPrimaryColor,
+        title: Padding(
+          padding: const EdgeInsets.only(
+              left: kDefaultMargin, right: kDefaultMargin),
           child: Text(
-            'Stay updated by checking out verified crypto market news',
+            '24/7 stable and secure mining network',
             overflow: TextOverflow.fade,
-            style: _fontDescriptionStyle,
-            textAlign: TextAlign.center,
+            style: bodyText2,
+            textAlign: TextAlign.start,
           ),
         ),
-        mainImage: Image.asset(
-          'assets/icons/onboarding_3.png',
-          height: _imageAssetSize,
-          fit: BoxFit.cover,
-          width: _imageAssetSize,
+        body: Container(),
+        mainImage: SvgPicture.asset(
+          'assets/onboarding/onboarding_3.svg',
+          height: defaultSize,
+          width: defaultSize,
         ),
       ),
-      PageViewModel(
-        iconColor: kDarkGrey,
-        bubbleBackgroundColor: kDarkGrey,
-        title: Text('', style: _fontHeaderStyle),
-        body: Padding(
-          padding: const EdgeInsets.only(bottom: kDefaultMargin / 2),
-          child: Text(
-            'Seamlessly earn interest on crypto assets in your ROAE wallet',
-            overflow: TextOverflow.fade,
-            style: _fontDescriptionStyle,
-            textAlign: TextAlign.center,
-          ),
-        ),
-        mainImage: Image.asset(
-          'assets/icons/onboarding_4.png',
-          height: _imageAssetSize,
-          fit: BoxFit.cover,
-          width: _imageAssetSize,
-        ),
-      ),*/
     ];
 
     return pages;

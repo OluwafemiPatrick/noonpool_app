@@ -155,59 +155,67 @@ class _IntroViewsFlutterState extends State<IntroViewsFlutter>
     return Scaffold(
       //Stack is used to place components over one another.
       resizeToAvoidBottomInset: false,
-      body: Stack(
-        children: <Widget>[
-          Positioned(
-            child: widget.logInButton,
-            top: kDefaultMargin * 3,
-            right: kDefaultMargin,
-            left: kDefaultMargin,
-          ),
-          PageIntro(
-            pageViewModel: pages[activePageIndex],
-            percentVisible: 1.0,
-            columnMainAxisAlignment: widget.columnMainAxisAlignment,
-          ), //Pages
-          PageReveal(
-            //next page reveal
-            revealPercent: slidePercent,
-            child: PageIntro(
-                pageViewModel: pages[nextPageIndex],
-                percentVisible: slidePercent,
-                columnMainAxisAlignment: widget.columnMainAxisAlignment),
-          ), //PageReveal
-
-          Positioned(
-            child: Column(
-              children: [
-                PagerIndicator(
-                  //bottom page indicator
-                  viewModel: PagerIndicatorViewModel(
-                    pages,
-                    activePageIndex,
-                    slideDirection,
-                    slidePercent,
-                  ),
-                ), //PagerIndicator
-                const SizedBox(
-                  height: kDefaultMargin,
-                ),
-                widget.getStartedButton,
-              ],
+      body: SafeArea(
+        child: Stack(
+          children: <Widget>[
+            Positioned(
+              child: Image.asset(
+                logoLocation,
+                height: 100,
+                width: 100,
+              ),
+              left: 0,
             ),
-            bottom: kDefaultMargin,
-            left: kDefaultMargin,
-            right: kDefaultMargin,
-          ),
-          PageDragger(
-            //Used for gesture control
-            fullTransitionPX: widget.fullTransition,
-            canDragLeftToRight: activePageIndex > 0,
-            canDragRightToLeft: activePageIndex < pages.length - 1,
-            slideUpdateStream: slideUpdateStream,
-          ), //PageDragger
-        ], //Widget
-      ), //Stack
+            PageIntro(
+              pageViewModel: pages[activePageIndex],
+              percentVisible: 1.0,
+              columnMainAxisAlignment: widget.columnMainAxisAlignment,
+            ), //Pages
+
+            PageReveal(
+              //next page reveal
+              revealPercent: slidePercent,
+              child: PageIntro(
+                  pageViewModel: pages[nextPageIndex],
+                  percentVisible: slidePercent,
+                  columnMainAxisAlignment: widget.columnMainAxisAlignment),
+            ), //PageReveal
+            Positioned(
+              child: Column(
+                children: [
+                  PagerIndicator(
+                    //bottom page indicator
+                    viewModel: PagerIndicatorViewModel(
+                      pages,
+                      activePageIndex,
+                      slideDirection,
+                      slidePercent,
+                    ),
+                  ), //PagerIndicator
+                  const SizedBox(
+                    height: kDefaultMargin,
+                  ),
+                  widget.getStartedButton,
+                  const SizedBox(
+                    height: kDefaultMargin / 2,
+                  ),
+                  widget.logInButton
+                ],
+              ),
+              bottom: kDefaultMargin,
+              left: kDefaultMargin,
+              right: kDefaultMargin,
+            ),
+            PageDragger(
+              //Used for gesture control
+              fullTransitionPX: widget.fullTransition,
+              canDragLeftToRight: activePageIndex > 0,
+              canDragRightToLeft: activePageIndex < pages.length - 1,
+              slideUpdateStream: slideUpdateStream,
+            ), //PageDragger
+          ], //Widget
+        ), //Stac
+      ), //
     ); //Scaffold
   }
 }
