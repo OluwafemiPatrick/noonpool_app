@@ -42,7 +42,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   Widget buildCreateAccountButton(TextStyle bodyText2) {
     return CustomElevatedButton(
       onPressed: () {
-    /*    Navigator.of(context).push(CustomPageRoute(
+        /*    Navigator.of(context).push(CustomPageRoute(
           screen: const RegisterScreen(),
         ));*/
       },
