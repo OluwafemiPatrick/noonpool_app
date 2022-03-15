@@ -5,6 +5,7 @@ import 'constants.dart';
 class CustomElevatedButton extends StatelessWidget {
   final VoidCallback onPressed;
   final Widget widget;
+
   const CustomElevatedButton(
       {Key? key, required this.onPressed, required this.widget})
       : super(key: key);
@@ -15,12 +16,12 @@ class CustomElevatedButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: kPrimaryColor,
-            elevation: 3,
-            shape: const RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.all(Radius.circular(kDefaultMargin / 2)),
-            )),
+          primary: kPrimaryColor,
+          elevation: 3,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(kDefaultMargin / 2)),
+          ),
+        ),
         onPressed: onPressed,
         child: Padding(
           padding: const EdgeInsets.only(
