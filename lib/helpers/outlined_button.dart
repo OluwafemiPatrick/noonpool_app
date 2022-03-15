@@ -16,12 +16,12 @@ class CustomOutlinedButton extends StatelessWidget {
       width: double.infinity,
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
-          side: BorderSide(color: kPrimaryColor, width: 1),
+          side: const BorderSide(color: kPrimaryColor, width: 1),
         ),
         onPressed: onPressed,
         child: Padding(
           padding: const EdgeInsets.only(
-              top: kDefaultPadding, bottom: kDefaultPadding),
+              top: kDefaultPadding / 2, bottom: kDefaultPadding / 2),
           child: widget,
         ),
       ),

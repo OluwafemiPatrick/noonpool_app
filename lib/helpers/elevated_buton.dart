@@ -21,7 +21,7 @@ class CustomElevatedButton extends StatelessWidget {
         onPressed: onPressed,
         child: Padding(
           padding: const EdgeInsets.only(
-              top: kDefaultPadding, bottom: kDefaultPadding),
+              top: kDefaultPadding / 2, bottom: kDefaultPadding / 2),
           child: widget,
         ),
       ),
