@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:noonpool/presentation/splash_screen/splash_screen.dart';
-
 import 'helpers/constants.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,8 +30,8 @@ class MyApp extends StatelessWidget {
       iconTheme: ThemeData.light().iconTheme.copyWith(color: kTextColor),
       textTheme: ThemeData.light().textTheme.copyWith(
             bodyText1: const TextStyle(
-                fontSize: 18, color: kTextColor, fontWeight: FontWeight.w500),
-            bodyText2: const TextStyle(fontSize: 16, color: kTextColor),
+                fontSize: 16, color: kTextColor, fontWeight: FontWeight.w500),
+            bodyText2: const TextStyle(fontSize: 14, color: kTextColor),
           ),
     );
 
