@@ -5,6 +5,10 @@ import 'package:noonpool/helpers/constants.dart';
 import 'package:noonpool/helpers/page_route.dart';
 import 'package:noonpool/onboarding/onboarding.dart';
 
+import '../../helpers/firebase_util.dart';
+import '../../helpers/shared_preference_util.dart';
+import '../auth/login/login_sceen.dart';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
@@ -58,9 +62,29 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   void route() {
-    Navigator.of(context).push(CustomPageRoute(
-      screen: const OnBoardingScreen(),
-    ));
+    var navigatorState = Navigator.of(context);
+    if (AppPreferences.onBoardingStatus) {
+      if (AppPreferences.loginStatus && sFirebaseAuth.currentUser != null) {
+        /*navigatorState.pushReplacement(CustomPageRoute(
+            screen:
+            const MainScreen())); */
+        // user has been previously logged in, redirect to the main page
+      } else {
+        AppPreferences.setLoginStatus(status: false);
+        sFirebaseAuth.signOut();
+
+        navigatorState.pushReplacement(CustomPageRoute(
+            screen:
+                const LoginScreen())); // user has seen the onboarding screen, redirect to the login screen
+      }
+    } else {
+      AppPreferences.setLoginStatus(status: false);
+      AppPreferences.setOnBoardingStatus(status: false);
+      sFirebaseAuth.signOut();
+      navigatorState.pushReplacement(CustomPageRoute(
+          screen:
+              const OnBoardingScreen())); //user has not see the onboarding screen
+    }
   }
 
   Future startTime() async {

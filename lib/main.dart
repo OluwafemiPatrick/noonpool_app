@@ -1,8 +1,10 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:noonpool/presentation/splash_screen/splash_screen.dart';
 
 import 'helpers/constants.dart';
+import 'helpers/shared_preference_util.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,6 +14,10 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+
+  //init shared preferences
+  await AppPreferences.init();
+  await Firebase.initializeApp();
 
   runApp(const MyApp());
 }

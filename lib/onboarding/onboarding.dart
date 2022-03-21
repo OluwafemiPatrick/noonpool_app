@@ -3,11 +3,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:noonpool/helpers/outlined_button.dart';
 import 'package:noonpool/library/intro_views_flutter-2.4.0/lib/Models/page_view_model.dart';
 import 'package:noonpool/library/intro_views_flutter-2.4.0/lib/intro_views_flutter.dart';
-import 'package:noonpool/presentation/auth/login_sceen.dart';
+import 'package:noonpool/presentation/auth/login/login_sceen.dart';
 
 import '../helpers/constants.dart';
 import '../helpers/elevated_buton.dart';
 import '../helpers/page_route.dart';
+import '../presentation/auth/register/register_sceen.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({Key? key}) : super(key: key);
@@ -50,9 +51,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   Widget buildCreateAccountButton(TextStyle bodyText2) {
     return CustomElevatedButton(
       onPressed: () {
-        /*    Navigator.of(context).push(CustomPageRoute(
+        Navigator.of(context).push(CustomPageRoute(
           screen: const RegisterScreen(),
-        ));*/
+        ));
       },
       widget: Text(
         'Create Account',
