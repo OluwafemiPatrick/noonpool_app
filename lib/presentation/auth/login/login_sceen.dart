@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:noonpool/helpers/elevated_buton.dart';
+import 'package:noonpool/helpers/elevated_button.dart';
 import 'package:noonpool/presentation/auth/register/register_sceen.dart';
 
 import '../../../helpers/constants.dart';
 import '../../../helpers/firebase_util.dart';
 import '../../../helpers/page_route.dart';
 import '../../../helpers/shared_preference_util.dart';
+import '../../main/main_screen.dart';
 import '../forgot_password/forgot_password.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -54,10 +55,10 @@ class _LoginScreenState extends State<LoginScreen> {
       case successful:
         AppPreferences.setLoginStatus(status: true);
         AppPreferences.setOnBoardingStatus(status: true);
-        /* navigatorState.pushAndRemoveUntil(
+        Navigator.of(context).pushAndRemoveUntil(
           CustomPageRoute(screen: const MainScreen()),
-              (route) => false,
-        );*/
+          (route) => false,
+        );
         break;
       case 'account_unverified':
         sFirebaseAuth.signOut();
@@ -234,10 +235,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(
                   height: kDefaultMargin / 2,
                 ),
-                buildSignUpButton(bodyText2),
-                const SizedBox(
-                  height: kDefaultMargin / 2,
-                ),
                 buildForgotPassword(bodyText2),
                 const SizedBox(
                   height: kDefaultMargin / 2,
@@ -280,29 +277,6 @@ class _LoginScreenState extends State<LoginScreen> {
       style: TextButton.styleFrom(
         textStyle: bodyText2.copyWith(color: kPrimaryColor),
       ),
-    );
-  }
-
-  Row buildSignUpButton(TextStyle bodyText2) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          'Don\'t have an account?',
-          style: bodyText2,
-        ),
-        TextButton(
-          onPressed: () {},
-          child: const Text(
-            'Sign Up',
-          ),
-          style: TextButton.styleFrom(
-            textStyle: bodyText2.copyWith(color: kPrimaryColor),
-          ),
-        ),
-      ],
     );
   }
 
@@ -411,17 +385,20 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget buildForgotPassword(TextStyle bodyText2) {
-    return TextButton(
-      onPressed: () {
-        Navigator.of(context).push(
-          CustomPageRoute(screen: const ForgotPasswordScreen()),
-        );
-      },
-      child: const Text(
-        'Forgot your Password?',
-      ),
-      style: TextButton.styleFrom(
-        textStyle: bodyText2,
+    return Container(
+      alignment: Alignment.center,
+      child: TextButton(
+        onPressed: () {
+          Navigator.of(context).push(
+            CustomPageRoute(screen: const ForgotPasswordScreen()),
+          );
+        },
+        child: const Text(
+          'Forgot your Password?',
+        ),
+        style: TextButton.styleFrom(
+          textStyle: bodyText2,
+        ),
       ),
     );
   }
@@ -436,6 +413,9 @@ class _LoginScreenState extends State<LoginScreen> {
           Text(
             "Don't have an account?",
             style: bodyText2,
+          ),
+          const SizedBox(
+            width: kDefaultMargin / 4,
           ),
           Text(
             "Sign Up",

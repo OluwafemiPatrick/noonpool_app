@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../helpers/constants.dart';
-import '../../../helpers/elevated_buton.dart';
+import '../../../helpers/elevated_button.dart';
 import '../../../helpers/firebase_util.dart';
 import '../../../helpers/page_route.dart';
 import '../../../helpers/text_button.dart';
@@ -122,7 +122,7 @@ class _RegistrationConfirmationScreenState
     );
 
     final accountDetails =
-        ModalRoute.of(context)!.settings.arguments as Map<String, String>;
+        (ModalRoute.of(context)!.settings.arguments) as Map<String, String>;
     final String response = await resendVerification(
         email: accountDetails['email'] ?? '',
         password: accountDetails['password'] ?? '');

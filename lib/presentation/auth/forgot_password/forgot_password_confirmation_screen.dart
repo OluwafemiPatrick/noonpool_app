@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../helpers/constants.dart';
-import '../../../helpers/elevated_buton.dart';
+import '../../../helpers/elevated_button.dart';
 import '../../../helpers/page_route.dart';
 import '../login/login_sceen.dart';
 

@@ -6,7 +6,7 @@ import 'package:noonpool/library/intro_views_flutter-2.4.0/lib/intro_views_flutt
 import 'package:noonpool/presentation/auth/login/login_sceen.dart';
 
 import '../helpers/constants.dart';
-import '../helpers/elevated_buton.dart';
+import '../helpers/elevated_button.dart';
 import '../helpers/page_route.dart';
 import '../presentation/auth/register/register_sceen.dart';
 

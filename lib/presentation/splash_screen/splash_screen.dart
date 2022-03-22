@@ -8,6 +8,7 @@ import 'package:noonpool/onboarding/onboarding.dart';
 import '../../helpers/firebase_util.dart';
 import '../../helpers/shared_preference_util.dart';
 import '../auth/login/login_sceen.dart';
+import '../main/main_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -65,9 +66,8 @@ class _SplashScreenState extends State<SplashScreen>
     var navigatorState = Navigator.of(context);
     if (AppPreferences.onBoardingStatus) {
       if (AppPreferences.loginStatus && sFirebaseAuth.currentUser != null) {
-        /*navigatorState.pushReplacement(CustomPageRoute(
-            screen:
-            const MainScreen())); */
+        navigatorState
+            .pushReplacement(CustomPageRoute(screen: const MainScreen()));
         // user has been previously logged in, redirect to the main page
       } else {
         AppPreferences.setLoginStatus(status: false);

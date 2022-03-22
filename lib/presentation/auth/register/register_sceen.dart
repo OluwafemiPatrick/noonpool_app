@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:noonpool/helpers/elevated_buton.dart';
+import 'package:noonpool/helpers/elevated_button.dart';
 import 'package:noonpool/presentation/auth/register/registration_confirmation_screen.dart';
 
 import '../../../helpers/constants.dart';
@@ -84,10 +84,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     switch (response) {
       case successful:
+        final Map<String, String> data = {'email': email, 'password': password};
         Navigator.of(context).pushReplacement(
           CustomPageRoute(
-              screen: const RegistrationConfirmationScreen(),
-              argument: {'email': email, 'password': password}),
+              screen: const RegistrationConfirmationScreen(), argument: data),
         );
         break;
       default:
@@ -154,42 +154,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: Padding(
           padding: const EdgeInsets.all(kDefaultPadding),
           child: SingleChildScrollView(
-              child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: kDefaultMargin,
-                ),
-                ...buildNameTextField(bodyText2),
-                const SizedBox(
-                  height: kDefaultMargin,
-                ),
-                ...buildEmailTextField(bodyText2),
-                const SizedBox(
-                  height: kDefaultMargin,
-                ),
-                ...buildPasswordTextField(bodyText2),
-                const SizedBox(
-                  height: kDefaultMargin,
-                ),
-                ...buildRetypePasswordTextField(bodyText2),
-                const SizedBox(
-                  height: kDefaultMargin / 2,
-                ),
-                buildForgotPasswordButton(bodyText2),
-                const SizedBox(
-                  height: kDefaultMargin,
-                ),
-                buildSignInButton(bodyText2),
-                const SizedBox(
-                  height: kDefaultMargin / 2,
-                ),
-                buildSignUpButton(bodyText2),
-              ],
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    height: kDefaultMargin,
+                  ),
+                  ...buildNameTextField(bodyText2),
+                  const SizedBox(
+                    height: kDefaultMargin,
+                  ),
+                  ...buildEmailTextField(bodyText2),
+                  const SizedBox(
+                    height: kDefaultMargin,
+                  ),
+                  ...buildPasswordTextField(bodyText2),
+                  const SizedBox(
+                    height: kDefaultMargin,
+                  ),
+                  ...buildRetypePasswordTextField(bodyText2),
+                  const SizedBox(
+                    height: kDefaultMargin * 2,
+                  ),
+                  buildSignUpButton(bodyText2),
+                  const SizedBox(
+                    height: kDefaultMargin / 2,
+                  ),
+                ],
+              ),
             ),
-          )),
+          ),
         ),
       ),
     );
@@ -209,48 +205,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
       elevation: 0,
       backgroundColor: Colors.transparent,
       title: Text(
-        'Sign In',
+        'Sign Up',
         style: bodyText1.copyWith(fontSize: 20),
       ),
     );
   }
 
-  TextButton buildForgotPasswordButton(TextStyle bodyText2) {
-    return TextButton(
-      onPressed: () {},
-      child: const Text(
-        'Forgot your Password?',
-      ),
-      style: TextButton.styleFrom(
-        textStyle: bodyText2.copyWith(color: kPrimaryColor),
-      ),
-    );
-  }
-
-  Row buildSignUpButton(TextStyle bodyText2) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          'Don\'t have an account?',
-          style: bodyText2,
-        ),
-        TextButton(
-          onPressed: () {},
-          child: const Text(
-            'Sign Up',
-          ),
-          style: TextButton.styleFrom(
-            textStyle: bodyText2.copyWith(color: kPrimaryColor),
-          ),
-        ),
-      ],
-    );
-  }
-
-  CustomElevatedButton buildSignInButton(TextStyle bodyText2) {
+  CustomElevatedButton buildSignUpButton(TextStyle bodyText2) {
     return CustomElevatedButton(
       onPressed: () {
         _saveForm();
@@ -264,7 +225,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             )
           : Text(
-              'Sign In',
+              'Sign Up',
               style: bodyText2.copyWith(color: Colors.white),
             ),
     );

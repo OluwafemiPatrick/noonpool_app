@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "928082185030",
+    "project_id": "noonpool-001",
+    "storage_bucket": "noonpool-001.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928082185030:android:5e5038e7a2b795a223f347",
+        "android_client_info": {
+          "package_name": "com.noonpool.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "928082185030-notd0e6lc0e20ile30j8ag2u0gavdbic.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4EIR3dHsCKEmjBJi7nPyxg9A4QHwCrBQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "928082185030-notd0e6lc0e20ile30j8ag2u0gavdbic.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../helpers/constants.dart';
-import '../../../helpers/elevated_buton.dart';
+import '../../../helpers/elevated_button.dart';
 import '../../../helpers/firebase_util.dart';
 import '../../../helpers/page_route.dart';
 import 'forgot_password_confirmation_screen.dart';
@@ -34,7 +34,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       _isLoading = true;
     });
 
-    String response = await forgotPassword(email: email);
+    String response = await forgotPassword(email: email.trim());
     switch (response) {
       case successful:
         Navigator.of(context).push(
