@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:noonpool/helpers/constants.dart';
 import 'package:noonpool/helpers/firebase_util.dart';
-import 'package:noonpool/helpers/svg_image.dart';
 import 'package:noonpool/model/coin_model.dart';
 import 'package:noonpool/presentation/home/widget/home_coin_item.dart';
 
@@ -82,6 +81,19 @@ class _HomeTabState extends State<HomeTab> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
+              'Profit',
+              style: bodyText1,
+            ),
+            Text(
+              'Price',
+              style: lightText,
+            ),
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
               'Pool Hashrate',
               style: bodyText1,
             ),
@@ -135,21 +147,6 @@ class _HomeTabState extends State<HomeTab> {
     return AppBar(
       elevation: 0,
       backgroundColor: Colors.transparent,
-      leading: InkWell(
-        onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Menu clicked'),
-            ),
-          );
-        },
-        child: const Center(
-          child: SvgImage(
-              iconLocation: 'assets/icons/menu.svg',
-              name: 'menu',
-              color: Colors.black),
-        ),
-      ),
       title: Text(
         sFirebaseAuth.currentUser?.email ?? '',
         style: bodyText1,

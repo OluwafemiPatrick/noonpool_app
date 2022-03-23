@@ -19,7 +19,7 @@ class HomeCoinItem extends StatelessWidget {
     final bodyText2 = textTheme.bodyText2!;
     final lightText = bodyText2.copyWith(color: kLightText);
     const spacer = SizedBox(
-      width: kDefaultMargin / 4,
+      width: kDefaultMargin / 2,
     );
     return Padding(
       padding: const EdgeInsets.only(
@@ -36,6 +36,8 @@ class HomeCoinItem extends StatelessWidget {
             ),
             spacer,
             buildCoinDetails(bodyText1, lightText),
+            const Spacer(),
+            buildPrice(bodyText1, lightText),
             const Spacer(),
             buildHashRate(bodyText1, lightText),
             spacer,
@@ -61,6 +63,24 @@ class HomeCoinItem extends StatelessWidget {
         const SizedBox(height: kDefaultMargin / 4),
         Text(
           coinModel.algorithm,
+          style: lightText,
+        )
+      ],
+    );
+  }
+
+  Column buildPrice(TextStyle bodyText1, TextStyle lightText) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          coinModel.profit,
+          style: bodyText1,
+        ),
+        const SizedBox(height: kDefaultMargin / 4),
+        Text(
+          coinModel.price,
           style: lightText,
         )
       ],
