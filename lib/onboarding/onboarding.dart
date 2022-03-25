@@ -24,7 +24,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     final bodyText2 = textTheme.bodyText2;
 
     final pages =
-        buildPages(bodyText2!.copyWith(color: kPrimaryColor, fontSize: 20));
+        buildPages(bodyText2!.copyWith(color: kPrimaryColor, fontSize: 16));
     return IntroViewsFlutter(
       pages,
       getStartedButton: buildCreateAccountButton(bodyText2),
@@ -64,25 +64,27 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
   /// * SETTING THE ONBOARDING PAGES *
   List<PageViewModel> buildPages(TextStyle bodyText2) {
-    double defaultSize = 300;
+    var defaultSize = MediaQuery.of(context).size.width * 0.8;
+
     List<PageViewModel> pages = [
       PageViewModel(
         iconColor: kPrimaryColor,
         bubbleBackgroundColor: kPrimaryColor,
         title: Padding(
-          padding: const EdgeInsets.only(
-              left: kDefaultMargin, right: kDefaultMargin),
+          padding: const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
           child: Text(
             'View mining profits at a glance',
             overflow: TextOverflow.fade,
             style: bodyText2,
-            textAlign: TextAlign.start,
+            textAlign: TextAlign.center,
           ),
         ),
         body: Container(),
         mainImage: SvgPicture.asset(
           'assets/onboarding/onboarding_1.svg',
-          width: defaultSize,
+
+          width: defaultSize + 40,
+
         ),
       ),
       PageViewModel(
@@ -95,13 +97,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             'Built in cryptocurrency wallet for managing assets',
             overflow: TextOverflow.fade,
             style: bodyText2,
-            textAlign: TextAlign.start,
+            textAlign: TextAlign.center,
           ),
         ),
         body: Container(),
         mainImage: SvgPicture.asset(
           'assets/onboarding/onboarding_2.svg',
-          width: defaultSize,
+        //  height: defaultSize,
         ),
       ),
       PageViewModel(
@@ -114,13 +116,15 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             '24/7 stable and secure mining network',
             overflow: TextOverflow.fade,
             style: bodyText2,
-            textAlign: TextAlign.start,
+            textAlign: TextAlign.center,
           ),
         ),
         body: Container(),
         mainImage: SvgPicture.asset(
           'assets/onboarding/onboarding_3.svg',
-          width: defaultSize,
+
+         // height: defaultSize,
+
         ),
       ),
     ];

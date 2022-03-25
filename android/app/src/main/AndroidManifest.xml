@@ -2,7 +2,7 @@
     package="com.noonpool.app.noonpool">
    <application
         android:label="NoonPool"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

@@ -19,7 +19,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
-  final Duration _duration = const Duration(milliseconds: 2000);
+  final Duration _duration = const Duration(seconds: 2);
   Animation<double>? _opacityAnimation;
   AnimationController? _controller;
 
@@ -100,7 +100,7 @@ class _SplashScreenState extends State<SplashScreen>
         child: Center(
           child: Image.asset(
             fullLogoLocation,
-            width: 300,
+            width: MediaQuery.of(context).size.width * 0.8,
           ),
         ),
       ),
