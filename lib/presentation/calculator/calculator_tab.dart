@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../helpers/constants.dart';
+import '../../helpers/elevated_button.dart';
 
 class CalculatorTab extends StatefulWidget {
   const CalculatorTab({Key? key}) : super(key: key);
@@ -11,6 +12,38 @@ class CalculatorTab extends StatefulWidget {
 }
 
 class _CalculatorTabState extends State<CalculatorTab> {
+  static const _difficulty = "difficulty";
+  static const _price = "price";
+  static const _ppsRate = "ppsRate";
+  static const _validHashRate = "validHashRate";
+
+  final Map<String, dynamic> _initValues = {
+    _difficulty: '',
+    _price: '',
+    _ppsRate: '',
+    _validHashRate: ''
+  };
+  final _formKey = GlobalKey<FormState>();
+  final _priceFocusNode = FocusNode();
+  final _ppsFocusNode = FocusNode();
+  final _validHashRateFocusNode = FocusNode();
+
+  void _saveForm() {
+    final isValid = _formKey.currentState?.validate();
+    if ((isValid ?? false) == false) {
+      return;
+    }
+    _formKey.currentState?.save();
+  }
+
+  @override
+  void dispose() {
+    _priceFocusNode.dispose();
+    _ppsFocusNode.dispose();
+    _validHashRateFocusNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -21,7 +54,9 @@ class _CalculatorTabState extends State<CalculatorTab> {
       height: kDefaultMargin,
     );
     return Scaffold(
-      body: ListView(
+        body: Form(
+      key: _formKey,
+      child: ListView(
         physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.all(0),
         children: [
@@ -37,12 +72,26 @@ class _CalculatorTabState extends State<CalculatorTab> {
           spacer,
           ...buildValidHashRate(bodyText2),
           spacer,
+          Padding(
+            padding: const EdgeInsets.only(
+                left: kDefaultPadding, right: kDefaultPadding),
+            child: CustomElevatedButton(
+              onPressed: _saveForm,
+              widget: Text(
+                'Calculate',
+                style: bodyText2.copyWith(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+          spacer,
           const Divider(),
           spacer,
           ...buildTotal(bodyText2, bodyText1),
         ],
       ),
-    );
+    ));
   }
 
   Card buildTopText(TextStyle bodyText2) {
@@ -75,17 +124,41 @@ class _CalculatorTabState extends State<CalculatorTab> {
       const SizedBox(
         height: kDefaultMargin / 4,
       ),
-      Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: kLightBackgroud,
-        ),
-        margin:
-            const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
-        padding: const EdgeInsets.all(kDefaultPadding / 2),
-        child: Text(
-          '21659344833264.85',
+      Padding(
+        padding: const EdgeInsets.only(
+            left: kDefaultPadding, right: kDefaultPadding),
+        child: TextFormField(
+          textInputAction: TextInputAction.next,
           style: bodyText2,
+          onFieldSubmitted: (_) {
+            FocusScope.of(context).requestFocus(_priceFocusNode);
+          },
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.only(
+                left: kDefaultPadding / 2, right: kDefaultPadding / 2),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(kDefaultMargin / 4),
+              borderSide: const BorderSide(width: 1, color: kPrimaryColor),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(kDefaultMargin / 4),
+              borderSide: const BorderSide(width: 1, color: kPrimaryColor),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(kDefaultMargin / 4),
+              borderSide: const BorderSide(width: 2, color: Colors.red),
+            ),
+          ),
+          keyboardType: TextInputType.number,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return '';
+            }
+            return null;
+          },
+          onSaved: (value) {
+            _initValues[_difficulty] = value ?? "";
+          },
         ),
       ),
     ];
@@ -104,26 +177,60 @@ class _CalculatorTabState extends State<CalculatorTab> {
         height: kDefaultMargin / 4,
       ),
       Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: kLightBackgroud,
-            ),
-            margin: const EdgeInsets.only(left: kDefaultMargin),
-            padding: const EdgeInsets.all(kDefaultPadding / 2),
-            child: Text(
-              '63118.64',
-              style: bodyText2,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  left: kDefaultPadding, right: kDefaultPadding),
+              child: TextFormField(
+                textInputAction: TextInputAction.next,
+                focusNode: _priceFocusNode,
+                style: bodyText2,
+                onFieldSubmitted: (_) {
+                  FocusScope.of(context).requestFocus(_ppsFocusNode);
+                },
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.only(
+                      left: kDefaultPadding / 2, right: kDefaultPadding / 2),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(kDefaultMargin / 4),
+                    borderSide:
+                        const BorderSide(width: 1, color: kPrimaryColor),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(kDefaultMargin / 4),
+                    borderSide:
+                        const BorderSide(width: 1, color: kPrimaryColor),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(kDefaultMargin / 4),
+                    borderSide: const BorderSide(width: 2, color: Colors.red),
+                  ),
+                ),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return '';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _initValues[_price] = value ?? "";
+                },
+              ),
             ),
           ),
-          const Spacer(),
+          const SizedBox(
+            width: kDefaultMargin / 2,
+          ),
           Container(
             margin: const EdgeInsets.only(right: kDefaultMargin),
             padding: const EdgeInsets.all(kDefaultPadding / 4),
             decoration: BoxDecoration(
-                border: Border.all(width: 3, color: kLightBackgroud),
-                borderRadius: BorderRadius.circular(10)),
+              border: Border.all(width: 1, color: kPrimaryColor),
+              borderRadius: BorderRadius.circular(kDefaultMargin / 4),
+            ),
             child: Row(
               children: [
                 Text(
@@ -154,26 +261,47 @@ class _CalculatorTabState extends State<CalculatorTab> {
       const SizedBox(
         height: kDefaultMargin / 4,
       ),
-      Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: kLightBackgroud,
-        ),
-        margin:
-            const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
-        padding: const EdgeInsets.all(kDefaultPadding / 2),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              '4',
-              style: bodyText2,
-            ),
-            const Icon(
+      Padding(
+        padding: const EdgeInsets.only(
+            left: kDefaultPadding, right: kDefaultPadding),
+        child: TextFormField(
+          textInputAction: TextInputAction.next,
+          focusNode: _ppsFocusNode,
+          style: bodyText2,
+          onFieldSubmitted: (_) {
+            FocusScope.of(context).requestFocus(_validHashRateFocusNode);
+          },
+          decoration: InputDecoration(
+            suffixIcon: const Icon(
               Icons.percent_rounded,
-              color: kTextColor,
-            )
-          ],
+              size: 18,
+              color: kPrimaryColor,
+            ),
+            contentPadding: const EdgeInsets.only(
+                left: kDefaultPadding / 2, right: kDefaultPadding / 2),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(kDefaultMargin / 4),
+              borderSide: const BorderSide(width: 1, color: kPrimaryColor),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(kDefaultMargin / 4),
+              borderSide: const BorderSide(width: 1, color: kPrimaryColor),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(kDefaultMargin / 4),
+              borderSide: const BorderSide(width: 2, color: Colors.red),
+            ),
+          ),
+          keyboardType: TextInputType.number,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return '';
+            }
+            return null;
+          },
+          onSaved: (value) {
+            _initValues[_ppsRate] = value ?? "";
+          },
         ),
       ),
     ];
@@ -191,17 +319,39 @@ class _CalculatorTabState extends State<CalculatorTab> {
       const SizedBox(
         height: kDefaultMargin / 4,
       ),
-      Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: kLightBackgroud,
-        ),
-        margin:
-            const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
-        padding: const EdgeInsets.all(kDefaultPadding / 2),
-        child: Text(
-          '1',
+      Padding(
+        padding: const EdgeInsets.only(
+            left: kDefaultPadding, right: kDefaultPadding),
+        child: TextFormField(
+          textInputAction: TextInputAction.done,
+          focusNode: _validHashRateFocusNode,
           style: bodyText2,
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.only(
+                left: kDefaultPadding / 2, right: kDefaultPadding / 2),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(kDefaultMargin / 4),
+              borderSide: const BorderSide(width: 1, color: kPrimaryColor),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(kDefaultMargin / 4),
+              borderSide: const BorderSide(width: 1, color: kPrimaryColor),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(kDefaultMargin / 4),
+              borderSide: const BorderSide(width: 2, color: Colors.red),
+            ),
+          ),
+          keyboardType: TextInputType.number,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return '';
+            }
+            return null;
+          },
+          onSaved: (value) {
+            _initValues[_validHashRate] = value ?? "";
+          },
         ),
       ),
     ];
@@ -237,7 +387,7 @@ class _CalculatorTabState extends State<CalculatorTab> {
             ),
             const Spacer(),
             Text(
-              '= \$ 0.3566',
+              '= \$ 0.2566',
               style: bodyText2.copyWith(color: kPrimaryColor),
             ),
           ],

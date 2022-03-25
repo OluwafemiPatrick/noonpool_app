@@ -235,7 +235,7 @@ class _PoolTabState extends State<PoolTab> {
             Expanded(
               child: Text(
                 'stratum+tcp://btc.noonpool.com:3333',
-                style: bodyText2.copyWith(fontSize: 18),
+                style: bodyText2.copyWith(fontSize: 14),
               ),
             ),
             const Icon(
@@ -272,7 +272,7 @@ class _PoolTabState extends State<PoolTab> {
             Expanded(
               child: Text(
                 'stratum+tcp://bitcoin.noonpool.com:3333',
-                style: bodyText2.copyWith(fontSize: 18),
+                style: bodyText2.copyWith(fontSize: 14),
               ),
             ),
             const Icon(

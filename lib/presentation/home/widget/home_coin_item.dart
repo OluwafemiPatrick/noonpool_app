@@ -23,7 +23,9 @@ class HomeCoinItem extends StatelessWidget {
     );
     return Padding(
       padding: const EdgeInsets.only(
-          bottom: kDefaultMargin, left: kDefaultMargin, right: kDefaultMargin),
+          bottom: kDefaultMargin,
+          left: kDefaultMargin / 2,
+          right: kDefaultMargin / 2),
       child: InkWell(
         onTap: () => onPressed(coinModel),
         child: Row(

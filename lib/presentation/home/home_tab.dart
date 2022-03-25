@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:noonpool/helpers/constants.dart';
 import 'package:noonpool/helpers/firebase_util.dart';
 import 'package:noonpool/model/coin_model.dart';
 import 'package:noonpool/presentation/home/widget/home_coin_item.dart';
+import 'package:noonpool/presentation/home/widget/home_header_item.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({Key? key}) : super(key: key);
@@ -28,18 +31,17 @@ class _HomeTabState extends State<HomeTab> {
         children: [
           buildAppBar(bodyText1),
           spacer,
-          Padding(
-            child: Image.asset(
-              'assets/images/start_mining.png',
-              fit: BoxFit.fitWidth,
-              width: double.infinity,
-            ),
-            padding: const EdgeInsets.only(
-                left: kDefaultMargin, right: kDefaultMargin),
+          const Padding(
+            child: _HomeHeader(),
+            padding:
+                EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
           ),
           spacer,
           Padding(
-            child: buildRow1(bodyText2),
+            child: Text(
+              'Statistics',
+              style: bodyText2.copyWith(fontSize: 20),
+            ),
             padding: const EdgeInsets.only(
                 left: kDefaultMargin, right: kDefaultMargin),
           ),
@@ -72,7 +74,7 @@ class _HomeTabState extends State<HomeTab> {
               style: bodyText1,
             ),
             Text(
-              'Algorithim',
+              'Algorithm',
               style: lightText,
             ),
           ],
@@ -107,42 +109,6 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  Row buildRow1(TextStyle bodyText2) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          'Statistics',
-          style: bodyText2.copyWith(fontSize: 20),
-        ),
-        Container(
-          padding: const EdgeInsets.only(
-              top: kDefaultMargin / 4,
-              left: kDefaultMargin / 2,
-              right: kDefaultMargin / 2,
-              bottom: kDefaultMargin / 4),
-          decoration: BoxDecoration(
-              color: kLightPrimaryColor,
-              borderRadius: BorderRadius.circular(kDefaultMargin)),
-          child: Row(
-            children: [
-              Text(
-                'Sort by default',
-                style: bodyText2.copyWith(color: kPrimaryColor),
-              ),
-              const Icon(
-                Icons.arrow_drop_down,
-                color: kPrimaryColor,
-              )
-            ],
-          ),
-        )
-      ],
-    );
-  }
-
   AppBar buildAppBar(TextStyle? bodyText1) {
     return AppBar(
       elevation: 0,
@@ -151,6 +117,83 @@ class _HomeTabState extends State<HomeTab> {
         sFirebaseAuth.currentUser?.email ?? '',
         style: bodyText1,
       ),
+    );
+  }
+}
+
+class _HomeHeader extends StatefulWidget {
+  const _HomeHeader({Key? key}) : super(key: key);
+
+  @override
+  State<_HomeHeader> createState() => _HomeHeaderState();
+}
+
+class _HomeHeaderState extends State<_HomeHeader> {
+  final List<Map<String, String>> viewPagerData = [
+    {
+      'image': 'assets/onboarding/onboarding_1.svg',
+      'title': 'View mining profits at a glance'
+    },
+    {
+      'title': 'Built in cryptocurrency wallet for managing assets',
+      'image': 'assets/onboarding/onboarding_2.svg'
+    },
+    {
+      'title': '24/7 stable and secure mining network',
+      'image': 'assets/onboarding/onboarding_3.svg'
+    },
+  ];
+  Timer? _timer;
+  final PageController _pageController = PageController();
+  final duration = const Duration(seconds: 4);
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      updateCurrentPage();
+    });
+  }
+
+  void updateCurrentPage() {
+    var length = viewPagerData.length;
+    var page = _pageController.page;
+    if (page == null) {
+      return;
+    }
+
+    if (page == length - 1) {
+      _pageController.animateToPage(0,
+          duration: duration, curve: Curves.bounceInOut);
+    } else {
+      _pageController.animateToPage(page.toInt() + 1,
+          duration: duration, curve: Curves.bounceInOut);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    var width = size.width;
+
+    return SizedBox(
+      width: width,
+      height: 200,
+      child: PageView.builder(
+          controller: _pageController,
+          scrollDirection: Axis.horizontal,
+          itemCount: viewPagerData.length,
+          itemBuilder: (context, index) {
+            final String title = (viewPagerData[index])['title'] ?? '';
+            final String imageLocation = (viewPagerData[index])['image'] ?? '';
+            return HomeHeaderItem(title: title, imageLocation: imageLocation);
+          }),
     );
   }
 }
