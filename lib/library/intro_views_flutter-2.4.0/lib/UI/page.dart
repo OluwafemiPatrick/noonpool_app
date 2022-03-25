@@ -48,14 +48,20 @@ class PageIntro extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
+        const Spacer(
+          flex: 1,
+        ),
         _ImagePageTransform(
             percentVisible: percentVisible, pageViewModel: pageViewModel),
         const SizedBox(
-          height: kDefaultMargin*1.5,
+          height: kDefaultMargin * 1.5,
         ),
         _TitlePageTransform(
           percentVisible: percentVisible,
           pageViewModel: pageViewModel,
+        ),
+        const Spacer(
+          flex: 2,
         ),
       ],
     );
