@@ -7,6 +7,9 @@ import 'package:noonpool/model/coin_model.dart';
 import 'package:noonpool/presentation/home/widget/home_coin_item.dart';
 import 'package:noonpool/presentation/home/widget/home_header_item.dart';
 
+import '../../helpers/page_route.dart';
+import '../coin/coin_screen.dart';
+
 class HomeTab extends StatefulWidget {
   const HomeTab({Key? key}) : super(key: key);
 
@@ -54,11 +57,16 @@ class _HomeTabState extends State<HomeTab> {
           spacer,
           ...dummyCoinModel.map(
             (coinModel) =>
-                HomeCoinItem(coinModel: coinModel, onPressed: (_) {}),
+                HomeCoinItem(coinModel: coinModel, onPressed: onCoinPressed),
           ),
         ],
       ),
     );
+  }
+
+
+  void onCoinPressed(CoinModel coinModel){
+    Navigator.of(context).push(CustomPageRoute(screen: const CoinScreen(), argument: coinModel),);
   }
 
   Row buildRow2(TextStyle bodyText1, TextStyle lightText) {
