@@ -47,21 +47,65 @@ class _SettingsTabState extends State<SettingsTab> {
     return Padding(
       padding: const EdgeInsets.all(kDefaultMargin / 2),
       child: CustomElevatedButton(
-        onPressed: () {
-          sFirebaseAuth.signOut();
-          AppPreferences.setLoginStatus(status: false);
-          Navigator.of(context).push(
-            CustomPageRoute(
-              screen: const LoginScreen(),
-            ),
-          );
-        },
+        onPressed: () => showLogoutDialog(),
         widget: Text(
           'Sign Out',
           style: bodyText2.copyWith(color: Colors.white),
         ),
       ),
     );
+  }
+
+  void showLogoutDialog() async {
+    TextTheme textTheme = Theme.of(context).textTheme;
+    final bodyText1 = textTheme.bodyText1!.copyWith(fontSize: 20);
+    final bodyText2 = textTheme.bodyText2!.copyWith(fontSize: 16);
+    showDialog(
+        context: context,
+        builder: (ctx) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+            ),
+            title: Text(
+              'Sign out?',
+              style: bodyText1,
+            ),
+            content: Text(
+              'Do you wish to sign out of this device',
+              style: bodyText2,
+            ),
+            contentPadding: const EdgeInsets.all(kDefaultMargin / 2),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Cancel',
+                  style: bodyText2,
+                ),
+              ),
+              TextButton(
+                onPressed: () async {
+                  sFirebaseAuth.signOut();
+                  AppPreferences.setLoginStatus(status: false);
+                  Navigator.of(context).push(
+                    CustomPageRoute(
+                      screen: const LoginScreen(),
+                    ),
+                  );
+                },
+                child: Text(
+                  'Sign Out',
+                  style: bodyText2.copyWith(color: kPrimaryColor),
+                ),
+              ),
+            ],
+          );
+        });
   }
 
   Card buildSecondCard(Divider divider) {

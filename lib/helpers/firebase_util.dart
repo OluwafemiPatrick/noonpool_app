@@ -136,13 +136,13 @@ Future<List<CoinModel>> getAllCoinDetails() async {
           .map((data) => CoinModel(
               imageLocation: data['coin_logo'].toString().trim(),
               coin: data['coin_name'].toString().trim(),
-              coinName: data['coin_symbol'].toString().trim(),
+              coinSubTitle: data['coin_symbol'].toString().trim(),
               algorithm: data['algo'].toString().trim(),
               id: data['_id'],
-              poolHashRate: data['pool_hashrate'].toString().trim(),
-              profit: data['profit'].toString().trim(),
-              price: data['price'].toString().trim(),
-              networkHashRate: data['net_hashrate'].toString().trim()))
+              poolHashRate: data['pool_hashrate'],
+              profit: data['profit'],
+              price: data['price'],
+              networkHashRate: data['net_hashrate']))
           .toList();
 /*
 

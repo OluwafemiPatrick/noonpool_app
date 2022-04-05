@@ -8,6 +8,7 @@ import 'package:noonpool/model/coin_model.dart';
 import 'package:noonpool/presentation/home/widget/home_coin_item.dart';
 import 'package:noonpool/presentation/home/widget/home_header_item.dart';
 
+import '../../helpers/error_widget.dart';
 import '../../helpers/page_route.dart';
 import '../coin/coin_screen.dart';
 
@@ -29,12 +30,12 @@ class _HomeTabState extends State<HomeTab> {
       height: kDefaultMargin,
     );
     return Scaffold(
-      body: ListView(
-        physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.all(0),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
         children: [
           buildAppBar(bodyText1),
-          spacer,
           const Padding(
             child: _HomeHeader(),
             padding:
@@ -56,66 +57,48 @@ class _HomeTabState extends State<HomeTab> {
                 left: kDefaultMargin, right: kDefaultMargin),
           ),
           spacer,
-          FutureBuilder<List<CoinModel>>(
-              future: getAllCoinDetails(),
-              builder: (ctx, asyncDataSnapshot) {
-                if (asyncDataSnapshot.hasError) {
-                  // show error
-                  final error = asyncDataSnapshot.error.toString();
-                  return Column(mainAxisSize: MainAxisSize.min, children: [
-                    const SizedBox(
-                      height: kDefaultMargin * 2,
-                    ),
-                    Lottie.asset(
-                      'assets/lottie/error.json',
-                      width: 200,
-                      animate: true,
-                      reverse: true,
-                      repeat: true,
-                      height: 200,
-                      fit: BoxFit.contain,
-                    ),
-                    Text(
-                      error,
-                      style: bodyText1,
-                    ),
-                    const SizedBox(
-                      height: kDefaultMargin * 2,
-                    ),
-                  ]);
-                } else {
-                  if (asyncDataSnapshot.hasData) {
-                    List<CoinModel> allData = asyncDataSnapshot.data ?? [];
-                    return ListView.builder(
-                      padding: const EdgeInsets.all(0),
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: allData.length,
-                      itemBuilder: (ctx, index) {
-                        return HomeCoinItem(
-                            coinModel: allData[index],
-                            onPressed: onCoinPressed);
-                      },
-                    );
+          Expanded(
+            child: FutureBuilder<List<CoinModel>>(
+                future: getAllCoinDetails(),
+                builder: (ctx, asyncDataSnapshot) {
+                  if (asyncDataSnapshot.hasError) {
+                    // show error
+                    final error = asyncDataSnapshot.error.toString();
+                    return CustomErrorWidget(
+                        error: error,
+                        onRefresh: () {
+                          setState(() {});
+                        });
                   } else {
-                    //  loading progress bar
-                    return Container(
-                      height: 300,
-                      width: double.infinity,
-                      alignment: Alignment.center,
-                      child: Lottie.asset(
-                        'assets/lottie/loading.json',
-                        width: 100,
-                        animate: true,
-                        reverse: true,
-                        repeat: true,
-                        height: 100,
-                        fit: BoxFit.contain,
-                      ),
-                    );
+                    if (asyncDataSnapshot.hasData) {
+                      List<CoinModel> allData = asyncDataSnapshot.data ?? [];
+                      return ListView.builder(
+                        padding: const EdgeInsets.all(0),
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: allData.length,
+                        itemBuilder: (ctx, index) {
+                          return HomeCoinItem(
+                              coinModel: allData[index],
+                              onPressed: onCoinPressed);
+                        },
+                      );
+                    } else {
+                      //  loading progress bar
+                      return Center(
+                        child: Lottie.asset(
+                          'assets/lottie/loading.json',
+                          width: 100,
+                          animate: true,
+                          reverse: true,
+                          repeat: true,
+                          height: 100,
+                          fit: BoxFit.contain,
+                        ),
+                      );
+                    }
                   }
-                }
-              }),
+                }),
+          ),
         ],
       ),
     );
@@ -250,7 +233,7 @@ class _HomeHeaderState extends State<_HomeHeader> {
 
     return SizedBox(
       width: width,
-      height: 200,
+      height: 130,
       child: PageView.builder(
           controller: _pageController,
           scrollDirection: Axis.horizontal,

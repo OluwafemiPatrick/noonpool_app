@@ -36,7 +36,7 @@ class HomeCoinItem extends StatelessWidget {
                 tag: coinModel.id,
                 child: CachedNetworkImage(
                   imageUrl: coinModel.imageLocation,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fill,
                   width: 40,
                   height: 40,
                   placeholder: (context, url) => const SizedBox(),
@@ -86,12 +86,12 @@ class HomeCoinItem extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          coinModel.profit.toString(),
+          coinModel.profit.toStringAsExponential(3),
           style: bodyText1,
         ),
         const SizedBox(height: kDefaultMargin / 4),
         Text(
-          coinModel.price.toString(),
+          coinModel.price.toStringAsExponential(3),
           style: lightText,
         )
       ],
@@ -104,12 +104,12 @@ class HomeCoinItem extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          coinModel.poolHashRate.toString(),
+          coinModel.poolHashRate.toStringAsExponential(3),
           style: bodyText1,
         ),
         const SizedBox(height: kDefaultMargin / 4),
         Text(
-          coinModel.networkHashRate.toString(),
+          coinModel.networkHashRate.toStringAsExponential(3),
           style: lightText,
         )
       ],

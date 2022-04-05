@@ -38,7 +38,7 @@ class HomeHeaderItem extends StatelessWidget {
           ),
           SvgPicture.asset(
             imageLocation,
-            width: 200,
+            width: 150,
           ),
         ],
       ),
