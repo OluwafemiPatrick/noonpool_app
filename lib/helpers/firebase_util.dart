@@ -134,16 +134,32 @@ Future<List<CoinModel>> getAllCoinDetails() async {
 
       final coinData = allData
           .map((data) => CoinModel(
+              imageLocation: data['coin_logo'].toString().trim(),
+              coin: data['coin_name'].toString().trim(),
+              coinName: data['coin_symbol'].toString().trim(),
+              algorithm: data['algo'].toString().trim(),
+              id: data['_id'],
+              poolHashRate: data['pool_hashrate'].toString().trim(),
+              profit: data['profit'].toString().trim(),
+              price: data['price'].toString().trim(),
+              networkHashRate: data['net_hashrate'].toString().trim()))
+          .toList();
+/*
+
+      final coinData = allData
+          .map((data) => CoinModel(
               imageLocation: data['coin_logo'],
               coin: data['coin_name'],
               coinName: data['coin_symbol'],
               algorithm: data['algo'],
               id: data['_id'],
-              poolHashRate: data['pool_hashrate'],
-              profit: data['profit'],
-              price: data['price'],
-              networkHashRate: data['net_hashrate']))
+              poolHashRate: data['pool_hashrate'] + .0,
+              profit: data['profit'] + .0,
+              price: data['price'] + .0,
+              networkHashRate: data['net_hashrate'] + .0))
           .toList();
+*/
+
       return coinData;
     } else {
       return Future.error('Error occurred, please try again');

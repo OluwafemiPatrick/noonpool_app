@@ -64,20 +64,20 @@ class _HomeTabState extends State<HomeTab> {
                   final error = asyncDataSnapshot.error.toString();
                   return Column(mainAxisSize: MainAxisSize.min, children: [
                     const SizedBox(
-                      height: kDefaultMargin,
+                      height: kDefaultMargin * 2,
                     ),
                     Lottie.asset(
                       'assets/lottie/error.json',
-                      width: 280,
+                      width: 200,
                       animate: true,
                       reverse: true,
                       repeat: true,
-                      height: 280,
+                      height: 200,
                       fit: BoxFit.contain,
                     ),
                     Text(
-                      'Fetching data, please wait',
-                      style: bodyText2,
+                      error,
+                      style: bodyText1,
                     ),
                     const SizedBox(
                       height: kDefaultMargin * 2,
@@ -99,27 +99,20 @@ class _HomeTabState extends State<HomeTab> {
                     );
                   } else {
                     //  loading progress bar
-                    return Column(mainAxisSize: MainAxisSize.min, children: [
-                      const SizedBox(
-                        height: kDefaultMargin,
-                      ),
-                      Lottie.asset(
+                    return Container(
+                      height: 300,
+                      width: double.infinity,
+                      alignment: Alignment.center,
+                      child: Lottie.asset(
                         'assets/lottie/loading.json',
-                        width: 280,
+                        width: 100,
                         animate: true,
                         reverse: true,
                         repeat: true,
-                        height: 280,
+                        height: 100,
                         fit: BoxFit.contain,
                       ),
-                      Text(
-                        'Fetching data, please wait',
-                        style: bodyText2,
-                      ),
-                      const SizedBox(
-                        height: kDefaultMargin * 2,
-                      ),
-                    ]);
+                    );
                   }
                 }
               }),

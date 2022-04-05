@@ -86,12 +86,12 @@ class HomeCoinItem extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          coinModel.profit,
+          coinModel.profit.toString(),
           style: bodyText1,
         ),
         const SizedBox(height: kDefaultMargin / 4),
         Text(
-          coinModel.price,
+          coinModel.price.toString(),
           style: lightText,
         )
       ],
@@ -104,12 +104,12 @@ class HomeCoinItem extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          coinModel.poolHashRate,
+          coinModel.poolHashRate.toString(),
           style: bodyText1,
         ),
         const SizedBox(height: kDefaultMargin / 4),
         Text(
-          coinModel.networkHashRate,
+          coinModel.networkHashRate.toString(),
           style: lightText,
         )
       ],
