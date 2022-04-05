@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as http;
+import 'package:noonpool/model/coin_model.dart';
 
 FirebaseAuth sFirebaseAuth = FirebaseAuth.instance;
 FirebaseFirestore sFirebaseCloud = FirebaseFirestore.instance;
@@ -115,5 +117,41 @@ Future<String> signUp(
     }
   } catch (e) {
     return (e.toString());
+  }
+}
+
+Future<List<CoinModel>> getAllCoinDetails() async {
+  try {
+    final response = await http.get(
+      Uri.parse('https://noonpool.herokuapp.com/api/v1/fetchCoinData'),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    var decode = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      final allData = decode as List<dynamic>;
+
+      final coinData = allData
+          .map((data) => CoinModel(
+              imageLocation: data['coin_logo'],
+              coin: data['coin_name'],
+              coinName: data['coin_symbol'],
+              algorithm: data['algo'],
+              id: data['_id'],
+              poolHashRate: data['pool_hashrate'],
+              profit: data['profit'],
+              price: data['price'],
+              networkHashRate: data['net_hashrate']))
+          .toList();
+      return coinData;
+    } else {
+      return Future.error('Error occurred, please try again');
+    }
+  } on SocketException {
+    return Future.error(
+        'Kindly enable your internet connection to load new data');
+  } catch (e) {
+    return Future.error(e.toString());
   }
 }

@@ -141,26 +141,6 @@ class _MainScreenState extends State<MainScreen> {
           bottomNavItems: bottomNavItems,
           positionStream: _positionStream.stream),
     );
-    /* return Scaffold(
-      body: MultiBlocProvider(
-        providers: [
-          // to prevent reloading data once it is initialized
-          */ /* BlocProvider(create: (ctx) => NewsCubit()),
-          BlocProvider(create: (ctx) => CryptoCubit()),*/ /*
-        ],
-        child: Builder(
-          builder: (context) => PageView(
-            controller: _mainPageViewController,
-            physics: const NeverScrollableScrollPhysics(),
-            children: _pages,
-          ),
-        ),
-      ),
-      bottomNavigationBar: CustomBottomAppBar(
-          onBottomNavBarClicked: onBottomNavBarClicked,
-          bottomNavItems: bottomNavItems,
-          positionStream: _positionStream.stream),
-    );*/
   }
 
   void onBottomNavBarClicked(int position) {

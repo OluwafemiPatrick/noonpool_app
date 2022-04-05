@@ -1,5 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:noonpool/model/coin_model.dart';
 
 import '../../../helpers/constants.dart';
@@ -31,10 +31,19 @@ class HomeCoinItem extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SvgPicture.asset(
-              coinModel.imageLocation,
-              width: 40,
-              height: 40,
+            ClipRRect(
+              child: Hero(
+                tag: coinModel.id,
+                child: CachedNetworkImage(
+                  imageUrl: coinModel.imageLocation,
+                  fit: BoxFit.cover,
+                  width: 40,
+                  height: 40,
+                  placeholder: (context, url) => const SizedBox(),
+                  errorWidget: (context, url, error) => const SizedBox(),
+                ),
+              ),
+              borderRadius: BorderRadius.circular(20),
             ),
             spacer,
             buildCoinDetails(bodyText1, lightText),

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:noonpool/helpers/constants.dart';
 import 'package:noonpool/helpers/firebase_util.dart';
 import 'package:noonpool/model/coin_model.dart';
@@ -55,18 +56,82 @@ class _HomeTabState extends State<HomeTab> {
                 left: kDefaultMargin, right: kDefaultMargin),
           ),
           spacer,
-          ...dummyCoinModel.map(
-            (coinModel) =>
-                HomeCoinItem(coinModel: coinModel, onPressed: onCoinPressed),
-          ),
+          FutureBuilder<List<CoinModel>>(
+              future: getAllCoinDetails(),
+              builder: (ctx, asyncDataSnapshot) {
+                if (asyncDataSnapshot.hasError) {
+                  // show error
+                  final error = asyncDataSnapshot.error.toString();
+                  return Column(mainAxisSize: MainAxisSize.min, children: [
+                    const SizedBox(
+                      height: kDefaultMargin,
+                    ),
+                    Lottie.asset(
+                      'assets/lottie/error.json',
+                      width: 280,
+                      animate: true,
+                      reverse: true,
+                      repeat: true,
+                      height: 280,
+                      fit: BoxFit.contain,
+                    ),
+                    Text(
+                      'Fetching data, please wait',
+                      style: bodyText2,
+                    ),
+                    const SizedBox(
+                      height: kDefaultMargin * 2,
+                    ),
+                  ]);
+                } else {
+                  if (asyncDataSnapshot.hasData) {
+                    List<CoinModel> allData = asyncDataSnapshot.data ?? [];
+                    return ListView.builder(
+                      padding: const EdgeInsets.all(0),
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: allData.length,
+                      itemBuilder: (ctx, index) {
+                        return HomeCoinItem(
+                            coinModel: allData[index],
+                            onPressed: onCoinPressed);
+                      },
+                    );
+                  } else {
+                    //  loading progress bar
+                    return Column(mainAxisSize: MainAxisSize.min, children: [
+                      const SizedBox(
+                        height: kDefaultMargin,
+                      ),
+                      Lottie.asset(
+                        'assets/lottie/loading.json',
+                        width: 280,
+                        animate: true,
+                        reverse: true,
+                        repeat: true,
+                        height: 280,
+                        fit: BoxFit.contain,
+                      ),
+                      Text(
+                        'Fetching data, please wait',
+                        style: bodyText2,
+                      ),
+                      const SizedBox(
+                        height: kDefaultMargin * 2,
+                      ),
+                    ]);
+                  }
+                }
+              }),
         ],
       ),
     );
   }
 
-
-  void onCoinPressed(CoinModel coinModel){
-    Navigator.of(context).push(CustomPageRoute(screen: const CoinScreen(), argument: coinModel),);
+  void onCoinPressed(CoinModel coinModel) {
+    Navigator.of(context).push(
+      CustomPageRoute(screen: const CoinScreen(), argument: coinModel),
+    );
   }
 
   Row buildRow2(TextStyle bodyText1, TextStyle lightText) {
