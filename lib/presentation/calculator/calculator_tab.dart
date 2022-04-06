@@ -75,15 +75,12 @@ class _CalculatorTabBody extends StatefulWidget {
 }
 
 class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
-  static const _miners = "miners";
   static const _validHashRate = "validHashRate";
 
-  final Map<String, dynamic> _initValues = {_miners: '1', _validHashRate: ''};
+  final Map<String, dynamic> _initValues = {_validHashRate: ''};
   final _formKey = GlobalKey<FormState>();
-  final _minersFocusNode = FocusNode();
 
   final _validHashRateFocusNode = FocusNode();
-  final _minersController = TextEditingController(text: '1');
 
   double _estimatedAmount = 0.0;
   double _dollarValue = 0.0;
@@ -95,20 +92,15 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
     }
     _formKey.currentState?.save();
 
-    final miners = double.tryParse(_initValues[_miners]) ?? .0;
-
     final hashRate = double.tryParse(_initValues[_validHashRate]) ?? .0;
-    const blockReward = 6.25;
-    const numberOfBlocks = 144;
+    const mswMultiplier = 1000000000000;
 
     final firstCal = hashRate *
-        numberOfBlocks *
-        blockReward *
-        miners; // (miner hashrate * number of blocks per day * block reward * number of miners)
-    final secondCal = firstCal /
-        widget.coinModel
-            .networkHashRate; //(miner hashrate * number of blocks per day * block reward * number of miners) / network hashrate
-    final profitability = secondCal * 0.95;
+        widget.coinModel.reward *
+        mswMultiplier *
+        24; // mswRewards 	= mswReward * mswTemp * mswMultiplier * 24;
+
+    final profitability = firstCal * 0.95;
 
     setState(() {
       _estimatedAmount = profitability;
@@ -118,8 +110,6 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
 
   @override
   void dispose() {
-    _minersFocusNode.dispose();
-    _minersController.dispose();
     _validHashRateFocusNode.dispose();
     super.dispose();
   }
@@ -147,9 +137,9 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
           spacer,
           ...buildPPSFeeRate(bodyText2),
           spacer,
-          ...buildValidHashRate(bodyText2),
+          ...buildNumberOfMiners(bodyText2),
           spacer,
-          ...buildMinersNumber(bodyText2),
+          ...buildValidHashRate(bodyText2),
           spacer,
           Padding(
             padding: const EdgeInsets.only(
@@ -189,62 +179,6 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
         ),
       ),
     );
-  }
-
-  List<Widget> buildMinersNumber(TextStyle bodyText2) {
-    return [
-      Padding(
-        child: Text(
-          'Number of miners',
-          style: bodyText2,
-        ),
-        padding: const EdgeInsets.only(left: kDefaultMargin),
-      ),
-      const SizedBox(
-        height: kDefaultMargin / 4,
-      ),
-      Padding(
-        padding: const EdgeInsets.only(
-            left: kDefaultPadding, right: kDefaultPadding),
-        child: TextFormField(
-          textInputAction: TextInputAction.done,
-          focusNode: _minersFocusNode,
-          style: bodyText2,
-          controller: _minersController,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.only(
-                left: kDefaultPadding / 2, right: kDefaultPadding / 2),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(kDefaultMargin / 4),
-              borderSide: const BorderSide(width: 1, color: kPrimaryColor),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(kDefaultMargin / 4),
-              borderSide: const BorderSide(width: 1, color: kPrimaryColor),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(kDefaultMargin / 4),
-              borderSide: const BorderSide(width: 2, color: Colors.red),
-            ),
-          ),
-          keyboardType: TextInputType.number,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return '';
-            }
-            final number = int.tryParse(value.trim());
-            if (number != null) {
-              return null;
-            } else {
-              return 'Enter a valid digit';
-            }
-          },
-          onSaved: (value) {
-            _initValues[_miners] = value ?? "";
-          },
-        ),
-      ),
-    ];
   }
 
   List<Widget> buildPPSFeeRate(TextStyle bodyText2) {
@@ -310,7 +244,39 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
         margin: const EdgeInsets.only(
             left: kDefaultPadding, right: kDefaultPadding),
         child: Text(
-          widget.coinModel.networkHashRate.toString(),
+          widget.coinModel.difficulty.toString(),
+          style: bodyText2,
+        ),
+        alignment: Alignment.centerLeft,
+        padding: const EdgeInsets.all(kDefaultPadding / 1.5),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(kDefaultMargin / 4),
+          border: Border.all(
+            color: kPrimaryColor,
+            width: 1,
+          ),
+        ),
+      ),
+    ];
+  }
+
+  List<Widget> buildNumberOfMiners(TextStyle bodyText2) {
+    return [
+      Padding(
+        child: Text(
+          'Number of miners',
+          style: bodyText2,
+        ),
+        padding: const EdgeInsets.only(left: kDefaultMargin),
+      ),
+      const SizedBox(
+        height: kDefaultMargin / 4,
+      ),
+      Container(
+        margin: const EdgeInsets.only(
+            left: kDefaultPadding, right: kDefaultPadding),
+        child: Text(
+          '1',
           style: bodyText2,
         ),
         alignment: Alignment.centerLeft,
@@ -342,10 +308,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
         padding: const EdgeInsets.only(
             left: kDefaultPadding, right: kDefaultPadding),
         child: TextFormField(
-          textInputAction: TextInputAction.next,
-          onFieldSubmitted: (_) {
-            FocusScope.of(context).requestFocus(_minersFocusNode);
-          },
+          textInputAction: TextInputAction.done,
           focusNode: _validHashRateFocusNode,
           style: bodyText2,
           decoration: InputDecoration(
@@ -371,7 +334,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(kDefaultMargin / 4),
-              borderSide: const BorderSide(width: 2, color: Colors.red),
+              borderSide: const BorderSide(width: 3, color: Colors.red),
             ),
           ),
           keyboardType: TextInputType.number,
@@ -407,7 +370,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text(
-              _estimatedAmount.toStringAsExponential(5),
+              _estimatedAmount.toStringAsFixed(8),
               style: bodyText1.copyWith(fontSize: 25),
             ),
             const SizedBox(
@@ -419,7 +382,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
             ),
             const Spacer(),
             Text(
-              '= \$ ${_dollarValue.toStringAsExponential(5)}',
+              '= \$ ${_dollarValue.toStringAsFixed(6)}',
               style: bodyText2.copyWith(color: kPrimaryColor),
             ),
           ],

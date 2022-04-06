@@ -139,7 +139,8 @@ Future<List<CoinModel>> getAllCoinDetails() async {
               coinSubTitle: data['coin_symbol'].toString().trim(),
               algorithm: data['algo'].toString().trim(),
               id: data['_id'],
-              poolHashRate: data['pool_hashrate'],
+              difficulty: data['difficulty'],
+              reward: data['reward'],
               profit: data['profit'],
               price: data['price'],
               networkHashRate: data['net_hashrate']))

@@ -5,12 +5,9 @@ import 'package:noonpool/model/coin_model.dart';
 import '../../../helpers/constants.dart';
 
 class HomeCoinItem extends StatelessWidget {
-  final Function(CoinModel) onPressed;
   final CoinModel coinModel;
 
-  const HomeCoinItem(
-      {Key? key, required this.coinModel, required this.onPressed})
-      : super(key: key);
+  const HomeCoinItem({Key? key, required this.coinModel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,38 +23,35 @@ class HomeCoinItem extends StatelessWidget {
           bottom: kDefaultMargin,
           left: kDefaultMargin / 2,
           right: kDefaultMargin / 2),
-      child: InkWell(
-        onTap: () => onPressed(coinModel),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ClipRRect(
-              child: Hero(
-                tag: coinModel.id,
-                child: CachedNetworkImage(
-                  imageUrl: coinModel.imageLocation,
-                  fit: BoxFit.fill,
-                  width: 40,
-                  height: 40,
-                  placeholder: (context, url) => const SizedBox(),
-                  errorWidget: (context, url, error) => const SizedBox(),
-                ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          ClipRRect(
+            child: Hero(
+              tag: coinModel.id,
+              child: CachedNetworkImage(
+                imageUrl: coinModel.imageLocation,
+                fit: BoxFit.fill,
+                width: 40,
+                height: 40,
+                placeholder: (context, url) => const SizedBox(),
+                errorWidget: (context, url, error) => const SizedBox(),
               ),
-              borderRadius: BorderRadius.circular(20),
             ),
-            spacer,
-            buildCoinDetails(bodyText1, lightText),
-            const Spacer(),
-            buildPrice(bodyText1, lightText),
-            const Spacer(),
-            buildHashRate(bodyText1, lightText),
-            spacer,
-            const Icon(
-              Icons.navigate_next,
-              color: kPrimaryColor,
-            )
-          ],
-        ),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          spacer,
+          Expanded(
+            child: buildCoinDetails(bodyText1, lightText),
+          ),
+          Expanded(
+            child: buildPrice(bodyText1, lightText),
+          ),
+          spacer,
+          Expanded(
+            child: buildHashRate(bodyText1, lightText),
+          ),
+        ],
       ),
     );
   }
@@ -82,16 +76,16 @@ class HomeCoinItem extends StatelessWidget {
 
   Column buildPrice(TextStyle bodyText1, TextStyle lightText) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          coinModel.profit.toStringAsExponential(3),
+          coinModel.profit.toStringAsExponential(8),
           style: bodyText1,
         ),
         const SizedBox(height: kDefaultMargin / 4),
         Text(
-          coinModel.price.toStringAsExponential(3),
+          coinModel.price.toStringAsFixed(4),
           style: lightText,
         )
       ],
@@ -100,16 +94,16 @@ class HomeCoinItem extends StatelessWidget {
 
   Column buildHashRate(TextStyle bodyText1, TextStyle lightText) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          coinModel.poolHashRate.toStringAsExponential(3),
+          coinModel.difficulty.toStringAsExponential(6),
           style: bodyText1,
         ),
         const SizedBox(height: kDefaultMargin / 4),
         Text(
-          coinModel.networkHashRate.toStringAsExponential(3),
+          coinModel.networkHashRate.toStringAsExponential(6),
           style: lightText,
         )
       ],

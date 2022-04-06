@@ -9,8 +9,6 @@ import 'package:noonpool/presentation/home/widget/home_coin_item.dart';
 import 'package:noonpool/presentation/home/widget/home_header_item.dart';
 
 import '../../helpers/error_widget.dart';
-import '../../helpers/page_route.dart';
-import '../coin/coin_screen.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({Key? key}) : super(key: key);
@@ -77,9 +75,7 @@ class _HomeTabState extends State<HomeTab> {
                         physics: const BouncingScrollPhysics(),
                         itemCount: allData.length,
                         itemBuilder: (ctx, index) {
-                          return HomeCoinItem(
-                              coinModel: allData[index],
-                              onPressed: onCoinPressed);
+                          return HomeCoinItem(coinModel: allData[index]);
                         },
                       );
                     } else {
@@ -104,55 +100,55 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  void onCoinPressed(CoinModel coinModel) {
-    Navigator.of(context).push(
-      CustomPageRoute(screen: const CoinScreen(), argument: coinModel),
-    );
-  }
-
   Row buildRow2(TextStyle bodyText1, TextStyle lightText) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Coin',
-              style: bodyText1,
-            ),
-            Text(
-              'Algorithm',
-              style: lightText,
-            ),
-          ],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Coin',
+                style: bodyText1,
+              ),
+              Text(
+                'Algorithm',
+                style: lightText,
+              ),
+            ],
+          ),
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Profit',
-              style: bodyText1,
-            ),
-            Text(
-              'Price',
-              style: lightText,
-            ),
-          ],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                'Profit',
+                style: bodyText1,
+              ),
+              Text(
+                'Price',
+                style: lightText,
+              ),
+            ],
+          ),
         ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Pool Hashrate',
-              style: bodyText1,
-            ),
-            Text(
-              'Network Hashrate',
-              style: lightText,
-            ),
-          ],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                'Difficulty',
+                style: bodyText1,
+              ),
+              Text(
+                'Network Hashrate',
+                style: lightText,
+              ),
+            ],
+          ),
         ),
       ],
     );
