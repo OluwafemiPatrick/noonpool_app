@@ -64,7 +64,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
   /// * SETTING THE ONBOARDING PAGES *
   List<PageViewModel> buildPages(TextStyle bodyText2) {
-    var defaultSize = MediaQuery.of(context).size.width * 0.8;
+    var defaultSize = MediaQuery.of(context).size.width * 0.6;
 
     List<PageViewModel> pages = [
       PageViewModel(
@@ -82,9 +82,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         body: Container(),
         mainImage: SvgPicture.asset(
           'assets/onboarding/onboarding_1.svg',
-
           width: defaultSize + 40,
-
         ),
       ),
       PageViewModel(
@@ -103,7 +101,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         body: Container(),
         mainImage: SvgPicture.asset(
           'assets/onboarding/onboarding_2.svg',
-        //  height: defaultSize,
+          width: defaultSize,
         ),
       ),
       PageViewModel(
@@ -122,9 +120,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         body: Container(),
         mainImage: SvgPicture.asset(
           'assets/onboarding/onboarding_3.svg',
-
-         // height: defaultSize,
-
+          width: defaultSize,
         ),
       ),
     ];

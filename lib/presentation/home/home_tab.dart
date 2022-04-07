@@ -147,11 +147,9 @@ class _HomeTabState extends State<HomeTab> {
                 'Network Hashrate',
                 style: lightText,
               ),
-            ],
-          ),
+            ]),
         ),
-      ],
-    );
+      ]);
   }
 
   AppBar buildAppBar(TextStyle? bodyText1) {

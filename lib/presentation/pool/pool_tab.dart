@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:noonpool/helpers/svg_image.dart';
 import 'package:noonpool/presentation/pool/widget/pool_statistics_title.dart';
@@ -18,7 +19,6 @@ class _PoolTabState extends State<PoolTab> {
   final StreamController<int> _poolStatisticsStream = StreamController();
   final List<String> _poolStatisticsTitles = [
     'General',
-    'Nigerian',
     'Mid-East'
   ];
 
@@ -78,7 +78,7 @@ class _PoolTabState extends State<PoolTab> {
                   Text(
                     'All',
                     style: bodyText2.copyWith(
-                      fontSize: 20,
+                      fontSize: 17,
                     ),
                   ),
                   const SizedBox(
@@ -87,7 +87,7 @@ class _PoolTabState extends State<PoolTab> {
                   Text(
                     '0',
                     style: bodyText2.copyWith(
-                        fontSize: 24, fontWeight: FontWeight.w500),
+                        fontSize: 20, fontWeight: FontWeight.w500),
                   ),
                 ],
               ),
@@ -96,7 +96,7 @@ class _PoolTabState extends State<PoolTab> {
                   Text(
                     'Online',
                     style: bodyText2.copyWith(
-                      fontSize: 20,
+                      fontSize: 17,
                     ),
                   ),
                   const SizedBox(
@@ -105,7 +105,7 @@ class _PoolTabState extends State<PoolTab> {
                   Text(
                     '0',
                     style: bodyText2.copyWith(
-                        fontSize: 24, fontWeight: FontWeight.w500),
+                        fontSize: 20, fontWeight: FontWeight.w500),
                   ),
                 ],
               ),
@@ -114,7 +114,7 @@ class _PoolTabState extends State<PoolTab> {
                   Text(
                     'Offline',
                     style: bodyText2.copyWith(
-                      fontSize: 20,
+                      fontSize: 17,
                     ),
                   ),
                   const SizedBox(
@@ -123,7 +123,7 @@ class _PoolTabState extends State<PoolTab> {
                   Text(
                     '0',
                     style: bodyText2.copyWith(
-                        fontSize: 24, fontWeight: FontWeight.w500),
+                        fontSize: 20, fontWeight: FontWeight.w500),
                   ),
                 ],
               ),
@@ -132,7 +132,7 @@ class _PoolTabState extends State<PoolTab> {
                   Text(
                     'Inactive',
                     style: bodyText2.copyWith(
-                      fontSize: 20,
+                      fontSize: 17,
                     ),
                   ),
                   const SizedBox(
@@ -141,7 +141,7 @@ class _PoolTabState extends State<PoolTab> {
                   Text(
                     '0',
                     style: bodyText2.copyWith(
-                        fontSize: 24, fontWeight: FontWeight.w500),
+                        fontSize: 20, fontWeight: FontWeight.w500),
                   ),
                 ],
               ),
@@ -205,7 +205,7 @@ class _PoolTabState extends State<PoolTab> {
   Padding buildExtraNote(TextStyle bodyText2) {
     return Padding(
       child: Text(
-        'Note. Port 25/433 is available too.',
+        'Note. Ports 3002 and 3003 are also available.',
         style: bodyText2.copyWith(color: kLightText),
       ),
       padding:
@@ -220,12 +220,9 @@ class _PoolTabState extends State<PoolTab> {
           'BTC Mining Address',
           style: bodyText2.copyWith(color: kLightText),
         ),
-        padding:
-            const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+        padding: const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
       ),
-      const SizedBox(
-        height: kDefaultMargin / 4,
-      ),
+      const SizedBox(height: kDefaultMargin / 4,),
       Padding(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -234,18 +231,24 @@ class _PoolTabState extends State<PoolTab> {
           children: [
             Expanded(
               child: Text(
-                'stratum+tcp://btc.noonpool.com:3333',
+                'bitcoin.noonpool.com:3004',
                 style: bodyText2.copyWith(fontSize: 14),
               ),
             ),
-            const Icon(
-              Icons.copy_rounded,
-              color: kPrimaryColor,
+            GestureDetector(
+              child: const Icon(
+                Icons.copy_rounded,
+                color: kPrimaryColor,
+              ),
+              onTap: () {
+                Clipboard.setData(const ClipboardData(text: 'bitcoin.noonpool.com:3004')).then((_){
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("address copied to clipboard")));
+                });
+              },
             ),
-          ],
-        ),
-        padding:
-            const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+          ] ),
+        padding: const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
       ),
     ];
   }
@@ -257,12 +260,9 @@ class _PoolTabState extends State<PoolTab> {
           'Smart Minting URL',
           style: bodyText2.copyWith(color: kLightText),
         ),
-        padding:
-            const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+        padding: const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
       ),
-      const SizedBox(
-        height: kDefaultMargin / 4,
-      ),
+      const SizedBox(height: kDefaultMargin / 4,),
       Padding(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -271,18 +271,25 @@ class _PoolTabState extends State<PoolTab> {
           children: [
             Expanded(
               child: Text(
-                'stratum+tcp://bitcoin.noonpool.com:3333',
+                'stratum+tcp://bitcoin.noonpool.com:3004',
                 style: bodyText2.copyWith(fontSize: 14),
               ),
             ),
-            const Icon(
-              Icons.copy_rounded,
-              color: kPrimaryColor,
+            GestureDetector(
+              child: const Icon(
+                Icons.copy_rounded,
+                color: kPrimaryColor,
+              ),
+              onTap: () {
+                Clipboard.setData(const ClipboardData(text: 'stratum+tcp://bitcoin.noonpool.com:3004')).then((_){
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("address copied to clipboard")));
+                });
+              },
             ),
           ],
         ),
-        padding:
-            const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+        padding: const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
       ),
     ];
   }

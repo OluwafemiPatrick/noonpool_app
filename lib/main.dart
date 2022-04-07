@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:noonpool/presentation/splash_screen/splash_screen.dart';
 
+import 'firebase_options.dart';
 import 'helpers/constants.dart';
 import 'helpers/shared_preference_util.dart';
 
@@ -17,7 +18,7 @@ void main() async {
 
   //init shared preferences
   await AppPreferences.init();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(const MyApp());
 }
