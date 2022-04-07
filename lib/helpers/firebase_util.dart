@@ -12,14 +12,13 @@ FirebaseFirestore sFirebaseCloud = FirebaseFirestore.instance;
 const String successful = '--';
 
 //*** FORGOT PASSWORD ***
-Future<String> forgotPassword({
+Future<void> forgotPassword({
   required String email,
 }) async {
   try {
     await sFirebaseAuth.sendPasswordResetEmail(email: email);
-    return successful;
   } catch (e) {
-    return (e.toString());
+    return Future.error(e.toString());
   }
 }
 

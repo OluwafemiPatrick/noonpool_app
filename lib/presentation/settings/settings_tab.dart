@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:noonpool/helpers/elevated_button.dart';
 import 'package:noonpool/helpers/firebase_util.dart';
 import 'package:noonpool/helpers/page_route.dart';
 import 'package:noonpool/helpers/shared_preference_util.dart';
+import 'package:noonpool/presentation/about_us/about_us_screen.dart';
+import 'package:noonpool/presentation/announcement/announcement_screen.dart';
 import 'package:noonpool/presentation/auth/login/login_sceen.dart';
 import 'package:noonpool/presentation/settings/widget/settings_item.dart';
 
@@ -130,10 +133,7 @@ class _SettingsTabState extends State<SettingsTab> {
 
   SettingsItem buildLanguageItem() {
     return SettingsItem(
-        onPressed: () {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(const SnackBar(content: Text('Language pressed')));
-        },
+        onPressed: showLanguageDialog,
         title: 'Language',
         iconLocation: 'assets/icons/language.svg');
   }
@@ -151,8 +151,8 @@ class _SettingsTabState extends State<SettingsTab> {
   SettingsItem buildAboutItem() {
     return SettingsItem(
         onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('About NoonPool pressed')));
+          Navigator.of(context)
+              .push(CustomPageRoute(screen: const AboutUsScreen()));
         },
         title: 'About NoonPool',
         iconLocation: 'assets/icons/about.svg');
@@ -167,26 +167,87 @@ class _SettingsTabState extends State<SettingsTab> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
-        children: [buildAnnouncementItem(), divider, buildSecurityCenterItem()],
+        children: [buildAnnouncementItem(), divider, buildChangePasswordItem()],
       ),
     );
   }
 
-  SettingsItem buildSecurityCenterItem() {
+  SettingsItem buildChangePasswordItem() {
     return SettingsItem(
-        onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Security Center pressed')));
-        },
-        title: 'Security Center',
+        onPressed: showChangePasswordDialog,
+        title: 'Change Password',
         iconLocation: 'assets/icons/security.svg');
+  }
+
+  void showChangePasswordDialog() async {
+    TextTheme textTheme = Theme.of(context).textTheme;
+    final bodyText1 = textTheme.bodyText1!;
+    final bodyText2 = textTheme.bodyText2!;
+    showDialog(
+        context: context,
+        builder: (ctx) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+            ),
+            title: Text(
+              'Change Password',
+              style: bodyText1,
+            ),
+            contentPadding: const EdgeInsets.all(kDefaultMargin / 2),
+            content: Text(
+              'Do you want a link to change your password for your current account? ',
+              style: bodyText2,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Cancel',
+                  style: bodyText2,
+                ),
+              ),
+              TextButton(
+                onPressed: changePassword,
+                child: Text(
+                  'Yes',
+                  style: bodyText2.copyWith(color: kPrimaryColor),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  changePassword() async {
+    try {
+      var email = sFirebaseAuth.currentUser?.email ?? '';
+      await forgotPassword(email: email);
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+              'An email with a link to change your password has been sent to your account.'),
+        ),
+      );
+    } catch (exception) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(exception.toString()),
+        ),
+      );
+    }
   }
 
   SettingsItem buildAnnouncementItem() {
     return SettingsItem(
         onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Announcement pressed')));
+          Navigator.of(context)
+              .push(CustomPageRoute(screen: const AnnouncementScreen()));
         },
         title: 'Announcement',
         iconLocation: 'assets/icons/announcement.svg');
@@ -199,6 +260,82 @@ class _SettingsTabState extends State<SettingsTab> {
       title: Text(
         'Settings',
         style: bodyText1,
+      ),
+    );
+  }
+
+  void showLanguageDialog() async {
+    final textTheme = Theme.of(context).textTheme;
+    final bodyText1 = textTheme.bodyText1!;
+    final bodyText2 = textTheme.bodyText2!;
+
+    var height = MediaQuery.of(context).size.height;
+
+    Dialog dialog = Dialog(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(10),
+        ),
+      ),
+      elevation: 5,
+      child: Container(
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        padding: const EdgeInsets.only(
+            top: kDefaultPadding,
+            bottom: kDefaultPadding,
+            left: kDefaultPadding,
+            right: kDefaultPadding),
+        decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10))),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Lottie.asset('assets/lottie/language.json',
+                width: 260,
+                animate: true,
+                reverse: true,
+                repeat: true,
+                height: 240,
+                fit: BoxFit.fitWidth,
+                alignment: Alignment.center),
+            const SizedBox(
+              height: kDefaultMargin,
+            ),
+            Text(
+              'Language',
+              style: bodyText1,
+            ),
+            const SizedBox(
+              height: kDefaultMargin / 2,
+            ),
+            const Divider(),
+            ListTile(
+              contentPadding: const EdgeInsets.all(0),
+              trailing: Checkbox(
+                value: true,
+                onChanged: (bool? value) {},
+              ),
+              title: Text(
+                'English',
+                style: bodyText2,
+              ),
+            ),
+            const Divider(),
+          ],
+        ),
+      ),
+    );
+    showGeneralDialog(
+      context: context,
+      barrierLabel: "Announcement Dialog",
+      barrierDismissible: true,
+      barrierColor: Colors.black.withOpacity(0.5),
+      transitionDuration: const Duration(milliseconds: 500),
+      pageBuilder: (_, __, ___) => dialog,
+      transitionBuilder: (_, anim, __, child) => FadeTransition(
+        opacity: Tween(begin: 0.0, end: 1.0).animate(anim),
+        child: child,
       ),
     );
   }

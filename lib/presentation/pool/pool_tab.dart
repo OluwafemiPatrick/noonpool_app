@@ -17,10 +17,7 @@ class PoolTab extends StatefulWidget {
 
 class _PoolTabState extends State<PoolTab> {
   final StreamController<int> _poolStatisticsStream = StreamController();
-  final List<String> _poolStatisticsTitles = [
-    'General',
-    'Mid-East'
-  ];
+  final List<String> _poolStatisticsTitles = ['General', 'Mid-East'];
 
   @override
   Widget build(BuildContext context) {
@@ -220,35 +217,41 @@ class _PoolTabState extends State<PoolTab> {
           'BTC Mining Address',
           style: bodyText2.copyWith(color: kLightText),
         ),
-        padding: const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+        padding:
+            const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
       ),
-      const SizedBox(height: kDefaultMargin / 4,),
+      const SizedBox(
+        height: kDefaultMargin / 4,
+      ),
       Padding(
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Text(
-                'bitcoin.noonpool.com:3004',
-                style: bodyText2.copyWith(fontSize: 14),
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  'bitcoin.noonpool.com:3004',
+                  style: bodyText2.copyWith(fontSize: 14),
+                ),
               ),
-            ),
-            GestureDetector(
-              child: const Icon(
-                Icons.copy_rounded,
-                color: kPrimaryColor,
+              GestureDetector(
+                child: const Icon(
+                  Icons.copy_rounded,
+                  color: kPrimaryColor,
+                ),
+                onTap: () {
+                  Clipboard.setData(const ClipboardData(
+                          text: 'bitcoin.noonpool.com:3004'))
+                      .then((_) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text("address copied to clipboard")));
+                  });
+                },
               ),
-              onTap: () {
-                Clipboard.setData(const ClipboardData(text: 'bitcoin.noonpool.com:3004')).then((_){
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("address copied to clipboard")));
-                });
-              },
-            ),
-          ] ),
-        padding: const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+            ]),
+        padding:
+            const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
       ),
     ];
   }
@@ -260,9 +263,12 @@ class _PoolTabState extends State<PoolTab> {
           'Smart Minting URL',
           style: bodyText2.copyWith(color: kLightText),
         ),
-        padding: const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+        padding:
+            const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
       ),
-      const SizedBox(height: kDefaultMargin / 4,),
+      const SizedBox(
+        height: kDefaultMargin / 4,
+      ),
       Padding(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -281,15 +287,18 @@ class _PoolTabState extends State<PoolTab> {
                 color: kPrimaryColor,
               ),
               onTap: () {
-                Clipboard.setData(const ClipboardData(text: 'stratum+tcp://bitcoin.noonpool.com:3004')).then((_){
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("address copied to clipboard")));
+                Clipboard.setData(const ClipboardData(
+                        text: 'stratum+tcp://bitcoin.noonpool.com:3004'))
+                    .then((_) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("address copied to clipboard")));
                 });
               },
             ),
           ],
         ),
-        padding: const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+        padding:
+            const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
       ),
     ];
   }

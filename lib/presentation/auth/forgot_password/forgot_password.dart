@@ -33,22 +33,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     setState(() {
       _isLoading = true;
     });
-
-    String response = await forgotPassword(email: email.trim());
-    switch (response) {
-      case successful:
-        Navigator.of(context).push(
-          CustomPageRoute(
-            screen: const ForgotPasswordConfirmationScreen(),
-          ),
-        );
-        break;
-      default:
-        //error occurred, handle error
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(response)));
-        break;
+    try {
+      await forgotPassword(email: email.trim());
+      Navigator.of(context).push(
+        CustomPageRoute(
+          screen: const ForgotPasswordConfirmationScreen(),
+        ),
+      );
+    } catch (exception) {
+      //error occurred, handle error
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(exception.toString())));
     }
+
     setState(() {
       _isLoading = false;
     });
