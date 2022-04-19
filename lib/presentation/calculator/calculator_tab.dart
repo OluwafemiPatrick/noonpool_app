@@ -6,7 +6,7 @@ import 'package:noonpool/helpers/error_widget.dart';
 
 import '../../helpers/constants.dart';
 import '../../helpers/elevated_button.dart';
-import '../../helpers/firebase_util.dart';
+import '../../helpers/network_helper.dart';
 import '../../model/coin_model.dart';
 
 class CalculatorTab extends StatefulWidget {

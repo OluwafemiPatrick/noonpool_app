@@ -8,14 +8,14 @@ import 'package:noonpool/presentation/pool/widget/pool_statistics_title.dart';
 
 import '../../helpers/constants.dart';
 
-class PoolTab extends StatefulWidget {
-  const PoolTab({Key? key}) : super(key: key);
+class PoolTabbb extends StatefulWidget {
+  const PoolTabbb({Key? key}) : super(key: key);
 
   @override
-  State<PoolTab> createState() => _PoolTabState();
+  State<PoolTabbb> createState() => _PoolTabbbState();
 }
 
-class _PoolTabState extends State<PoolTab> {
+class _PoolTabbbState extends State<PoolTabbb> {
   final StreamController<int> _poolStatisticsStream = StreamController();
   final List<String> _poolStatisticsTitles = ['General', 'Mid-East'];
 
@@ -27,16 +27,12 @@ class _PoolTabState extends State<PoolTab> {
     const spacer = SizedBox(
       height: kDefaultMargin,
     );
-    const divider = Divider();
     return Scaffold(
       body: ListView(
         physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.all(0),
         children: [
           buildAppBar(bodyText1, bodyText2),
-          spacer,
-          buildStatistics(bodyText2),
-          spacer,
           buildStatisticsItem(),
           spacer,
           ...buildBtcMiningAddress(bodyText2),
@@ -45,7 +41,7 @@ class _PoolTabState extends State<PoolTab> {
           spacer,
           buildExtraNote(bodyText2),
           spacer,
-          divider,
+          buildStatistics(bodyText2),
           spacer,
           buildPoolData(bodyText2, spacer),
         ],
@@ -56,9 +52,8 @@ class _PoolTabState extends State<PoolTab> {
   Container buildPoolData(TextStyle bodyText2, SizedBox spacer) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(kDefaultPadding),
-      margin: const EdgeInsets.only(
-          left: kDefaultMargin / 2, right: kDefaultMargin / 2),
+      padding: const EdgeInsets.symmetric(vertical: kDefaultPadding),
+      margin: const EdgeInsets.only(left: kDefaultMargin / 2, right: kDefaultMargin / 2),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(kDefaultMargin / 2),
         color: kLightBackgroud,
@@ -66,89 +61,73 @@ class _PoolTabState extends State<PoolTab> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Column(
-                children: [
-                  Text(
-                    'All',
-                    style: bodyText2.copyWith(
-                      fontSize: 17,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Column(
+                  children: [
+                    Text(
+                      'All',
+                      style: bodyText2.copyWith(
+                        fontSize: 15,
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: kDefaultMargin / 4,
-                  ),
-                  Text(
-                    '0',
-                    style: bodyText2.copyWith(
-                        fontSize: 20, fontWeight: FontWeight.w500),
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  Text(
-                    'Online',
-                    style: bodyText2.copyWith(
-                      fontSize: 17,
+                    const SizedBox(
+                      height: kDefaultMargin / 4,
                     ),
-                  ),
-                  const SizedBox(
-                    height: kDefaultMargin / 4,
-                  ),
-                  Text(
-                    '0',
-                    style: bodyText2.copyWith(
-                        fontSize: 20, fontWeight: FontWeight.w500),
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  Text(
-                    'Offline',
-                    style: bodyText2.copyWith(
-                      fontSize: 17,
+                    Text(
+                      '0',
+                      style: bodyText2.copyWith(
+                          fontSize: 15, fontWeight: FontWeight.w500),
                     ),
-                  ),
-                  const SizedBox(
-                    height: kDefaultMargin / 4,
-                  ),
-                  Text(
-                    '0',
-                    style: bodyText2.copyWith(
-                        fontSize: 20, fontWeight: FontWeight.w500),
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  Text(
-                    'Inactive',
-                    style: bodyText2.copyWith(
-                      fontSize: 17,
+                  ],
+                ),
+                Column(
+                  children: [
+                    Text(
+                      'Online',
+                      style: bodyText2.copyWith(
+                        fontSize: 15,
+                      ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: kDefaultMargin / 4,
-                  ),
-                  Text(
-                    '0',
-                    style: bodyText2.copyWith(
-                        fontSize: 20, fontWeight: FontWeight.w500),
-                  ),
-                ],
-              ),
-            ],
+                    const SizedBox(
+                      height: kDefaultMargin / 4,
+                    ),
+                    Text(
+                      '0',
+                      style: bodyText2.copyWith(
+                          fontSize: 15, fontWeight: FontWeight.w500),
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    Text(
+                      'Offline',
+                      style: bodyText2.copyWith(
+                        fontSize: 15,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: kDefaultMargin / 4,
+                    ),
+                    Text(
+                      '0',
+                      style: bodyText2.copyWith(
+                          fontSize: 15, fontWeight: FontWeight.w500),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
           spacer,
           Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(kDefaultMargin / 4)),
+            width: MediaQuery.of(context).size.width,
+            decoration: const BoxDecoration(color: Colors.white,),
             padding: const EdgeInsets.all(kDefaultMargin / 2),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -158,15 +137,15 @@ class _PoolTabState extends State<PoolTab> {
                   style: bodyText2,
                 ),
                 Text(
-                  '10-Min(H/s)',
+                  'Hashrate',
                   style: bodyText2,
                 ),
                 Text(
-                  '1 -Day(H/s)',
+                  'Valid Shares',
                   style: bodyText2,
                 ),
                 Text(
-                  'Reject Rate',
+                  'Invalid Shares',
                   style: bodyText2,
                 ),
               ],
@@ -188,11 +167,6 @@ class _PoolTabState extends State<PoolTab> {
             style: bodyText2,
           ),
           spacer,
-          Text(
-            'Learn how to add a miner to start mining',
-            style: bodyText2.copyWith(color: kPrimaryColor),
-          ),
-          spacer,
           spacer,
         ],
       ),
@@ -202,11 +176,10 @@ class _PoolTabState extends State<PoolTab> {
   Padding buildExtraNote(TextStyle bodyText2) {
     return Padding(
       child: Text(
-        'Note. Ports 3002 and 3003 are also available.',
+        'Note. Ports 3003 is also available.',
         style: bodyText2.copyWith(color: kLightText),
       ),
-      padding:
-          const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+      padding: const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
     );
   }
 
@@ -217,12 +190,9 @@ class _PoolTabState extends State<PoolTab> {
           'BTC Mining Address',
           style: bodyText2.copyWith(color: kLightText),
         ),
-        padding:
-            const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+        padding: const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
       ),
-      const SizedBox(
-        height: kDefaultMargin / 4,
-      ),
+      const SizedBox(height: kDefaultMargin / 4),
       Padding(
         child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -242,8 +212,7 @@ class _PoolTabState extends State<PoolTab> {
                 ),
                 onTap: () {
                   Clipboard.setData(const ClipboardData(
-                          text: 'bitcoin.noonpool.com:3004'))
-                      .then((_) {
+                      text: 'bitcoin.noonpool.com:3004')).then((_) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text("address copied to clipboard")));
                   });
@@ -288,8 +257,7 @@ class _PoolTabState extends State<PoolTab> {
               ),
               onTap: () {
                 Clipboard.setData(const ClipboardData(
-                        text: 'stratum+tcp://bitcoin.noonpool.com:3004'))
-                    .then((_) {
+                  text: 'stratum+tcp://bitcoin.noonpool.com:3004')).then((_) {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text("address copied to clipboard")));
                 });
@@ -297,8 +265,7 @@ class _PoolTabState extends State<PoolTab> {
             ),
           ],
         ),
-        padding:
-            const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+        padding: const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
       ),
     ];
   }
@@ -323,10 +290,9 @@ class _PoolTabState extends State<PoolTab> {
     return Padding(
       child: Text(
         'Statistics',
-        style: bodyText2.copyWith(fontSize: 20),
+        style: bodyText2.copyWith(fontSize: 18),
       ),
-      padding:
-          const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+      padding: const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
     );
   }
 
@@ -373,4 +339,5 @@ class _PoolTabState extends State<PoolTab> {
       ],
     );
   }
+
 }

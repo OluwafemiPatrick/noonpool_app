@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:noonpool/helpers/elevated_button.dart';
+import 'package:noonpool/helpers/network_helper.dart';
 import 'package:noonpool/presentation/auth/register/registration_confirmation_screen.dart';
 
 import '../../../helpers/constants.dart';
@@ -27,6 +28,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   final passwordTextEditingController = TextEditingController(text: "");
   final retypePasswordTextEditingController = TextEditingController(text: "");
+
+  final  _validCharacters = RegExp(r'^[a-zA-Z0-9]+$');
+
 
   final Map<String, dynamic> _initValues = {
     _email: '',
@@ -75,25 +79,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
       _isLoading = true;
     });
 
-    final String response =
-        await signUp(email: email, password: password, name: name);
+   var result = await checkUsername(name);
+    if (result == true) {
 
-    setState(() {
-      _isLoading = false;
-    });
+      final String response = await signUp(email: email, password: password, name: name);
 
-    switch (response) {
-      case successful:
-        final Map<String, String> data = {'email': email, 'password': password};
-        Navigator.of(context).pushReplacement(
-          CustomPageRoute(
-              screen: const RegistrationConfirmationScreen(), argument: data),
-        );
-        break;
-      default:
-        showErrorDialog(response);
-        break;
+      setState(() {
+        _isLoading = false;
+      });
+
+      switch (response) {
+        case successful:
+          final Map<String, String> data = {'email': email, 'password': password};
+          Navigator.of(context).pushReplacement(
+            CustomPageRoute(
+                screen: const RegistrationConfirmationScreen(), argument: data),
+          );
+          break;
+        default:
+          showErrorDialog(response);
+          break;
+      }
     }
+    else {
+      // throw an error message
+      showErrorDialog('$name has already been registered, kindly choose a different username');
+      setState(() {
+        _isLoading = false;
+      });
+    }
+
   }
 
   void showErrorDialog(String error) {
@@ -160,7 +175,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(
-                    height: kDefaultMargin,
+                    height: kDefaultMargin * 2,
                   ),
                   ...buildNameTextField(bodyText2),
                   const SizedBox(
@@ -176,7 +191,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   ...buildRetypePasswordTextField(bodyText2),
                   const SizedBox(
-                    height: kDefaultMargin * 2,
+                    height: kDefaultMargin * 5,
                   ),
                   buildSignUpButton(bodyText2),
                   const SizedBox(
@@ -236,23 +251,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
       SizedBox(
         width: double.infinity,
         child: Text(
-          'Name',
+          'Username',
           style: bodyText2.copyWith(
               fontWeight: FontWeight.w500, color: kPrimaryColor),
         ),
       ),
       TextFormField(
         textInputAction: TextInputAction.next,
-        decoration: const InputDecoration(
-          hintText: "Please enter your email address",
+        decoration: InputDecoration(
+          suffixIcon: IconButton(
+            icon: const Icon(
+              Icons.info_outlined,
+              color: kPrimaryColor,
+            ),
+            onPressed: () {},
+          ),
+          hintText: "Please enter your name.",
         ),
         style: bodyText2.copyWith(fontSize: 16),
         onFieldSubmitted: (_) {
           FocusScope.of(context).requestFocus(_emailFocusNode);
         },
         validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Please provide your name.';
+          if (value == null || value.isEmpty || value.length < 8) {
+            return 'Kindly create a unique username.';
+          }
+          if (!_validCharacters.hasMatch(value)){
+            return 'Username cannot contain spaces or special characters';
           }
           return null;
         },

@@ -8,6 +8,7 @@ import 'package:noonpool/presentation/about_us/about_us_screen.dart';
 import 'package:noonpool/presentation/announcement/announcement_screen.dart';
 import 'package:noonpool/presentation/auth/login/login_sceen.dart';
 import 'package:noonpool/presentation/settings/widget/settings_item.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../helpers/constants.dart';
 
@@ -141,8 +142,9 @@ class _SettingsTabState extends State<SettingsTab> {
   SettingsItem buildHelpCenterItem() {
     return SettingsItem(
         onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Help Center pressed')));
+          launch(_emailLaunchFunction());
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //     const SnackBar(content: Text('Help Center pressed')));
         },
         title: 'Help Center',
         iconLocation: 'assets/icons/help.svg');
@@ -339,4 +341,24 @@ class _SettingsTabState extends State<SettingsTab> {
       ),
     );
   }
+
+  _emailLaunchFunction() {
+    Uri emailLaunchUri = Uri(
+      scheme: 'mailto',
+      path: supportEmailAddress,
+      query: _encodeQueryParameters(
+          <String, String>{'subject': 'Customer Support: NoonPool App'}),
+    );
+    return emailLaunchUri.toString();
+  }
+
+
+  String _encodeQueryParameters(Map<String, String> params) {
+    return params.entries
+        .map((e) =>
+    '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+        .join('&');
+  }
+
+
 }

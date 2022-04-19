@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:noonpool/helpers/elevated_button.dart';
+import 'package:noonpool/helpers/network_helper.dart';
 import 'package:noonpool/presentation/auth/register/register_sceen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../helpers/constants.dart';
 import '../../../helpers/firebase_util.dart';
@@ -42,6 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future showLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     final email = _initValues[_email].trim();
     final password = _initValues[_password].trim();
 
@@ -53,6 +56,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
     switch (response) {
       case successful:
+        var result = await getHomepageData(sFirebaseAuth.currentUser!.uid);
+        prefs.setString('username', result['username']);
+
         AppPreferences.setLoginStatus(status: true);
         AppPreferences.setOnBoardingStatus(status: true);
         Navigator.of(context).pushAndRemoveUntil(

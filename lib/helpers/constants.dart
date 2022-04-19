@@ -16,3 +16,5 @@ const kTextColor = Color.fromRGBO(55, 71, 79, 1);
 
 const String logoLocation = "assets/images/mini_logo.png";
 const String fullLogoLocation = "assets/images/logo.png";
+
+const String supportEmailAddress = "support@noonpool.com";

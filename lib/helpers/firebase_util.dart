@@ -1,13 +1,8 @@
-import 'dart:convert';
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:http/http.dart' as http;
-import 'package:noonpool/model/coin_model.dart';
+import 'package:noonpool/helpers/network_helper.dart';
 
 FirebaseAuth sFirebaseAuth = FirebaseAuth.instance;
-FirebaseFirestore sFirebaseCloud = FirebaseFirestore.instance;
 
 const String successful = '--';
 
@@ -98,11 +93,12 @@ Future<String> signUp(
 
     var body = {
       "email": email,
-      'id': userId,
-      'name': name,
+      'user_id': userId,
+      'username': name,
     };
 
-    await sFirebaseCloud.collection('users').doc(userId).set(body);
+    // create a new account for user in mongodb
+    await createUserAccount(name, email, userId);
 
     sFirebaseAuth.signOut();
     return successful;
@@ -119,55 +115,3 @@ Future<String> signUp(
   }
 }
 
-Future<List<CoinModel>> getAllCoinDetails() async {
-  try {
-    final response = await http.get(
-      Uri.parse('https://noonpool.herokuapp.com/api/v1/fetchCoinData'),
-      headers: {'Content-Type': 'application/json'},
-    );
-
-    var decode = jsonDecode(response.body);
-
-    if (response.statusCode == 200) {
-      final allData = decode as List<dynamic>;
-
-      final coinData = allData
-          .map((data) => CoinModel(
-              imageLocation: data['coin_logo'].toString().trim(),
-              coin: data['coin_name'].toString().trim(),
-              coinSubTitle: data['coin_symbol'].toString().trim(),
-              algorithm: data['algo'].toString().trim(),
-              id: data['_id'],
-              difficulty: data['difficulty'],
-              reward: data['reward'],
-              profit: data['profit'],
-              price: data['price'],
-              networkHashRate: data['net_hashrate']))
-          .toList();
-/*
-
-      final coinData = allData
-          .map((data) => CoinModel(
-              imageLocation: data['coin_logo'],
-              coin: data['coin_name'],
-              coinName: data['coin_symbol'],
-              algorithm: data['algo'],
-              id: data['_id'],
-              poolHashRate: data['pool_hashrate'] + .0,
-              profit: data['profit'] + .0,
-              price: data['price'] + .0,
-              networkHashRate: data['net_hashrate'] + .0))
-          .toList();
-*/
-
-      return coinData;
-    } else {
-      return Future.error('Error occurred, please try again');
-    }
-  } on SocketException {
-    return Future.error(
-        'Kindly enable your internet connection to load new data');
-  } catch (e) {
-    return Future.error(e.toString());
-  }
-}

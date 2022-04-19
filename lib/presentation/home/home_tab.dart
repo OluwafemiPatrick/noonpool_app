@@ -9,6 +9,7 @@ import 'package:noonpool/presentation/home/widget/home_coin_item.dart';
 import 'package:noonpool/presentation/home/widget/home_header_item.dart';
 
 import '../../helpers/error_widget.dart';
+import '../../helpers/network_helper.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({Key? key}) : super(key: key);
@@ -36,8 +37,7 @@ class _HomeTabState extends State<HomeTab> {
           buildAppBar(bodyText1),
           const Padding(
             child: _HomeHeader(),
-            padding:
-                EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+            padding: EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
           ),
           spacer,
           Padding(
@@ -83,12 +83,12 @@ class _HomeTabState extends State<HomeTab> {
                       return Center(
                         child: Lottie.asset(
                           'assets/lottie/loading.json',
-                          width: 100,
-                          animate: true,
-                          reverse: true,
-                          repeat: true,
-                          height: 100,
-                          fit: BoxFit.contain,
+                            width: 100,
+                            animate: true,
+                            reverse: true,
+                            repeat: true,
+                            height: 100,
+                            fit: BoxFit.contain,
                         ),
                       );
                     }

@@ -34,7 +34,9 @@ class HomeCoinItem extends StatelessWidget {
                 fit: BoxFit.fill,
                 width: 40,
                 height: 40,
-                placeholder: (context, url) => const SizedBox(),
+                placeholder: (context, url) => Container(
+                  color: Colors.brown[300],
+                ),
                 errorWidget: (context, url, error) => const SizedBox(),
               ),
             ),
