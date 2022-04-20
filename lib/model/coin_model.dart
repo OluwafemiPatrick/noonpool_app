@@ -20,5 +20,6 @@ class CoinModel {
       required this.reward,
       required this.profit,
       required this.price,
-      required this.networkHashRate});
+      required this.networkHashRate
+      });
 }

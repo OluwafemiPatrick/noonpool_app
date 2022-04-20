@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:noonpool/helpers/network_helper.dart';
 import 'package:noonpool/presentation/pool/widget/pool_statistics_title.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,6 +22,7 @@ class _PoolTabState extends State<PoolTab> {
   final List<String> _poolStatisticsTitles = ['General', 'Mid-East'];
 
   String _username = '';
+  List workerData = [];
 
   @override
   void initState() {
@@ -78,13 +80,8 @@ class _PoolTabState extends State<PoolTab> {
                 borderRadius: BorderRadius.circular(kDefaultMargin)),
             child: Row(
               children: [
-                SvgPicture.asset(
-                  'assets/coins/btc.svg',
-                  height: 25,
-                  width: 25,
-                ),
                 const SizedBox(
-                  width: kDefaultMargin / 5,
+                  width: kDefaultMargin,
                 ),
                 Text(
                   'BTC',
@@ -222,7 +219,7 @@ class _PoolTabState extends State<PoolTab> {
   Padding buildStatistics(TextStyle bodyText2, String workerName) {
     return Padding(
       child: Text(
-        'Statistics ($workerName)',
+        'Statistics -> $workerName',
         style: bodyText2.copyWith(fontSize: 18),
       ),
       padding: const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
@@ -250,7 +247,7 @@ class _PoolTabState extends State<PoolTab> {
                 Column(
                   children: [
                     Text(
-                      'All',
+                      'All miners',
                       style: bodyText2.copyWith(
                         fontSize: 15,
                       ),
@@ -259,7 +256,7 @@ class _PoolTabState extends State<PoolTab> {
                       height: kDefaultMargin / 4,
                     ),
                     Text(
-                      '0',
+                      workerData.isNotEmpty ? workerData.length.toString() : '0',
                       style: bodyText2.copyWith(
                           fontSize: 15, fontWeight: FontWeight.w500),
                     ),
@@ -268,7 +265,7 @@ class _PoolTabState extends State<PoolTab> {
                 Column(
                   children: [
                     Text(
-                      'Online',
+                      'Paid earnings',
                       style: bodyText2.copyWith(
                         fontSize: 15,
                       ),
@@ -277,7 +274,7 @@ class _PoolTabState extends State<PoolTab> {
                       height: kDefaultMargin / 4,
                     ),
                     Text(
-                      '0',
+                      workerData.isNotEmpty ? workerData[0]['paidEarning'] : '0',
                       style: bodyText2.copyWith(
                           fontSize: 15, fontWeight: FontWeight.w500),
                     ),
@@ -286,7 +283,7 @@ class _PoolTabState extends State<PoolTab> {
                 Column(
                   children: [
                     Text(
-                      'Offline',
+                      'Unpaid earnings',
                       style: bodyText2.copyWith(
                         fontSize: 15,
                       ),
@@ -295,7 +292,7 @@ class _PoolTabState extends State<PoolTab> {
                       height: kDefaultMargin / 4,
                     ),
                     Text(
-                      '0',
+                      workerData.isNotEmpty ? workerData[0]['unpaidEarning'] : '0',
                       style: bodyText2.copyWith(
                           fontSize: 15, fontWeight: FontWeight.w500),
                     ),
@@ -308,31 +305,107 @@ class _PoolTabState extends State<PoolTab> {
           Container(
             width: MediaQuery.of(context).size.width,
             decoration: const BoxDecoration(color: Colors.white,),
-            padding: const EdgeInsets.all(kDefaultMargin / 2),
+            padding: const EdgeInsets.symmetric(vertical: kDefaultMargin / 2, horizontal: kDefaultMargin / 2),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'WorkerID',
-                  style: bodyText2,
+                Expanded(
+                  child: Text(
+                    'WorkerID',
+                    style: bodyText2,
+                  ),
                 ),
-                Text(
-                  'Hashrate',
-                  style: bodyText2,
+                Expanded(
+                  child: Text(
+                    'Hashrate',
+                    style: bodyText2,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-                Text(
-                  'Valid Shares',
-                  style: bodyText2,
+                Expanded(
+                  child: Text(
+                    'Valid Shares',
+                    style: bodyText2,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-                Text(
-                  'Invalid Shares',
-                  style: bodyText2,
+                Expanded(
+                  child: Text(
+                    'Invalid Shares',
+                    style: bodyText2,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ],
             ),
           ),
-          noWorkerData(bodyText2),
+          const SizedBox(height: 12.0),
+          if (workerData.isNotEmpty) Expanded(
+            child: ListView.builder(
+                    itemCount: 2,
+                    physics: const ScrollPhysics(),
+                    itemBuilder: (_, index) {
+                      return displayWorkerData(
+                        workerData[index]['workerId'],
+                        workerData[index]['hashrate'],
+                        workerData[index]['sharesValid'],
+                        workerData[index]['sharesInvalid'],
+                      );
+                    },
+                  ),
+          ) else noWorkerData(bodyText2)
+        ],
+      ),
+    );
+  }
 
+  Widget displayWorkerData (String workerId, hashrate, sharesValid, sharesInvalid) {
+    final textTheme = Theme.of(context).textTheme;
+    final bodyText2 = textTheme.bodyText2!;
+    String _workerId, _hashrate, _validS, _inValidS;
+
+    // format worker_id into proper name
+    var split = workerId.split('.');
+    if (split.length<4 && split.length>1) {
+      var s1 = split[1];
+      var s2 = split[2];
+      _workerId = "$s1.$s2";
+    } else {
+      _workerId = workerId;
+    }
+
+    // remove decimal figures from hashrate
+    var rate = double.parse(hashrate);
+    _hashrate = rate.toStringAsFixed(0);
+
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.symmetric(horizontal: kDefaultMargin / 2),
+      margin: const EdgeInsets.only(bottom: 12.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(_workerId,
+              style: bodyText2,
+            ),
+          ),
+          Expanded(
+            child: Text(_hashrate,
+              style: bodyText2,
+              textAlign: TextAlign.center,
+            ),
+          ),
+          Expanded(
+            child: Text(sharesValid=='null' ? '0' : sharesValid,
+              style: bodyText2,
+              textAlign: TextAlign.center,
+            ),
+          ),
+          Expanded(
+            child: Text(sharesInvalid=='null' ? '0' : sharesInvalid,
+              style: bodyText2,
+              textAlign: TextAlign.center,
+            ),
+          ),
         ],
       ),
     );
@@ -365,10 +438,22 @@ class _PoolTabState extends State<PoolTab> {
   }
 
   getUsername() async {
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _username = prefs.getString('username')!;
-    });
+    String? name = prefs.getString('username');
+
+    if (name != null) {
+      List result = await fetchWorkerData(name);
+
+      setState(() {
+        _username = name;
+        workerData = result;
+      });
+    }
+
+
+
+
   }
 
 

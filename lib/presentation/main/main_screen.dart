@@ -6,7 +6,6 @@ import 'package:lottie/lottie.dart';
 import 'package:noonpool/presentation/calculator/calculator_tab.dart';
 import 'package:noonpool/presentation/home/home_tab.dart';
 import 'package:noonpool/presentation/pool/pool_data.dart';
-import 'package:noonpool/presentation/pool/pool_tabbb.dart';
 import 'package:noonpool/presentation/settings/settings_tab.dart';
 
 import '../../helpers/bottom_app_bar.dart';

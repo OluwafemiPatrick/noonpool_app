@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:noonpool/model/worker_data_model.dart';
+
 import '../model/coin_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -108,6 +110,59 @@ Future<dynamic> getHomepageData (String userId) async {
   } else {
     var data = jsonDecode(response.body);
     return data;
+  }
+
+}
+
+Future<dynamic> fetchWorkerData (String workerName) async {
+  final url = 'http://bitcoin.noonpool.com:5000/api/v1/Pool-Bitcoin/miners?method=$workerName';
+  final response = await http.get(Uri.parse(url));
+
+  if (response.statusCode == 200) {
+    var workerData = jsonDecode(response.body);
+    List workers = workerData['body']['primary']['workers']['shared'];
+    List dataToReturn = [];
+
+    String paidEarning = workerData['body']['primary']['payments']['paid'].toString();
+    String unpaidEarning = workerData['body']['primary']['payments']['balances'].toString();
+
+    for (var name in workers) {
+      String subUrl = 'http://bitcoin.noonpool.com:5000/api/v1/Pool-Bitcoin/miners?method=$name';
+      var res = await http.get(Uri.parse(subUrl));
+
+      Map<String, dynamic> list = json.decode(res.body);
+      var subList = list['body']['primary'];
+
+      String hashrate = subList['hashrate']['shared'].toString();
+      String sharesValid = subList['shares']['shared']['valid'].toString();
+      String sharesInvalid = subList['shares']['shared']['invalid'].toString();
+      String sharesStale = subList['shares']['shared']['stale'].toString();
+      String payBalance = subList['payments']['balances'].toString();
+      String payGenerate = subList['payments']['generate'].toString();
+      String payImmature = subList['payments']['immature'].toString();
+      String payPaid = subList['payments']['paid'].toString();
+      String work = subList['work']['shared'].toString();
+
+      Map<String, String> workerD = {
+        'workerId' : name,
+        'hashrate' : hashrate,
+        'sharesValid' : sharesValid,
+        'sharesInvalid': sharesInvalid,
+        'sharesStale': sharesStale,
+        'payBalance': payBalance,
+        'payGenerate': payGenerate,
+        'payImmature': payImmature,
+        'payPaid': payPaid,
+        'work': work,
+        'paidEarning': paidEarning,
+        'unpaidEarning': unpaidEarning
+      };
+      dataToReturn.add(workerD);
+    }
+    return dataToReturn;
+  }
+  else {
+    return null;
   }
 
 }
