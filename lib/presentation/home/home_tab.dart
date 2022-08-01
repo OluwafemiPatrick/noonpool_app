@@ -125,11 +125,11 @@ class _HomeTabState extends State<HomeTab> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                'Profit',
+                'Price (USD)',
                 style: bodyText1,
               ),
               Text(
-                'Price',
+                'Mining Profit',
                 style: lightText,
               ),
             ],

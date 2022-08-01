@@ -78,18 +78,19 @@ class HomeCoinItem extends StatelessWidget {
 
   Column buildPrice(TextStyle bodyText1, TextStyle lightText) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          coinModel.profit.toStringAsExponential(8),
+          coinModel.price.toStringAsFixed(4),
           style: bodyText1,
         ),
         const SizedBox(height: kDefaultMargin / 4),
         Text(
-          coinModel.price.toStringAsFixed(4),
+          coinModel.profit.toStringAsExponential(8),
           style: lightText,
-        )
+        ),
+
       ],
     );
   }

@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:noonpool/helpers/error_widget.dart';
@@ -165,8 +164,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
 
   Card buildTopText(TextStyle bodyText2) {
     return Card(
-      margin:
-          const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+      margin: const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
       color: kLightBackgroud,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
@@ -432,6 +430,8 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
                   widget.coinModel.coinSubTitle,
                   style: bodyText2,
                 ),
+
+
               ],
             ),
           ),
@@ -442,4 +442,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
       ],
     );
   }
+
+
+
 }

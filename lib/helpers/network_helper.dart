@@ -7,7 +7,9 @@ import '../model/coin_model.dart';
 import 'package:http/http.dart' as http;
 
 
-const String baseUrl = 'https://noonpool.herokuapp.com/api/v1/';
+//const String baseUrl = 'https://noonpool.herokuapp.com/api/v1/';
+const String baseUrl = 'http://3.12.45.208:5050/api/v1/';
+
 
 Future<List<CoinModel>> getAllCoinDetails() async {
 

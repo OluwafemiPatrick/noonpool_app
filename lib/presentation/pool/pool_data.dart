@@ -23,6 +23,11 @@ class _PoolTabState extends State<PoolTab> {
 
   String _username = '';
   List workerData = [];
+  String coin = 'LTC';
+  String port1 = '3070', port2 = '3080';
+  String miningAdd = 'litecoin.noonpool.com:3070';
+  String stratumUrl = 'stratum+tcp://litecoin.noonpool.com:3070';
+
 
   @override
   void initState() {
@@ -80,17 +85,9 @@ class _PoolTabState extends State<PoolTab> {
                 borderRadius: BorderRadius.circular(kDefaultMargin)),
             child: Row(
               children: [
-                const SizedBox(
-                  width: kDefaultMargin,
-                ),
-                Text(
-                  'BTC',
-                  style: bodyText2,
-                ),
-                const Icon(
-                  Icons.arrow_drop_down,
-                  color: kTextColor,
-                )
+                const SizedBox(width: kDefaultMargin),
+                Text(coin, style: bodyText2),
+                dropDown(bodyText2),
               ]),
           ),
         ),
@@ -98,6 +95,68 @@ class _PoolTabState extends State<PoolTab> {
           width: kDefaultMargin / 2,
         )
       ],
+    );
+  }
+
+
+  Widget dropDown(TextStyle bodyText2) {
+    List<String> _coinList = ['LTC', 'BTC', 'DOGE', 'BCH'];
+    String? _selected;
+    return DropdownButton<String>(
+      underline: Container(),
+      value: _selected,
+      icon: const Icon(
+        Icons.arrow_drop_down_sharp,
+        color: kPrimaryColor,
+      ),
+      items: _coinList.map((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value, style: bodyText2,),
+        );
+      }).toList(),
+      onChanged: (newValue) {
+        setState(() {
+          _selected = newValue.toString();
+          if (_selected == 'LTC'){
+            setState(() {
+              coin = _selected!;
+              port1 = '3070';
+              port2 = '3080';
+              miningAdd = 'litecoin.noonpool.com:3070';
+              stratumUrl = 'stratum+tcp://litecoin.noonpool.com:3070';
+            });
+          }
+          if (_selected == 'BTC'){
+            setState(() {
+              coin = _selected!;
+              port1 = '3333';
+              port2 = '3334';
+              miningAdd = 'bitcoin.noonpool.com:3333';
+              stratumUrl = 'stratum+tcp://bitcoin.noonpool.com:3333';
+            });
+          }
+          if (_selected == 'DOGE'){
+            setState(() {
+              coin = _selected!;
+              port1 = '';
+              port2 = '';
+              miningAdd = 'Coin not available';
+              stratumUrl = 'Coin not available';
+            });
+          }
+          if (_selected == 'BCH'){
+            setState(() {
+              coin = _selected!;
+              port1 = '';
+              port2 = '';
+              miningAdd = 'Coin not available';
+              stratumUrl = 'Coin not available';
+            });
+          }
+        });
+      },
+
     );
   }
 
@@ -123,7 +182,7 @@ class _PoolTabState extends State<PoolTab> {
     return [
       Padding(
         child: Text(
-          'BTC Mining Address',
+          '$coin Mining Address',
           style: bodyText2.copyWith(color: kLightText),
         ),
         padding: const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
@@ -137,7 +196,7 @@ class _PoolTabState extends State<PoolTab> {
             children: [
               Expanded(
                 child: Text(
-                  'bitcoin.noonpool.com:3004',
+                  miningAdd,
                   style: bodyText2.copyWith(fontSize: 14),
                 ),
               ),
@@ -147,8 +206,8 @@ class _PoolTabState extends State<PoolTab> {
                   color: kPrimaryColor,
                 ),
                 onTap: () {
-                  Clipboard.setData(const ClipboardData(
-                      text: 'bitcoin.noonpool.com:3004')).then((_) {
+                  Clipboard.setData(ClipboardData(
+                      text: miningAdd)).then((_) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text("address copied to clipboard")));
                   });
@@ -182,7 +241,7 @@ class _PoolTabState extends State<PoolTab> {
           children: [
             Expanded(
               child: Text(
-                'stratum+tcp://bitcoin.noonpool.com:3004',
+                stratumUrl,
                 style: bodyText2.copyWith(fontSize: 14),
               ),
             ),
@@ -192,8 +251,8 @@ class _PoolTabState extends State<PoolTab> {
                 color: kPrimaryColor,
               ),
               onTap: () {
-                Clipboard.setData(const ClipboardData(
-                    text: 'stratum+tcp://bitcoin.noonpool.com:3004')).then((_) {
+                Clipboard.setData(ClipboardData(
+                    text: stratumUrl)).then((_) {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text("address copied to clipboard")));
                 });
@@ -209,7 +268,7 @@ class _PoolTabState extends State<PoolTab> {
   Padding buildExtraNote(TextStyle bodyText2) {
     return Padding(
       child: Text(
-        'Note. Ports 3003 is also available.',
+        'Note. Port $port2 is also available.',
         style: bodyText2.copyWith(color: kLightText),
       ),
       padding: const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
