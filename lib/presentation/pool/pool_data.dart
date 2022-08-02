@@ -27,6 +27,10 @@ class _PoolTabState extends State<PoolTab> {
   String port1 = '3070', port2 = '3080';
   String miningAdd = 'litecoin.noonpool.com:3070';
   String stratumUrl = 'stratum+tcp://litecoin.noonpool.com:3070';
+  String ltcUrl = 'http://litecoin.noonpool.com:6050/api/v1/Pool-Litecoin';
+  String btcUrl = 'http://bitcoin.noonpool.com:6055/api/v1/Pool-Bitcoin';
+  String bchUrl = '';
+  String dogeUrl = '';
 
 
   @override
@@ -116,45 +120,51 @@ class _PoolTabState extends State<PoolTab> {
         );
       }).toList(),
       onChanged: (newValue) {
-        setState(() {
-          _selected = newValue.toString();
-          if (_selected == 'LTC'){
-            setState(() {
-              coin = _selected!;
-              port1 = '3070';
-              port2 = '3080';
-              miningAdd = 'litecoin.noonpool.com:3070';
-              stratumUrl = 'stratum+tcp://litecoin.noonpool.com:3070';
-            });
-          }
-          if (_selected == 'BTC'){
-            setState(() {
-              coin = _selected!;
-              port1 = '3333';
-              port2 = '3334';
-              miningAdd = 'bitcoin.noonpool.com:3333';
-              stratumUrl = 'stratum+tcp://bitcoin.noonpool.com:3333';
-            });
-          }
-          if (_selected == 'DOGE'){
-            setState(() {
-              coin = _selected!;
-              port1 = '';
-              port2 = '';
-              miningAdd = 'Coin not available';
-              stratumUrl = 'Coin not available';
-            });
-          }
-          if (_selected == 'BCH'){
-            setState(() {
-              coin = _selected!;
-              port1 = '';
-              port2 = '';
-              miningAdd = 'Coin not available';
-              stratumUrl = 'Coin not available';
-            });
-          }
-        });
+        _selected = newValue.toString();
+        if (_selected == 'LTC'){
+          setState(() {
+            workerData = [];
+            coin = _selected!;
+            port1 = '3070';
+            port2 = '3080';
+            miningAdd = 'litecoin.noonpool.com:3070';
+            stratumUrl = 'stratum+tcp://litecoin.noonpool.com:3070';
+          });
+          initState();
+        }
+        if (_selected == 'BTC'){
+          setState(() {
+            workerData = [];
+            coin = _selected!;
+            port1 = '3333';
+            port2 = '3334';
+            miningAdd = 'bitcoin.noonpool.com:3333';
+            stratumUrl = 'stratum+tcp://bitcoin.noonpool.com:3333';
+          });
+          initState();
+        }
+        if (_selected == 'DOGE'){
+          setState(() {
+            workerData = [];
+            coin = _selected!;
+            port1 = '0';
+            port2 = '0';
+            miningAdd = 'Coin not available';
+            stratumUrl = 'Coin not available';
+          });
+          initState();
+        }
+        if (_selected == 'BCH'){
+          setState(() {
+            workerData = [];
+            coin = _selected!;
+            port1 = '0';
+            port2 = '0';
+            miningAdd = 'Coin not available';
+            stratumUrl = 'Coin not available';
+          });
+          initState();
+        }
       },
 
     );
@@ -400,7 +410,7 @@ class _PoolTabState extends State<PoolTab> {
           const SizedBox(height: 12.0),
           if (workerData.isNotEmpty) Expanded(
             child: ListView.builder(
-                    itemCount: 2,
+                    itemCount: workerData.length,
                     physics: const ScrollPhysics(),
                     itemBuilder: (_, index) {
                       return displayWorkerData(
@@ -501,8 +511,22 @@ class _PoolTabState extends State<PoolTab> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? name = prefs.getString('username');
 
+    String? poolUrl;
+    if (coin == 'LTC') {
+      setState(() => poolUrl = ltcUrl);
+    }
+    if (coin == 'BTC') {
+      setState(() => poolUrl = btcUrl);
+    }
+    if (coin == 'BCH') {
+      setState(() => poolUrl = bchUrl);
+    }
+    if (coin == 'DOGE') {
+      setState(() => poolUrl = dogeUrl);
+    }
+
     if (name != null) {
-      List result = await fetchWorkerData(name);
+      List result = await fetchWorkerData(name, poolUrl);
 
       setState(() {
         _username = name;

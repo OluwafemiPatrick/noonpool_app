@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 
 
 //const String baseUrl = 'https://noonpool.herokuapp.com/api/v1/';
-const String baseUrl = 'http://3.12.45.208:5050/api/v1/';
+const String baseUrl = 'http://5.189.137.144:3505/api/v1/';
 
 
 Future<List<CoinModel>> getAllCoinDetails() async {
@@ -116,8 +116,8 @@ Future<dynamic> getHomepageData (String userId) async {
 
 }
 
-Future<dynamic> fetchWorkerData (String workerName) async {
-  final url = 'http://bitcoin.noonpool.com:5000/api/v1/Pool-Bitcoin/miners?method=$workerName';
+Future<dynamic> fetchWorkerData (String workerName, poolUrl) async {
+  final url = '$poolUrl/miners?method=$workerName';
   final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
@@ -129,7 +129,7 @@ Future<dynamic> fetchWorkerData (String workerName) async {
     String unpaidEarning = workerData['body']['primary']['payments']['balances'].toString();
 
     for (var name in workers) {
-      String subUrl = 'http://bitcoin.noonpool.com:5000/api/v1/Pool-Bitcoin/miners?method=$name';
+      String subUrl = '$poolUrl/miners?method=$name';
       var res = await http.get(Uri.parse(subUrl));
 
       Map<String, dynamic> list = json.decode(res.body);
