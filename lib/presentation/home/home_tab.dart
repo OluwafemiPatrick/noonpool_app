@@ -37,7 +37,8 @@ class _HomeTabState extends State<HomeTab> {
           buildAppBar(bodyText1),
           const Padding(
             child: _HomeHeader(),
-            padding: EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+            padding:
+                EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
           ),
           spacer,
           Padding(
@@ -52,7 +53,9 @@ class _HomeTabState extends State<HomeTab> {
           Padding(
             child: buildRow2(bodyText1, lightText),
             padding: const EdgeInsets.only(
-                left: kDefaultMargin, right: kDefaultMargin),
+              left: kDefaultMargin,
+              right: kDefaultMargin,
+            ),
           ),
           spacer,
           Expanded(
@@ -83,12 +86,12 @@ class _HomeTabState extends State<HomeTab> {
                       return Center(
                         child: Lottie.asset(
                           'assets/lottie/loading.json',
-                            width: 100,
-                            animate: true,
-                            reverse: true,
-                            repeat: true,
-                            height: 100,
-                            fit: BoxFit.contain,
+                          width: 100,
+                          animate: true,
+                          reverse: true,
+                          repeat: true,
+                          height: 100,
+                          fit: BoxFit.contain,
                         ),
                       );
                     }
@@ -102,43 +105,42 @@ class _HomeTabState extends State<HomeTab> {
 
   Row buildRow2(TextStyle bodyText1, TextStyle lightText) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Coin',
-                style: bodyText1,
-              ),
-              Text(
-                'Algorithm',
-                style: lightText,
-              ),
-            ],
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Coin',
+                  style: bodyText1,
+                ),
+                Text(
+                  'Algorithm',
+                  style: lightText,
+                ),
+              ],
+            ),
           ),
-        ),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                'Price',
-                style: bodyText1,
-              ),
-              Text(
-                'Mining Profit',
-                style: lightText,
-              ),
-            ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Price',
+                  style: bodyText1,
+                ),
+                Text(
+                  'Mining Profit',
+                  style: lightText,
+                ),
+              ],
+            ),
           ),
-        ),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
+          Expanded(
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
               Text(
                 'Difficulty',
                 style: bodyText1,
@@ -148,8 +150,8 @@ class _HomeTabState extends State<HomeTab> {
                 style: lightText,
               ),
             ]),
-        ),
-      ]);
+          ),
+        ]);
   }
 
   AppBar buildAppBar(TextStyle? bodyText1) {

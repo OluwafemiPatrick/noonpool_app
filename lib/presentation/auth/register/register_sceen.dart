@@ -1,6 +1,8 @@
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:noonpool/helpers/elevated_button.dart';
 import 'package:noonpool/helpers/network_helper.dart';
+import 'package:noonpool/helpers/text_button.dart';
 import 'package:noonpool/presentation/auth/register/registration_confirmation_screen.dart';
 
 import '../../../helpers/constants.dart';
@@ -21,16 +23,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
   static const _retypePassword = "retypePassword";
   bool _isHidden = true;
   bool _isLoading = false;
-
+  CancelableOperation? cancelableFuture;
   final _emailFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
   final _reTypePasswordFocusNode = FocusNode();
   final _formKey = GlobalKey<FormState>();
+  final _formKeyName = GlobalKey<FormFieldState>();
   final passwordTextEditingController = TextEditingController(text: "");
   final retypePasswordTextEditingController = TextEditingController(text: "");
-
-  final  _validCharacters = RegExp(r'^[a-zA-Z0-9]+$');
-
+  String? errorText;
+  final _validCharacters = RegExp(r'^[a-zA-Z0-9]+$');
 
   final Map<String, dynamic> _initValues = {
     _email: '',
@@ -69,46 +71,66 @@ class _RegisterScreenState extends State<RegisterScreen> {
     showRegistrationStatus();
   }
 
+  verifyUserName(String name) async {
+    try {
+      cancelableFuture?.cancel();
+      cancelableFuture = CancelableOperation.fromFuture(checkUsername(name));
+      final isAvailiable = await cancelableFuture?.value;
+      if (isAvailiable == true) {
+        errorText = null;
+      } else {
+        errorText = 'Username unavailiable';
+      }
+    } catch (exception) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(exception.toString())));
+      errorText = 'Username unavailiable';
+    }
+    _formKeyName.currentState?.validate();
+  }
+
   Future showRegistrationStatus() async {
     final email = _initValues[_email].trim();
     final name = _initValues[_name].trim();
     final password = _initValues[_password].trim();
 
-    //if is loading the text changes to a progress bar
     setState(() {
       _isLoading = true;
     });
+    try {
+      final result = await checkUsername(name);
+      if (result == true) {
+        final String response =
+            await signUp(email: email, password: password, name: name);
 
-   var result = await checkUsername(name);
-    if (result == true) {
-
-      final String response = await signUp(email: email, password: password, name: name);
-
-      setState(() {
-        _isLoading = false;
-      });
-
-      switch (response) {
-        case successful:
-          final Map<String, String> data = {'email': email, 'password': password};
-          Navigator.of(context).pushReplacement(
-            CustomPageRoute(
-                screen: const RegistrationConfirmationScreen(), argument: data),
-          );
-          break;
-        default:
-          showErrorDialog(response);
-          break;
+        switch (response) {
+          case successful:
+            final Map<String, String> data = {
+              'email': email,
+              'password': password
+            };
+            Navigator.of(context).pushReplacement(
+              CustomPageRoute(
+                screen: const RegistrationConfirmationScreen(),
+                argument: data,
+              ),
+            );
+            break;
+          default:
+            showErrorDialog(response);
+            break;
+        }
+      } else {
+        // throw an error message
+        showErrorDialog(
+            '$name has already been registered, kindly choose a different username');
       }
+    } catch (exception) {
+      showErrorDialog(exception.toString());
     }
-    else {
-      // throw an error message
-      showErrorDialog('$name has already been registered, kindly choose a different username');
-      setState(() {
-        _isLoading = false;
-      });
-    }
-
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   void showErrorDialog(String error) {
@@ -159,46 +181,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var bodyText1 = themeData.textTheme.bodyText1!;
-    var bodyText2 = themeData.textTheme.bodyText2!;
+    final themeData = Theme.of(context);
+    final bodyText1 = themeData.textTheme.bodyText1!;
+    final bodyText2 = themeData.textTheme.bodyText2!;
 
     return Scaffold(
       appBar: buildAppBar(bodyText1),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(kDefaultPadding),
-          child: SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: kDefaultMargin * 2,
-                  ),
-                  ...buildNameTextField(bodyText2),
-                  const SizedBox(
-                    height: kDefaultMargin,
-                  ),
-                  ...buildEmailTextField(bodyText2),
-                  const SizedBox(
-                    height: kDefaultMargin,
-                  ),
-                  ...buildPasswordTextField(bodyText2),
-                  const SizedBox(
-                    height: kDefaultMargin,
-                  ),
-                  ...buildRetypePasswordTextField(bodyText2),
-                  const SizedBox(
-                    height: kDefaultMargin * 5,
-                  ),
-                  buildSignUpButton(bodyText2),
-                  const SizedBox(
-                    height: kDefaultMargin / 2,
-                  ),
-                ],
-              ),
+      body: Padding(
+        padding: const EdgeInsets.all(kDefaultPadding / 2),
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ...buildNameTextField(bodyText2, bodyText1),
+                const SizedBox(
+                  height: kDefaultMargin / 2,
+                ),
+                ...buildEmailTextField(bodyText2),
+                const SizedBox(
+                  height: kDefaultMargin / 2,
+                ),
+                ...buildPasswordTextField(bodyText2),
+                const SizedBox(
+                  height: kDefaultMargin / 2,
+                ),
+                ...buildRetypePasswordTextField(bodyText2),
+                const SizedBox(
+                  height: kDefaultMargin,
+                ),
+                buildSignUpButton(bodyText2),
+                const SizedBox(
+                  height: kDefaultMargin / 2,
+                ),
+              ],
             ),
           ),
         ),
@@ -208,20 +225,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   AppBar buildAppBar(TextStyle bodyText1) {
     return AppBar(
-      leading: IconButton(
-        icon: const Icon(
-          Icons.arrow_back_rounded,
-          color: Colors.black,
-        ),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
+      leading: const BackButton(
+        color: Colors.black,
       ),
       elevation: 0,
       backgroundColor: Colors.transparent,
       title: Text(
         'Sign Up',
-        style: bodyText1.copyWith(fontSize: 20),
+        style: bodyText1,
       ),
     );
   }
@@ -246,40 +257,84 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  List<Widget> buildNameTextField(TextStyle bodyText2) {
+  List<Widget> buildNameTextField(TextStyle bodyText2, TextStyle bodyText1) {
     return [
-      SizedBox(
-        width: double.infinity,
-        child: Text(
-          'Username',
-          style: bodyText2.copyWith(
-              fontWeight: FontWeight.w500, color: kPrimaryColor),
-        ),
-      ),
       TextFormField(
+        key: _formKeyName,
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: Colors.red),
+          ),
           suffixIcon: IconButton(
             icon: const Icon(
               Icons.info_outlined,
               color: kPrimaryColor,
             ),
-            onPressed: () {},
+            onPressed: () {
+              showDialog(
+                  context: context,
+                  builder: (_) {
+                    return AlertDialog(
+                      contentPadding: const EdgeInsets.all(kDefaultPadding / 2),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      alignment: Alignment.centerRight,
+                      title: Text(
+                        'Username',
+                        style: bodyText1,
+                      ),
+                      content: Text(
+                        'Please enter a unique username; this username will be associated with your account and will be used in the application.',
+                        style: bodyText2,
+                      ),
+                      actions: [
+                        CustomTextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          isFullWidth: false,
+                          widget: Text(
+                            'Okay',
+                            style: bodyText2.copyWith(color: kPrimaryColor),
+                          ),
+                        ),
+                      ],
+                    );
+                  });
+            },
           ),
-          hintText: "Please enter your name.",
+          labelText: "Username",
+          hintText: "Please enter your username.",
         ),
-        style: bodyText2.copyWith(fontSize: 16),
+        style: bodyText2,
         onFieldSubmitted: (_) {
           FocusScope.of(context).requestFocus(_emailFocusNode);
         },
+        onChanged: (text) {
+          if (text.isEmpty || text.length < 8) {
+            _formKeyName.currentState?.validate();
+          } else if (!_validCharacters.hasMatch(text)) {
+            _formKeyName.currentState?.validate();
+          } else {
+            verifyUserName(text);
+          }
+        },
         validator: (value) {
           if (value == null || value.isEmpty || value.length < 8) {
-            return 'Kindly create a unique username.';
-          }
-          if (!_validCharacters.hasMatch(value)){
+            return 'Username length must be greater than 8.';
+          } else if (!_validCharacters.hasMatch(value)) {
             return 'Username cannot contain spaces or special characters';
           }
-          return null;
+          return errorText;
         },
         onSaved: (value) {
           _initValues[_name] = value ?? "";
@@ -290,21 +345,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   List<Widget> buildEmailTextField(TextStyle bodyText2) {
     return [
-      SizedBox(
-        width: double.infinity,
-        child: Text(
-          'Email',
-          style: bodyText2.copyWith(
-              fontWeight: FontWeight.w500, color: kPrimaryColor),
-        ),
-      ),
       TextFormField(
         textInputAction: TextInputAction.next,
         focusNode: _emailFocusNode,
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
+          labelText: "Email",
           hintText: "Please enter your email address",
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: Colors.red),
+          ),
         ),
-        style: bodyText2.copyWith(fontSize: 16),
+        style: bodyText2,
         onFieldSubmitted: (_) {
           FocusScope.of(context).requestFocus(_passwordFocusNode);
         },
@@ -328,14 +386,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   List<Widget> buildPasswordTextField(TextStyle bodyText2) {
     return [
-      SizedBox(
-        width: double.infinity,
-        child: Text(
-          'Password',
-          style: bodyText2.copyWith(
-              fontWeight: FontWeight.w500, color: kPrimaryColor),
-        ),
-      ),
       TextFormField(
         textInputAction: TextInputAction.next,
         obscureText: _isHidden,
@@ -343,7 +393,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         controller: passwordTextEditingController,
         enableSuggestions: !_isHidden,
         autocorrect: !_isHidden,
-        style: bodyText2.copyWith(fontSize: 16),
+        style: bodyText2,
         decoration: InputDecoration(
           suffixIcon: IconButton(
             icon: Icon(
@@ -356,7 +406,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
               });
             },
           ),
+          labelText: "Password",
           hintText: "Enter your password.",
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: Colors.red),
+          ),
         ),
         keyboardType: TextInputType.visiblePassword,
         validator: (value) {
@@ -378,14 +439,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   List<Widget> buildRetypePasswordTextField(TextStyle bodyText2) {
     return [
-      SizedBox(
-        width: double.infinity,
-        child: Text(
-          'Retype Password',
-          style: bodyText2.copyWith(
-              fontWeight: FontWeight.w500, color: kPrimaryColor),
-        ),
-      ),
       TextFormField(
         textInputAction: TextInputAction.done,
         obscureText: _isHidden,
@@ -393,7 +446,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         controller: retypePasswordTextEditingController,
         enableSuggestions: !_isHidden,
         autocorrect: !_isHidden,
-        style: bodyText2.copyWith(fontSize: 16),
+        style: bodyText2,
         decoration: InputDecoration(
           suffixIcon: IconButton(
             icon: Icon(
@@ -406,7 +459,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
               });
             },
           ),
+          labelText: "Retype Password",
           hintText: "Retype your password.",
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: Colors.red),
+          ),
         ),
         keyboardType: TextInputType.visiblePassword,
         validator: (value) {

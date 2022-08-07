@@ -6,7 +6,7 @@ import 'package:noonpool/library/intro_views_flutter-2.4.0/lib/Models/page_bubbl
 class PageBubble extends StatelessWidget {
   //view model
   final PageBubbleViewModel viewModel;
-
+  final duration = const Duration(milliseconds: 500);
   //Constructor
   const PageBubble({
     Key? key,
@@ -19,8 +19,9 @@ class PageBubble extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(
             left: kDefaultMargin / 4, right: kDefaultMargin / 4),
-        child: Container(
-          width: 10,
+        child: AnimatedContainer(
+          duration: duration,
+          width: viewModel.isActive ? 50 : 10,
           //This method return in between values according to active percent.
           height: 10,
           decoration: BoxDecoration(

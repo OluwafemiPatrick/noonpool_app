@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:noonpool/helpers/elevated_button.dart';
 import 'package:noonpool/helpers/network_helper.dart';
+import 'package:noonpool/presentation/auth/forgot_password/forgot_password.dart';
 import 'package:noonpool/presentation/auth/register/register_sceen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,7 +10,7 @@ import '../../../helpers/firebase_util.dart';
 import '../../../helpers/page_route.dart';
 import '../../../helpers/shared_preference_util.dart';
 import '../../main/main_screen.dart';
-import '../forgot_password/forgot_password.dart';
+import '../register/verify_user_account.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -52,29 +53,33 @@ class _LoginScreenState extends State<LoginScreen> {
       _isLoading = true;
     });
 
-    final String response = await signIn(email: email, password: password);
+    try {
+      final String response = await signIn(email: email, password: password);
+      switch (response) {
+        case successful:
+          final result = await getHomepageData(sFirebaseAuth.currentUser!.uid);
+          prefs.setString('username', result['username'] ?? '');
 
-    switch (response) {
-      case successful:
-        var result = await getHomepageData(sFirebaseAuth.currentUser!.uid);
-        prefs.setString('username', result['username']);
-
-        AppPreferences.setLoginStatus(status: true);
-        AppPreferences.setOnBoardingStatus(status: true);
-        Navigator.of(context).pushAndRemoveUntil(
-          CustomPageRoute(screen: const MainScreen()),
-          (route) => false,
-        );
-        break;
-      case 'account_unverified':
-        sFirebaseAuth.signOut();
-        showVerificationDialog();
-        break;
-      default:
-        //error occurred, handle error
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(response)));
-        break;
+          AppPreferences.setLoginStatus(status: true);
+          AppPreferences.setOnBoardingStatus(status: true);
+          Navigator.of(context).pushAndRemoveUntil(
+            CustomPageRoute(screen: const MainScreen()),
+            (route) => false,
+          );
+          break;
+        case 'account_unverified':
+          sFirebaseAuth.signOut();
+          showVerificationDialog();
+          break;
+        default:
+          //error occurred, handle error
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(response)));
+          break;
+      }
+    } catch (exception) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(exception.toString())));
     }
     setState(() {
       _isLoading = false;
@@ -87,13 +92,13 @@ class _LoginScreenState extends State<LoginScreen> {
     final bodyText2 = textTheme.bodyText2;
     Dialog dialog = Dialog(
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10))),
+          borderRadius: BorderRadius.all(Radius.circular(5))),
       elevation: 5,
       child: Container(
         decoration: BoxDecoration(
             color: Theme.of(context).canvasColor,
-            borderRadius: const BorderRadius.all(Radius.circular(15))),
-        padding: const EdgeInsets.all(30),
+            borderRadius: const BorderRadius.all(Radius.circular(8))),
+        padding: const EdgeInsets.all(kDefaultMargin / 2),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -106,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
               height: kDefaultMargin,
             ),
             Text(
-              'Email not verified, kindly verify through the link in your mail or click the resend verification button',
+              'Email not verified, kindly click the resend verification button below to verify your account',
               style: bodyText2,
               textAlign: TextAlign.center,
             ),
@@ -132,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
     showGeneralDialog(
       context: context,
       barrierLabel: "Verification Dialog",
-      barrierDismissible: false,
+      barrierDismissible: true,
       barrierColor: Colors.black.withOpacity(0.5),
       transitionDuration: const Duration(milliseconds: 500),
       pageBuilder: (_, __, ___) => dialog,
@@ -149,13 +154,13 @@ class _LoginScreenState extends State<LoginScreen> {
     final bodyText2 = textTheme.bodyText2;
     Dialog dialog = Dialog(
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10))),
+          borderRadius: BorderRadius.all(Radius.circular(8))),
       elevation: 5,
       child: Container(
         decoration: BoxDecoration(
             color: Theme.of(context).canvasColor,
-            borderRadius: const BorderRadius.all(Radius.circular(15))),
-        padding: const EdgeInsets.all(30),
+            borderRadius: const BorderRadius.all(Radius.circular(8))),
+        padding: const EdgeInsets.all(kDefaultMargin / 2),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -181,7 +186,7 @@ class _LoginScreenState extends State<LoginScreen> {
     showGeneralDialog(
       context: context,
       barrierLabel: "Resend Verification",
-      barrierDismissible: true,
+      barrierDismissible: false,
       barrierColor: Colors.black.withOpacity(0.5),
       transitionDuration: const Duration(milliseconds: 500),
       pageBuilder: (_, __, ___) => dialog,
@@ -194,28 +199,42 @@ class _LoginScreenState extends State<LoginScreen> {
     final email = _initValues[_email].trim();
     final password = _initValues[_password].trim();
 
-    final String response =
-        await resendVerification(email: email, password: password);
+    try {
+      final String response =
+          await resendVerification(email: email, password: password);
 
-    Navigator.of(context).pop();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(response),
-      ),
-    );
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(response),
+        ),
+      );
+      Navigator.of(context).push(
+        CustomPageRoute(
+          screen: const VerifyUserAccount(),
+        ),
+      );
+    } catch (exception) {
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(exception.toString()),
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-    var bodyText1 = themeData.textTheme.bodyText1!;
-    var bodyText2 = themeData.textTheme.bodyText2!;
+    final themeData = Theme.of(context);
+    final bodyText1 = themeData.textTheme.bodyText1!;
+    final bodyText2 = themeData.textTheme.bodyText2!;
 
     return Scaffold(
       appBar: buildAppBar(bodyText1),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(kDefaultPadding),
+          padding: const EdgeInsets.all(kDefaultPadding / 2),
           child: SingleChildScrollView(
               child: Form(
             key: _formKey,
@@ -227,15 +246,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 ...buildEmailTextField(bodyText2),
                 const SizedBox(
-                  height: kDefaultMargin,
+                  height: kDefaultMargin / 2,
                 ),
                 ...buildPasswordTextField(bodyText2),
                 const SizedBox(
-                  height: kDefaultMargin / 2,
-                ),
-                buildForgotPasswordButton(bodyText2),
-                const SizedBox(
-                  height: kDefaultMargin,
+                  height: kDefaultMargin * 2,
                 ),
                 buildSignInButton(bodyText2),
                 const SizedBox(
@@ -256,32 +271,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
   AppBar buildAppBar(TextStyle bodyText1) {
     return AppBar(
-      leading: IconButton(
-        icon: const Icon(
-          Icons.arrow_back_rounded,
-          color: Colors.black,
-        ),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
+      leading: const BackButton(
+        color: Colors.black,
       ),
       elevation: 0,
       backgroundColor: Colors.transparent,
       title: Text(
         'Sign In',
-        style: bodyText1.copyWith(fontSize: 20),
-      ),
-    );
-  }
-
-  TextButton buildForgotPasswordButton(TextStyle bodyText2) {
-    return TextButton(
-      onPressed: () {},
-      child: const Text(
-        'Forgot your Password?',
-      ),
-      style: TextButton.styleFrom(
-        textStyle: bodyText2.copyWith(color: kPrimaryColor),
+        style: bodyText1,
       ),
     );
   }
@@ -308,20 +305,23 @@ class _LoginScreenState extends State<LoginScreen> {
 
   List<Widget> buildEmailTextField(TextStyle bodyText2) {
     return [
-      SizedBox(
-        width: double.infinity,
-        child: Text(
-          'Email',
-          style: bodyText2.copyWith(
-              fontWeight: FontWeight.w500, color: kPrimaryColor),
-        ),
-      ),
       TextFormField(
         textInputAction: TextInputAction.next,
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
+          labelText: "Email",
           hintText: "Please enter your email address",
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: Colors.red),
+          ),
         ),
-        style: bodyText2.copyWith(fontSize: 16),
+        style: bodyText2,
         onFieldSubmitted: (_) {
           FocusScope.of(context).requestFocus(_passwordFocusNode);
         },
@@ -345,14 +345,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   List<Widget> buildPasswordTextField(TextStyle bodyText2) {
     return [
-      SizedBox(
-        width: double.infinity,
-        child: Text(
-          'Password',
-          style: bodyText2.copyWith(
-              fontWeight: FontWeight.w500, color: kPrimaryColor),
-        ),
-      ),
       TextFormField(
         textInputAction: TextInputAction.done,
         obscureText: _isHidden,
@@ -372,7 +364,18 @@ class _LoginScreenState extends State<LoginScreen> {
               });
             },
           ),
+          labelText: "Password",
           hintText: "Enter your password.",
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: Colors.red),
+          ),
         ),
         keyboardType: TextInputType.visiblePassword,
         validator: (value) {

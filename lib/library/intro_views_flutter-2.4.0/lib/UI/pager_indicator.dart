@@ -25,7 +25,7 @@ class PagerIndicator extends StatelessWidget {
       final page = viewModel.pages[i];
 
       //calculating percent active
-      var percentActive;
+      double percentActive;
       if (i == viewModel.activeIndex) {
         percentActive = 1.0 - viewModel.slidePercent;
       } else if (i == viewModel.activeIndex - 1 &&
@@ -49,6 +49,7 @@ class PagerIndicator extends StatelessWidget {
           iconAssetPath: page.iconImageAssetPath,
           iconColor: page.iconColor,
           isHollow: isHollow,
+          isActive: viewModel.activeIndex == i,
           activePercent: percentActive,
           bubbleBackgroundColor: page.bubbleBackgroundColor,
           bubbleInner: page.bubble,

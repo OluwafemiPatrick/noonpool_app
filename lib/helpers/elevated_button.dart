@@ -19,7 +19,7 @@ class CustomElevatedButton extends StatelessWidget {
           primary: kPrimaryColor,
           elevation: 3,
           shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(kDefaultMargin / 2)),
+            borderRadius: BorderRadius.all(Radius.circular(8)),
           ),
         ),
         onPressed: onPressed,

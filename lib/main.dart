@@ -15,7 +15,9 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+  ));
   //init shared preferences
   await AppPreferences.init();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -28,7 +30,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var lightTheme = ThemeData(
+    final lightTheme = ThemeData(
       colorScheme: ColorScheme.fromSwatch().copyWith(
         primary: kPrimaryColor,
       ),
@@ -37,8 +39,8 @@ class MyApp extends StatelessWidget {
       iconTheme: ThemeData.light().iconTheme.copyWith(color: kTextColor),
       textTheme: ThemeData.light().textTheme.copyWith(
             bodyText1: const TextStyle(
-                fontSize: 14, color: kTextColor, fontWeight: FontWeight.w500),
-            bodyText2: const TextStyle(fontSize: 12, color: kTextColor),
+                fontSize: 15, color: kTextColor, fontWeight: FontWeight.w500),
+            bodyText2: const TextStyle(fontSize: 13, color: kTextColor),
           ),
     );
 

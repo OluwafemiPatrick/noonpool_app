@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:noonpool/presentation/auth/register/verify_user_account.dart';
 
 import '../../../helpers/constants.dart';
 import '../../../helpers/elevated_button.dart';
 import '../../../helpers/firebase_util.dart';
 import '../../../helpers/page_route.dart';
 import '../../../helpers/text_button.dart';
-import '../login/login_sceen.dart';
 
 class RegistrationConfirmationScreen extends StatefulWidget {
   const RegistrationConfirmationScreen({Key? key}) : super(key: key);
@@ -22,6 +22,7 @@ class _RegistrationConfirmationScreenState
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final bodyText2 = textTheme.bodyText2;
+    final bodyText1 = textTheme.bodyText1;
 
     return Scaffold(
       body: Container(
@@ -34,26 +35,36 @@ class _RegistrationConfirmationScreenState
             SvgPicture.asset(
               'assets/icons/Mail.svg',
               semanticsLabel: 'authorize new device',
-              height: 300,
-              width: 300,
+              height: 280,
+              width: 280,
             ),
             const SizedBox(
               height: kDefaultMargin,
             ),
             Text(
-              "Registration successful, kindly check your mail to activate your account",
+              "Verify your mail",
+              style: bodyText1,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              "We have sent a OTP to your mail. Kindly click on proceed when you recieve it.",
               style: bodyText2,
               textAlign: TextAlign.center,
             ),
             const Spacer(),
             CustomElevatedButton(
               onPressed: () {
-                Navigator.of(context).pushAndRemoveUntil(
-                    CustomPageRoute(screen: const LoginScreen()),
-                    (route) => route.isFirst);
+                Navigator.of(context).push(
+                  CustomPageRoute(
+                    screen: const VerifyUserAccount(),
+                  ),
+                );
               },
               widget: Text(
-                'Login',
+                'Verify OTP',
                 style: bodyText2!.copyWith(
                   color: Colors.white,
                 ),
@@ -65,9 +76,9 @@ class _RegistrationConfirmationScreenState
             CustomTextButton(
               onPressed: showResendDialog,
               widget: const Text(
-                'Resend Email',
+                'Resend OTP',
               ),
-            )
+            ),
           ],
         ),
       ),

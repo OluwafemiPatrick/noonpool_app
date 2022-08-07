@@ -72,7 +72,7 @@ Future<String> signIn({
     } else if (e.code == 'wrong-password') {
       return ('Wrong password provided for that user.');
     } else {
-      return "error occurred";
+      return e.toString();
     }
   } catch (e) {
     return e.toString();
@@ -114,4 +114,3 @@ Future<String> signUp(
     return (e.toString());
   }
 }
-

@@ -20,6 +20,7 @@ class _ForgotPasswordConfirmationScreenState
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final bodyText2 = textTheme.bodyText2;
+    final bodyText1 = textTheme.bodyText1;
 
     return Scaffold(
       body: Container(
@@ -31,15 +32,15 @@ class _ForgotPasswordConfirmationScreenState
             const Spacer(),
             SvgPicture.asset(
               'assets/icons/forgot_password_3.svg',
-              height: 300,
-              width: 300,
+              height: 280,
+              width: 280,
             ),
             const SizedBox(
-              height: kDefaultMargin,
+              height: kDefaultMargin * 1.5,
             ),
             Text(
-              "A password reset link has been sent to your mail",
-              style: bodyText2,
+              "You have successfully reset your password; please log in now.",
+              style: bodyText1,
               textAlign: TextAlign.center,
             ),
             const Spacer(),
