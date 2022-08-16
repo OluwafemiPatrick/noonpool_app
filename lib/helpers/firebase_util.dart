@@ -1,13 +1,12 @@
-import 'dart:io';
+// import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:noonpool/helpers/network_helper.dart';
 
 FirebaseAuth sFirebaseAuth = FirebaseAuth.instance;
 
 const String successful = '--';
 
 //*** FORGOT PASSWORD ***
-Future<void> forgotPassword({
+/* Future<void> forgotPassword({
   required String email,
 }) async {
   try {
@@ -15,10 +14,10 @@ Future<void> forgotPassword({
   } catch (e) {
     return Future.error(e.toString());
   }
-}
+} */
 
 //*** RESEND VERIFICATION ***
-Future<String> resendVerification({
+/* Future<String> resendVerification({
   required String email,
   required String password,
 }) async {
@@ -47,10 +46,10 @@ Future<String> resendVerification({
   } catch (e) {
     return e.toString();
   }
-}
+} */
 
 //*** SIGN IN ***
-Future<String> signIn({
+/* Future<String> signIn({
   required String email,
   required String password,
 }) async {
@@ -77,9 +76,9 @@ Future<String> signIn({
   } catch (e) {
     return e.toString();
   }
-}
+} */
 
-//*** SIGN UP ***
+/*
 Future<String> signUp(
     {required String email,
     required String password,
@@ -113,4 +112,4 @@ Future<String> signUp(
   } catch (e) {
     return (e.toString());
   }
-}
+} */

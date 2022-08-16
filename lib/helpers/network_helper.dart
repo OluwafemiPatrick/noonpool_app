@@ -5,7 +5,8 @@ import '../model/coin_model.dart';
 import 'package:http/http.dart' as http;
 
 //const String baseUrl = 'https://noonpool.herokuapp.com/api/v1/';
-const String baseUrl = 'http://5.189.137.144:3505/api/v1/';
+// const String baseUrl = 'http://5.189.137.144:3505/api/v1/';
+const String baseUrl = 'http://5.189.137.144:1027/api/v2/';
 
 Future<List<CoinModel>> getAllCoinDetails() async {
   try {
@@ -45,7 +46,63 @@ Future<List<CoinModel>> getAllCoinDetails() async {
   }
 }
 
-Future createUserAccount(String username, email, id) async {
+//http://5.189.137.144:1027/api/v2/auth/login
+Future<bool> signInToUserAccount({
+  required String password,
+  required String email,
+}) async {
+  try {
+    final response = await http.post(
+      Uri.parse("auth/login"),
+      body: jsonEncode({
+        "email": email,
+        "password": password,
+      }),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body)['verificationStatus'] ?? false;
+    } else {
+      return Future.error(
+          'An error occurred while accessing your account, please try again');
+    }
+  } on SocketException {
+    return Future.error(
+        'Kindly enable your internet connection to sign in to noonpool');
+  } catch (exception) {
+    return Future.error(exception.toString());
+  }
+}
+
+Future<void> createUserAccount({
+  required String password,
+  required String email,
+  required String userName,
+}) async {
+  try {
+    final response = await http.post(
+      Uri.parse("auth/createUserAccount"),
+      body: jsonEncode(
+          {"email": email, "username": userName, "password": password}),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      return Future.error(
+          'An error occurred while creating your account, please try again');
+    }
+  } on SocketException {
+    return Future.error(
+        'Kindly enable your internet connection to sign up to noonpool');
+  } catch (exception) {
+    return Future.error(exception.toString());
+  }
+}
+
+/* Future createUserAccount(String username, email, id) async {
   String param = "username=$username&email=$email&user_id=$id";
   try {
     final response = await http.get(
@@ -64,7 +121,7 @@ Future createUserAccount(String username, email, id) async {
   } catch (e) {
     return Future.error(e.toString());
   }
-}
+} */
 
 Future<bool> checkUsername(String username) async {
   try {
@@ -151,5 +208,53 @@ Future<dynamic> fetchWorkerData(String workerName, poolUrl) async {
     return dataToReturn;
   } else {
     return null;
+  }
+}
+
+Future<void> sendUserOTP({required String email}) async {
+  try {
+    final response = await http.post(
+      Uri.parse("auth/sendOtp"),
+      body: jsonEncode({"email": email}),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      return Future.error(
+          'An error occurred while sending a reset OTP,  please try again');
+    }
+  } on SocketException {
+    return Future.error(
+        'Kindly enable your internet connection to verfiy your account');
+  } catch (exception) {
+    return Future.error(exception.toString());
+  }
+}
+
+Future<void> verifyUserOTP(
+    {required String email, required String code}) async {
+  try {
+    final response = await http.post(
+      Uri.parse("auth/emailVerification"),
+      body: jsonEncode({
+        "email": email,
+        "code": code,
+      }),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      return Future.error(
+          'An error occurred while sending a reset OTP,  please try again');
+    }
+  } on SocketException {
+    return Future.error(
+        'Kindly enable your internet connection to verfiy your account');
+  } catch (exception) {
+    return Future.error(exception.toString());
   }
 }

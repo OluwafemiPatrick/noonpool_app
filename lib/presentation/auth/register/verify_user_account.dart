@@ -6,7 +6,6 @@ import 'package:noonpool/helpers/page_route.dart';
 import 'package:noonpool/helpers/text_button.dart';
 import 'package:pinput/pinput.dart';
 
-import '../../../helpers/firebase_util.dart';
 import '../login/login_sceen.dart';
 
 class VerifyUserAccount extends StatefulWidget {
@@ -229,17 +228,17 @@ class _VerifyUserAccountState extends State<VerifyUserAccount> {
       ),
     );
 
-    final accountDetails =
+/*     final accountDetails =
         (ModalRoute.of(context)!.settings.arguments) as Map<String, String>;
     final String response = await resendVerification(
         email: accountDetails['email'] ?? '',
         password: accountDetails['password'] ?? '');
-
+ */
     Navigator.of(context).pop();
-    ScaffoldMessenger.of(context).showSnackBar(
+    /*   ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(response),
       ),
-    );
+    );*/
   }
 }

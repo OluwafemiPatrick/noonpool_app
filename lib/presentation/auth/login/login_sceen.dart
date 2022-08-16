@@ -54,28 +54,22 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
-      final String response = await signIn(email: email, password: password);
-      switch (response) {
-        case successful:
-          final result = await getHomepageData(sFirebaseAuth.currentUser!.uid);
-          prefs.setString('username', result['username'] ?? '');
-
-          AppPreferences.setLoginStatus(status: true);
-          AppPreferences.setOnBoardingStatus(status: true);
-          Navigator.of(context).pushAndRemoveUntil(
-            CustomPageRoute(screen: const MainScreen()),
-            (route) => false,
-          );
-          break;
-        case 'account_unverified':
-          sFirebaseAuth.signOut();
-          showVerificationDialog();
-          break;
-        default:
-          //error occurred, handle error
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(response)));
-          break;
+      final accountVerified = await signInToUserAccount(
+        email: email,
+        password: password,
+      );
+      if (accountVerified) {
+        final result = await getHomepageData(sFirebaseAuth.currentUser!.uid);
+        prefs.setString('username', result['username'] ?? '');
+        AppPreferences.setLoginStatus(status: true);
+        AppPreferences.setOnBoardingStatus(status: true);
+        Navigator.of(context).pushAndRemoveUntil(
+          CustomPageRoute(screen: const MainScreen()),
+          (route) => false,
+        );
+      } else {
+        sFirebaseAuth.signOut();
+        showVerificationDialog();
       }
     } catch (exception) {
       ScaffoldMessenger.of(context)
@@ -197,16 +191,14 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     final email = _initValues[_email].trim();
-    final password = _initValues[_password].trim();
 
     try {
-      final String response =
-          await resendVerification(email: email, password: password);
+      await sendUserOTP(email: email);
 
       Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(response),
+        const SnackBar(
+          content: Text("A reset OTP has been sent to your mail."),
         ),
       );
       Navigator.of(context).push(

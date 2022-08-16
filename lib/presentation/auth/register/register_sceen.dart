@@ -99,29 +99,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
     try {
       final result = await checkUsername(name);
-      if (result == true) {
-        final String response =
-            await signUp(email: email, password: password, name: name);
-
-        switch (response) {
-          case successful:
-            final Map<String, String> data = {
-              'email': email,
-              'password': password
-            };
-            Navigator.of(context).pushReplacement(
-              CustomPageRoute(
-                screen: const RegistrationConfirmationScreen(),
-                argument: data,
-              ),
-            );
-            break;
-          default:
-            showErrorDialog(response);
-            break;
-        }
+      if (result) {
+        await createUserAccount(
+          email: email,
+          password: password,
+          userName: name,
+        );
+        final Map<String, String> data = {'email': email, 'password': password};
+        Navigator.of(context).pushReplacement(
+          CustomPageRoute(
+            screen: const RegistrationConfirmationScreen(),
+            argument: data,
+          ),
+        );
       } else {
-        // throw an error message
         showErrorDialog(
             '$name has already been registered, kindly choose a different username');
       }

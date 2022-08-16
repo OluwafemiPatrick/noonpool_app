@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:noonpool/helpers/network_helper.dart';
 import 'package:noonpool/presentation/auth/register/verify_user_account.dart';
 
 import '../../../helpers/constants.dart';
 import '../../../helpers/elevated_button.dart';
-import '../../../helpers/firebase_util.dart';
 import '../../../helpers/page_route.dart';
 import '../../../helpers/text_button.dart';
 
@@ -132,17 +132,23 @@ class _RegistrationConfirmationScreenState
       ),
     );
 
-    final accountDetails =
-        (ModalRoute.of(context)!.settings.arguments) as Map<String, String>;
-    final String response = await resendVerification(
+    try {
+      final accountDetails =
+          (ModalRoute.of(context)!.settings.arguments) as Map<String, String>;
+      await sendUserOTP(
         email: accountDetails['email'] ?? '',
-        password: accountDetails['password'] ?? '');
-
-    Navigator.of(context).pop();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(response),
-      ),
-    );
+      );
+      Navigator.of(context).pop();
+    } catch (exception) {
+      Navigator.of(context).pop();
+      ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+        SnackBar(
+          content: Text(
+            exception.toString(),
+          ),
+        ),
+      );
+      //
+    }
   }
 }
