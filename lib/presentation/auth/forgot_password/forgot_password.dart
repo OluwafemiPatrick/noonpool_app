@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:noonpool/helpers/constants.dart';
 import 'package:noonpool/helpers/page_route.dart';
+import 'package:noonpool/main.dart';
 import 'package:noonpool/presentation/auth/forgot_password/forgot_password_confirmation_screen.dart';
 
 import 'forgot_password_stage1.dart';
@@ -75,6 +78,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     },
                   ),
                   ForgotPasswordStage2(
+                    email: email,
                     navigateNext: () {
                       onPageChanged(2);
                     },

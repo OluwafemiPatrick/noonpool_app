@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:noonpool/helpers/constants.dart';
 import 'package:noonpool/helpers/elevated_button.dart';
+import 'package:noonpool/helpers/network_helper.dart';
 import 'package:pinput/pinput.dart';
+import 'package:noonpool/main.dart';
 
 class ForgotPasswordStage2 extends StatefulWidget {
   final VoidCallback navigateNext;
-  const ForgotPasswordStage2({Key? key, required this.navigateNext})
+  final String email;
+  const ForgotPasswordStage2(
+      {Key? key, required this.navigateNext, required this.email})
       : super(key: key);
 
   @override
@@ -110,7 +114,10 @@ class _ForgotPasswordStage2State extends State<ForgotPasswordStage2> {
             const SizedBox(
               height: kDefaultMargin * 2,
             ),
-            Text('Otp Verification', style: bodyText1),
+            Text('Otp Verification',
+                style: bodyText1.copyWith(
+                  fontWeight: FontWeight.bold,
+                )),
             const SizedBox(height: (5)),
             Text(
               "Enter the OTP that was sent to your account.",
@@ -159,11 +166,14 @@ class _ForgotPasswordStage2State extends State<ForgotPasswordStage2> {
     });
 
     try {
-      // final otp = _otpFieldController.text.trim();
-      // await controller.otpVerification(otp: otp);
+      final code = _otpFieldController.text.trim();
+      await verifyUserOTP(
+        email: widget.email,
+        code: code,
+      );
       widget.navigateNext();
     } catch (exception) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
         SnackBar(
           content: Text(
             exception.toString(),

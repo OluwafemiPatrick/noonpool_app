@@ -71,7 +71,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         iconColor: kPrimaryColor,
         bubbleBackgroundColor: kPrimaryColor,
         title: Padding(
-          padding: const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+          padding: const EdgeInsets.only(
+              left: kDefaultMargin, right: kDefaultMargin),
           child: Text(
             'View mining profits at a glance',
             overflow: TextOverflow.fade,

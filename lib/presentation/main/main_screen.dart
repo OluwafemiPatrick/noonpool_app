@@ -3,10 +3,11 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:noonpool/presentation/calculator/calculator_tab.dart';
+import 'package:noonpool/presentation/calculator/calculator_screen.dart';
 import 'package:noonpool/presentation/home/home_tab.dart';
 import 'package:noonpool/presentation/pool/pool_data.dart';
 import 'package:noonpool/presentation/settings/settings_tab.dart';
+import 'package:noonpool/presentation/wallet/wallet_screen.dart';
 
 import '../../helpers/bottom_app_bar.dart';
 import '../../helpers/elevated_button.dart';
@@ -25,14 +26,14 @@ class _MainScreenState extends State<MainScreen> {
   List<Map<String, dynamic>> bottomNavItems = [
     {"title": "Home", "icon": 'assets/icons/home.svg'},
     {"title": "Pool", "icon": 'assets/icons/pool.svg'},
-    {"title": "Profit Calculator", "icon": 'assets/icons/calculator.svg'},
+    {"title": "Wallet", "icon": 'assets/icons/wallet.svg'},
     {"title": "Settings", "icon": 'assets/icons/settings.svg'},
   ];
 
   final List<Widget> _pages = [
     const HomeTab(),
     const PoolTab(),
-    const CalculatorTab(),
+    const WalletTab(),
     const SettingsTab(),
   ];
 

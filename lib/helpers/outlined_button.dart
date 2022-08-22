@@ -5,28 +5,44 @@ import 'constants.dart';
 class CustomOutlinedButton extends StatelessWidget {
   final VoidCallback onPressed;
   final Widget widget;
+  final EdgeInsets padding;
+  final bool isFullWidth;
 
-  const CustomOutlinedButton(
-      {Key? key, required this.onPressed, required this.widget})
-      : super(key: key);
+  const CustomOutlinedButton({
+    Key? key,
+    required this.onPressed,
+    required this.widget,
+    this.isFullWidth = true,
+    this.padding = const EdgeInsets.only(
+      top: kDefaultPadding / 1.5,
+      bottom: kDefaultPadding / 1.5,
+    ),
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: OutlinedButton(
-        style: OutlinedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.all(Radius.circular(kDefaultMargin / 2))),
-          side: const BorderSide(color: kPrimaryColor, width: 1),
+    return isFullWidth
+        ? SizedBox(
+            width: double.infinity,
+            child: button(),
+          )
+        : button();
+  }
+
+  OutlinedButton button() {
+    return OutlinedButton(
+      style: OutlinedButton.styleFrom(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(8),
+          ),
         ),
-        onPressed: onPressed,
-        child: Padding(
-          padding: const EdgeInsets.only(
-              top: kDefaultPadding / 2, bottom: kDefaultPadding / 2),
-          child: widget,
-        ),
+        side: const BorderSide(color: kPrimaryColor, width: 1),
+      ),
+      onPressed: onPressed,
+      child: Padding(
+        padding: padding,
+        child: widget,
       ),
     );
   }

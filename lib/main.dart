@@ -26,6 +26,10 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  // declare as global
+  static GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
+      GlobalKey<ScaffoldMessengerState>();
+
   const MyApp({Key? key}) : super(key: key);
 
   @override
@@ -48,6 +52,7 @@ class MyApp extends StatelessWidget {
       title: appName,
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
+      scaffoldMessengerKey: scaffoldMessengerKey,
       home: const SplashScreen(),
     );
   }

@@ -63,7 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '928082185030',
     projectId: 'noonpool-001',
     storageBucket: 'noonpool-001.appspot.com',
-    iosClientId: '928082185030-hmobsdfndn8imedrnollf2fuat9ddoof.apps.googleusercontent.com',
+    iosClientId:
+        '928082185030-hmobsdfndn8imedrnollf2fuat9ddoof.apps.googleusercontent.com',
     iosBundleId: 'com.noonpool.app',
   );
 }

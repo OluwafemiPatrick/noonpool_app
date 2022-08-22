@@ -43,7 +43,7 @@ class _RegistrationConfirmationScreenState
             ),
             Text(
               "Verify your mail",
-              style: bodyText1,
+              style: bodyText1!.copyWith(fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
             const SizedBox(
@@ -60,6 +60,7 @@ class _RegistrationConfirmationScreenState
                 Navigator.of(context).push(
                   CustomPageRoute(
                     screen: const VerifyUserAccount(),
+                    argument: ModalRoute.of(context)?.settings.arguments,
                   ),
                 );
               },
@@ -95,20 +96,20 @@ class _RegistrationConfirmationScreenState
       child: Container(
         decoration: BoxDecoration(
             color: Theme.of(context).canvasColor,
-            borderRadius: const BorderRadius.all(Radius.circular(15))),
-        padding: const EdgeInsets.all(30),
+            borderRadius: const BorderRadius.all(Radius.circular(10))),
+        padding: const EdgeInsets.all(10),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             const SizedBox(
-              height: 50,
-              width: 50,
+              height: 40,
+              width: 40,
               child: CircularProgressIndicator.adaptive(
                 backgroundColor: Colors.white,
               ),
             ),
             const SizedBox(
-              height: 40,
+              height: 20,
             ),
             Text(
               'Resending Verification, please wait',
@@ -133,12 +134,19 @@ class _RegistrationConfirmationScreenState
     );
 
     try {
-      final accountDetails =
-          (ModalRoute.of(context)!.settings.arguments) as Map<String, String>;
+      final email =
+          ((ModalRoute.of(context)?.settings.arguments) as String?) ?? '';
       await sendUserOTP(
-        email: accountDetails['email'] ?? '',
+        email: email,
       );
       Navigator.of(context).pop();
+      ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+        const SnackBar(
+          content: Text(
+            'A new OTP has been sent to your account',
+          ),
+        ),
+      );
     } catch (exception) {
       Navigator.of(context).pop();
       ScaffoldMessenger.maybeOf(context)?.showSnackBar(

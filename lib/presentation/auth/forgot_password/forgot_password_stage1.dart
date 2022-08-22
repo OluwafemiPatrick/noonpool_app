@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:noonpool/helpers/elevated_button.dart';
-
+import 'package:noonpool/helpers/network_helper.dart';
+import 'package:noonpool/main.dart';
 import '../../../helpers/constants.dart';
 
 class ForgotPasswordStage1 extends StatefulWidget {
   final Function(String) navigateNext;
-  const ForgotPasswordStage1({Key? key, required this.navigateNext})
-      : super(key: key);
+  const ForgotPasswordStage1({
+    Key? key,
+    required this.navigateNext,
+  }) : super(key: key);
 
   @override
   State<ForgotPasswordStage1> createState() => _ForgotPasswordStage1State();
@@ -93,7 +96,10 @@ class _ForgotPasswordStage1State extends State<ForgotPasswordStage1> {
             const SizedBox(
               height: kDefaultMargin,
             ),
-            Text('Email Verification', style: bodyText1),
+            Text('Email Verification',
+                style: bodyText1.copyWith(
+                  fontWeight: FontWeight.bold,
+                )),
             const SizedBox(height: (5)),
             Text(
               'Kindly enter your email and we’ll send help you recover your password',
@@ -141,19 +147,20 @@ class _ForgotPasswordStage1State extends State<ForgotPasswordStage1> {
 
     try {
       final String email = _emailController.text.trim();
-      // await controller.emailVerificationOtp(email: email);
-      //  await forgotPassword(email: email.trim());
+      await sendUserOTP(
+        email: email,
+      );
       () {
-        ScaffoldMessenger.of(context).showSnackBar(
+        MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
           const SnackBar(
-              content: Text('An verification OTP has been sent to your mail')),
+              content: Text('A verification OTP has been sent to your mail')),
         );
       }();
       widget.navigateNext(
         email,
       );
     } catch (exception) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
         SnackBar(
           content: Text(
             exception.toString(),

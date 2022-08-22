@@ -2,20 +2,20 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:noonpool/helpers/error_widget.dart';
+import 'package:noonpool/model/coin_model/coin_model.dart';
 
 import '../../helpers/constants.dart';
 import '../../helpers/elevated_button.dart';
 import '../../helpers/network_helper.dart';
-import '../../model/coin_model.dart';
 
-class CalculatorTab extends StatefulWidget {
-  const CalculatorTab({Key? key}) : super(key: key);
+class CalculatorScreen extends StatefulWidget {
+  const CalculatorScreen({Key? key}) : super(key: key);
 
   @override
-  State<CalculatorTab> createState() => _CalculatorTabState();
+  State<CalculatorScreen> createState() => _CalculatorScreenState();
 }
 
-class _CalculatorTabState extends State<CalculatorTab> {
+class _CalculatorScreenState extends State<CalculatorScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,7 +95,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
     const mswMultiplier = 1000000000000;
 
     final firstCal = hashRate *
-        widget.coinModel.reward *
+        (widget.coinModel.reward ?? 0) *
         mswMultiplier *
         24; // mswRewards 	= mswReward * mswTemp * mswMultiplier * 24;
 
@@ -103,7 +103,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
 
     setState(() {
       _estimatedAmount = profitability;
-      _dollarValue = profitability * widget.coinModel.price;
+      _dollarValue = profitability * (widget.coinModel.price ?? 0);
     });
   }
 
@@ -164,7 +164,8 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
 
   Card buildTopText(TextStyle bodyText2) {
     return Card(
-      margin: const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+      margin:
+          const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
       color: kLightBackgroud,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
@@ -375,7 +376,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
               width: kDefaultMargin / 5,
             ),
             Text(
-              widget.coinModel.coinSubTitle.toUpperCase(),
+              widget.coinModel.coinSymbol ?? '',
               style: bodyText2,
             ),
             const Spacer(),
@@ -394,6 +395,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
   AppBar buildAppBar(TextStyle? bodyText1, TextStyle bodyText2) {
     return AppBar(
       elevation: 0,
+      automaticallyImplyLeading: false,
       backgroundColor: Colors.transparent,
       title: Text(
         'Profit Calculator',
@@ -414,7 +416,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
               children: [
                 ClipRRect(
                   child: CachedNetworkImage(
-                    imageUrl: widget.coinModel.imageLocation,
+                    imageUrl: widget.coinModel.coinLogo ?? '',
                     fit: BoxFit.fill,
                     width: 25,
                     height: 25,
@@ -427,11 +429,9 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
                   width: kDefaultMargin / 5,
                 ),
                 Text(
-                  widget.coinModel.coinSubTitle,
+                  widget.coinModel.coinSymbol ?? '',
                   style: bodyText2,
                 ),
-
-
               ],
             ),
           ),
@@ -442,7 +442,4 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
       ],
     );
   }
-
-
-
 }

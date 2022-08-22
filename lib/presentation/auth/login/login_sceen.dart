@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:noonpool/helpers/elevated_button.dart';
 import 'package:noonpool/helpers/network_helper.dart';
+import 'package:noonpool/helpers/outlined_button.dart';
 import 'package:noonpool/presentation/auth/forgot_password/forgot_password.dart';
 import 'package:noonpool/presentation/auth/register/register_sceen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:noonpool/main.dart';
 import '../../../helpers/constants.dart';
-import '../../../helpers/firebase_util.dart';
 import '../../../helpers/page_route.dart';
 import '../../../helpers/shared_preference_util.dart';
 import '../../main/main_screen.dart';
@@ -45,7 +45,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future showLoginStatus() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
     final email = _initValues[_email].trim();
     final password = _initValues[_password].trim();
 
@@ -54,13 +53,24 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
-      final accountVerified = await signInToUserAccount(
+      final loginDetails = await signInToUserAccount(
         email: email,
         password: password,
       );
-      if (accountVerified) {
-        final result = await getHomepageData(sFirebaseAuth.currentUser!.uid);
-        prefs.setString('username', result['username'] ?? '');
+
+      if (loginDetails.userDetails == null ||
+          loginDetails.userDetails!.verified == null ||
+          loginDetails.userDetails!.id == null) {
+        MyApp.scaffoldMessengerKey.currentState?.showSnackBar(const SnackBar(
+            content:
+                Text("An error occcurred while logging in to your account")));
+        return;
+      }
+
+      if (loginDetails.userDetails!.verified!) {
+        AppPreferences.setUserName(
+            username: loginDetails.userDetails?.username ?? '');
+        AppPreferences.setId(id: loginDetails.userDetails?.id ?? '');
         AppPreferences.setLoginStatus(status: true);
         AppPreferences.setOnBoardingStatus(status: true);
         Navigator.of(context).pushAndRemoveUntil(
@@ -68,7 +78,6 @@ class _LoginScreenState extends State<LoginScreen> {
           (route) => false,
         );
       } else {
-        sFirebaseAuth.signOut();
         showVerificationDialog();
       }
     } catch (exception) {
@@ -99,20 +108,20 @@ class _LoginScreenState extends State<LoginScreen> {
             const Icon(
               Icons.error,
               color: Colors.red,
-              size: 100,
+              size: 150,
             ),
             const SizedBox(
               height: kDefaultMargin,
             ),
             Text(
-              'Email not verified, kindly click the resend verification button below to verify your account',
+              'Email not verified, kindly click the  button below to verify your account',
               style: bodyText2,
               textAlign: TextAlign.center,
             ),
             const SizedBox(
               height: kDefaultMargin,
             ),
-            CustomElevatedButton(
+            CustomOutlinedButton(
               onPressed: () {
                 Navigator.of(context).pop();
                 showResendDialog();
@@ -120,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
               widget: Text(
                 'Resend Verification Link',
                 style: bodyText2!.copyWith(
-                  color: Colors.white,
+                  color: kPrimaryColor,
                 ),
               ),
             ),
@@ -143,30 +152,29 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void showResendDialog() async {
-    // resend verification email
     final textTheme = Theme.of(context).textTheme;
     final bodyText2 = textTheme.bodyText2;
     Dialog dialog = Dialog(
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(8))),
+          borderRadius: BorderRadius.all(Radius.circular(10))),
       elevation: 5,
       child: Container(
         decoration: BoxDecoration(
             color: Theme.of(context).canvasColor,
-            borderRadius: const BorderRadius.all(Radius.circular(8))),
-        padding: const EdgeInsets.all(kDefaultMargin / 2),
+            borderRadius: const BorderRadius.all(Radius.circular(10))),
+        padding: const EdgeInsets.all(10),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             const SizedBox(
-              height: 50,
-              width: 50,
+              height: 40,
+              width: 40,
               child: CircularProgressIndicator.adaptive(
                 backgroundColor: Colors.white,
               ),
             ),
             const SizedBox(
-              height: 40,
+              height: 20,
             ),
             Text(
               'Resending Verification, please wait',
@@ -196,19 +204,20 @@ class _LoginScreenState extends State<LoginScreen> {
       await sendUserOTP(email: email);
 
       Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
+      MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
         const SnackBar(
-          content: Text("A reset OTP has been sent to your mail."),
+          content: Text("A new OTP has been sent to your mail."),
         ),
       );
       Navigator.of(context).push(
         CustomPageRoute(
           screen: const VerifyUserAccount(),
+          argument: email,
         ),
       );
     } catch (exception) {
       Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
+      MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
         SnackBar(
           content: Text(exception.toString()),
         ),

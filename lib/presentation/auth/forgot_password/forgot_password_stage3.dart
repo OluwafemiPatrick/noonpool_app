@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:noonpool/helpers/constants.dart';
 import 'package:noonpool/helpers/elevated_button.dart';
+import 'package:noonpool/helpers/network_helper.dart';
+import 'package:noonpool/main.dart';
 
 class ForgotPasswordStage3 extends StatefulWidget {
   final String email;
@@ -160,17 +162,20 @@ class _ForgotPasswordStage3State extends State<ForgotPasswordStage3> {
               child: SvgPicture.asset(
                 'assets/icons/security.svg',
                 semanticsLabel: 'authorize new device',
-                height: 250,
-                width: 250,
+                height: 200,
+                width: 200,
               ),
             ),
             const SizedBox(
               height: kDefaultMargin * 2,
             ),
-            Text('Password Change', style: bodyText1),
+            Text('Password Change',
+                style: bodyText1.copyWith(
+                  fontWeight: FontWeight.bold,
+                )),
             const SizedBox(height: (5)),
             Text(
-              "Enter a new  password for your account",
+              "Enter a new password for your account",
               style: bodyText2,
               textAlign: TextAlign.center,
             ),
@@ -216,27 +221,15 @@ class _ForgotPasswordStage3State extends State<ForgotPasswordStage3> {
     });
 
     try {
-      /*       final String password = _passwordController.text.trim();
-      final String reTypePassword = _retypePasswordController.text.trim();
-
-  final response = await controller.resetPassword(
+      final String password = _passwordController.text.trim();
+      await resetPassword(
         email: widget.email,
         password: password,
-        reTypePassword: reTypePassword,
-      ); */
+      );
 
-      () {
-        /*   ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              response,
-            ),
-          ),
-        ); */
-        widget.onDone();
-      }();
+      widget.onDone();
     } catch (exception) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
         SnackBar(
           content: Text(
             exception.toString(),

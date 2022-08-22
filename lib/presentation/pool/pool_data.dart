@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:noonpool/main.dart';
 import 'package:noonpool/helpers/network_helper.dart';
 import 'package:noonpool/presentation/pool/widget/pool_statistics_title.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,7 +31,6 @@ class _PoolTabState extends State<PoolTab> {
   String btcUrl = 'http://bitcoin.noonpool.com:6055/api/v1/Pool-Bitcoin';
   String bchUrl = '';
   String dogeUrl = '';
-
 
   @override
   void initState() {
@@ -63,14 +62,16 @@ class _PoolTabState extends State<PoolTab> {
             spacer,
             buildExtraNote(bodyText2),
             spacer,
-            buildStatistics(bodyText2, _username),
-            const SizedBox(height: 10.0,),
+            buildStatistics(bodyText1, _username),
+            const SizedBox(
+              height: 10.0,
+            ),
             Expanded(child: buildPoolData(bodyText2, spacer)),
-          ]),
+          ],
+        ),
       ),
     );
   }
-
 
   AppBar buildAppBar(TextStyle? bodyText1, TextStyle bodyText2) {
     return AppBar(
@@ -81,18 +82,19 @@ class _PoolTabState extends State<PoolTab> {
         style: bodyText1,
       ),
       actions: [
-        Center(
+        Container(
+          alignment: Alignment.center,
           child: Container(
             padding: const EdgeInsets.all(kDefaultMargin / 4),
             decoration: BoxDecoration(
-                color: kLightBackgroud,
-                borderRadius: BorderRadius.circular(kDefaultMargin)),
-            child: Row(
-              children: [
-                const SizedBox(width: kDefaultMargin),
-                Text(coin, style: bodyText2),
-                dropDown(bodyText2),
-              ]),
+              color: kLightBackgroud,
+              borderRadius: BorderRadius.circular(kDefaultMargin / 2),
+            ),
+            child: Row(children: [
+              const SizedBox(width: kDefaultMargin),
+              Text(coin, style: bodyText2),
+              dropDown(bodyText2),
+            ]),
           ),
         ),
         const SizedBox(
@@ -102,74 +104,78 @@ class _PoolTabState extends State<PoolTab> {
     );
   }
 
-
   Widget dropDown(TextStyle bodyText2) {
     List<String> _coinList = ['LTC', 'BTC', 'DOGE', 'BCH'];
     String? _selected;
-    return DropdownButton<String>(
-      underline: Container(),
-      value: _selected,
-      icon: const Icon(
-        Icons.arrow_drop_down_sharp,
-        color: kPrimaryColor,
+    return SizedBox(
+      height: 30,
+      child: DropdownButton<String>(
+        underline: Container(),
+        itemHeight: null,
+        value: _selected,
+        icon: const Icon(
+          Icons.arrow_drop_down_sharp,
+          color: kPrimaryColor,
+        ),
+        items: _coinList.map((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(
+              value,
+              style: bodyText2,
+            ),
+          );
+        }).toList(),
+        onChanged: (newValue) {
+          _selected = newValue.toString();
+          if (_selected == 'LTC') {
+            setState(() {
+              workerData = [];
+              coin = _selected!;
+              port1 = '3070';
+              port2 = '3080';
+              miningAdd = 'litecoin.noonpool.com:3070';
+              stratumUrl = 'stratum+tcp://litecoin.noonpool.com:3070';
+            });
+            initState();
+          }
+          if (_selected == 'BTC') {
+            setState(() {
+              workerData = [];
+              coin = _selected!;
+              port1 = '3333';
+              port2 = '3334';
+              miningAdd = 'bitcoin.noonpool.com:3333';
+              stratumUrl = 'stratum+tcp://bitcoin.noonpool.com:3333';
+            });
+            initState();
+          }
+          if (_selected == 'DOGE') {
+            setState(() {
+              workerData = [];
+              coin = _selected!;
+              port1 = '0';
+              port2 = '0';
+              miningAdd = 'Coin not available';
+              stratumUrl = 'Coin not available';
+            });
+            initState();
+          }
+          if (_selected == 'BCH') {
+            setState(() {
+              workerData = [];
+              coin = _selected!;
+              port1 = '0';
+              port2 = '0';
+              miningAdd = 'Coin not available';
+              stratumUrl = 'Coin not available';
+            });
+            initState();
+          }
+        },
       ),
-      items: _coinList.map((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value, style: bodyText2,),
-        );
-      }).toList(),
-      onChanged: (newValue) {
-        _selected = newValue.toString();
-        if (_selected == 'LTC'){
-          setState(() {
-            workerData = [];
-            coin = _selected!;
-            port1 = '3070';
-            port2 = '3080';
-            miningAdd = 'litecoin.noonpool.com:3070';
-            stratumUrl = 'stratum+tcp://litecoin.noonpool.com:3070';
-          });
-          initState();
-        }
-        if (_selected == 'BTC'){
-          setState(() {
-            workerData = [];
-            coin = _selected!;
-            port1 = '3333';
-            port2 = '3334';
-            miningAdd = 'bitcoin.noonpool.com:3333';
-            stratumUrl = 'stratum+tcp://bitcoin.noonpool.com:3333';
-          });
-          initState();
-        }
-        if (_selected == 'DOGE'){
-          setState(() {
-            workerData = [];
-            coin = _selected!;
-            port1 = '0';
-            port2 = '0';
-            miningAdd = 'Coin not available';
-            stratumUrl = 'Coin not available';
-          });
-          initState();
-        }
-        if (_selected == 'BCH'){
-          setState(() {
-            workerData = [];
-            coin = _selected!;
-            port1 = '0';
-            port2 = '0';
-            miningAdd = 'Coin not available';
-            stratumUrl = 'Coin not available';
-          });
-          initState();
-        }
-      },
-
     );
   }
-
 
   void onPoolStatisticsTitleClicked(int position) {
     _poolStatisticsStream.add(position);
@@ -183,10 +189,9 @@ class _PoolTabState extends State<PoolTab> {
           onTitleClicked: onPoolStatisticsTitleClicked,
           positionStream: _poolStatisticsStream.stream),
       padding:
-      const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+          const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
     );
   }
-
 
   List<Widget> buildBtcMiningAddress(TextStyle bodyText2) {
     return [
@@ -195,7 +200,8 @@ class _PoolTabState extends State<PoolTab> {
           '$coin Mining Address',
           style: bodyText2.copyWith(color: kLightText),
         ),
-        padding: const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+        padding:
+            const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
       ),
       const SizedBox(height: kDefaultMargin / 4),
       Padding(
@@ -216,16 +222,16 @@ class _PoolTabState extends State<PoolTab> {
                   color: kPrimaryColor,
                 ),
                 onTap: () {
-                  Clipboard.setData(ClipboardData(
-                      text: miningAdd)).then((_) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("address copied to clipboard")));
+                  Clipboard.setData(ClipboardData(text: miningAdd)).then((_) {
+                    MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
+                        const SnackBar(
+                            content: Text("address copied to clipboard")));
                   });
                 },
               ),
             ]),
         padding:
-        const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+            const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
       ),
     ];
   }
@@ -238,7 +244,7 @@ class _PoolTabState extends State<PoolTab> {
           style: bodyText2.copyWith(color: kLightText),
         ),
         padding:
-        const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+            const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
       ),
       const SizedBox(
         height: kDefaultMargin / 4,
@@ -261,16 +267,17 @@ class _PoolTabState extends State<PoolTab> {
                 color: kPrimaryColor,
               ),
               onTap: () {
-                Clipboard.setData(ClipboardData(
-                    text: stratumUrl)).then((_) {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text("address copied to clipboard")));
+                Clipboard.setData(ClipboardData(text: stratumUrl)).then((_) {
+                  MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
+                      const SnackBar(
+                          content: Text("address copied to clipboard")));
                 });
               },
             ),
           ],
         ),
-        padding: const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+        padding:
+            const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
       ),
     ];
   }
@@ -281,17 +288,19 @@ class _PoolTabState extends State<PoolTab> {
         'Note. Port $port2 is also available.',
         style: bodyText2.copyWith(color: kLightText),
       ),
-      padding: const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+      padding:
+          const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
     );
   }
 
-  Padding buildStatistics(TextStyle bodyText2, String workerName) {
+  Padding buildStatistics(TextStyle bodyText1, String workerName) {
     return Padding(
       child: Text(
         'Statistics -> $workerName',
-        style: bodyText2.copyWith(fontSize: 18),
+        style: bodyText1,
       ),
-      padding: const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+      padding:
+          const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
     );
   }
 
@@ -299,7 +308,8 @@ class _PoolTabState extends State<PoolTab> {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: kDefaultPadding),
-      margin: const EdgeInsets.only(left: kDefaultMargin / 2, right: kDefaultMargin / 2, bottom: 10.0),
+      margin: const EdgeInsets.only(
+          left: kDefaultMargin / 2, right: kDefaultMargin / 2, bottom: 10.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(kDefaultMargin / 2),
         color: kLightBackgroud,
@@ -315,17 +325,14 @@ class _PoolTabState extends State<PoolTab> {
               children: [
                 Column(
                   children: [
-                    Text(
-                      'All miners',
-                      style: bodyText2.copyWith(
-                        fontSize: 15,
-                      ),
-                    ),
+                    Text('All miners', style: bodyText2),
                     const SizedBox(
                       height: kDefaultMargin / 4,
                     ),
                     Text(
-                      workerData.isNotEmpty ? workerData.length.toString() : '0',
+                      workerData.isNotEmpty
+                          ? workerData.length.toString()
+                          : '0',
                       style: bodyText2.copyWith(
                           fontSize: 15, fontWeight: FontWeight.w500),
                     ),
@@ -333,17 +340,14 @@ class _PoolTabState extends State<PoolTab> {
                 ),
                 Column(
                   children: [
-                    Text(
-                      'Paid earnings',
-                      style: bodyText2.copyWith(
-                        fontSize: 15,
-                      ),
-                    ),
+                    Text('Paid earnings', style: bodyText2),
                     const SizedBox(
                       height: kDefaultMargin / 4,
                     ),
                     Text(
-                      workerData.isNotEmpty ? workerData[0]['paidEarning'] : '0',
+                      workerData.isNotEmpty
+                          ? workerData[0]['paidEarning']
+                          : '0',
                       style: bodyText2.copyWith(
                           fontSize: 15, fontWeight: FontWeight.w500),
                     ),
@@ -353,15 +357,15 @@ class _PoolTabState extends State<PoolTab> {
                   children: [
                     Text(
                       'Unpaid earnings',
-                      style: bodyText2.copyWith(
-                        fontSize: 15,
-                      ),
+                      style: bodyText2,
                     ),
                     const SizedBox(
                       height: kDefaultMargin / 4,
                     ),
                     Text(
-                      workerData.isNotEmpty ? workerData[0]['unpaidEarning'] : '0',
+                      workerData.isNotEmpty
+                          ? workerData[0]['unpaidEarning']
+                          : '0',
                       style: bodyText2.copyWith(
                           fontSize: 15, fontWeight: FontWeight.w500),
                     ),
@@ -373,8 +377,11 @@ class _PoolTabState extends State<PoolTab> {
           spacer,
           Container(
             width: MediaQuery.of(context).size.width,
-            decoration: const BoxDecoration(color: Colors.white,),
-            padding: const EdgeInsets.symmetric(vertical: kDefaultMargin / 2, horizontal: kDefaultMargin / 2),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+            ),
+            padding: const EdgeInsets.symmetric(
+                vertical: kDefaultMargin / 2, horizontal: kDefaultMargin / 2),
             child: Row(
               children: [
                 Expanded(
@@ -408,33 +415,37 @@ class _PoolTabState extends State<PoolTab> {
             ),
           ),
           const SizedBox(height: 12.0),
-          if (workerData.isNotEmpty) Expanded(
-            child: ListView.builder(
-                    itemCount: workerData.length,
-                    physics: const ScrollPhysics(),
-                    itemBuilder: (_, index) {
-                      return displayWorkerData(
-                        workerData[index]['workerId'],
-                        workerData[index]['hashrate'],
-                        workerData[index]['sharesValid'],
-                        workerData[index]['sharesInvalid'],
-                      );
-                    },
-                  ),
-          ) else noWorkerData(bodyText2)
+          if (workerData.isNotEmpty)
+            Expanded(
+              child: ListView.builder(
+                itemCount: workerData.length,
+                physics: const ScrollPhysics(),
+                itemBuilder: (_, index) {
+                  return displayWorkerData(
+                    workerData[index]['workerId'],
+                    workerData[index]['hashrate'],
+                    workerData[index]['sharesValid'],
+                    workerData[index]['sharesInvalid'],
+                  );
+                },
+              ),
+            )
+          else
+            noWorkerData(bodyText2)
         ],
       ),
     );
   }
 
-  Widget displayWorkerData (String workerId, hashrate, sharesValid, sharesInvalid) {
+  Widget displayWorkerData(
+      String workerId, hashrate, sharesValid, sharesInvalid) {
     final textTheme = Theme.of(context).textTheme;
     final bodyText2 = textTheme.bodyText2!;
     String _workerId, _hashrate, _validS, _inValidS;
 
     // format worker_id into proper name
     var split = workerId.split('.');
-    if (split.length<4 && split.length>1) {
+    if (split.length < 4 && split.length > 1) {
       var s1 = split[1];
       var s2 = split[2];
       _workerId = "$s1.$s2";
@@ -453,24 +464,28 @@ class _PoolTabState extends State<PoolTab> {
       child: Row(
         children: [
           Expanded(
-            child: Text(_workerId,
+            child: Text(
+              _workerId,
               style: bodyText2,
             ),
           ),
           Expanded(
-            child: Text(_hashrate,
-              style: bodyText2,
-              textAlign: TextAlign.center,
-            ),
-          ),
-          Expanded(
-            child: Text(sharesValid=='null' ? '0' : sharesValid,
+            child: Text(
+              _hashrate,
               style: bodyText2,
               textAlign: TextAlign.center,
             ),
           ),
           Expanded(
-            child: Text(sharesInvalid=='null' ? '0' : sharesInvalid,
+            child: Text(
+              sharesValid == 'null' ? '0' : sharesValid,
+              style: bodyText2,
+              textAlign: TextAlign.center,
+            ),
+          ),
+          Expanded(
+            child: Text(
+              sharesInvalid == 'null' ? '0' : sharesInvalid,
               style: bodyText2,
               textAlign: TextAlign.center,
             ),
@@ -479,7 +494,6 @@ class _PoolTabState extends State<PoolTab> {
       ),
     );
   }
-
 
   Widget noWorkerData(TextStyle bodyText2) {
     return SizedBox(
@@ -507,7 +521,6 @@ class _PoolTabState extends State<PoolTab> {
   }
 
   getUsername() async {
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? name = prefs.getString('username');
 
@@ -533,11 +546,5 @@ class _PoolTabState extends State<PoolTab> {
         workerData = result;
       });
     }
-
-
-
-
   }
-
-
 }

@@ -65,13 +65,12 @@ class _SplashScreenState extends State<SplashScreen>
   void route() {
     var navigatorState = Navigator.of(context);
     if (AppPreferences.onBoardingStatus) {
-      if (AppPreferences.loginStatus && sFirebaseAuth.currentUser != null) {
+      if (AppPreferences.loginStatus) {
         navigatorState
             .pushReplacement(CustomPageRoute(screen: const MainScreen()));
         // user has been previously logged in, redirect to the main page
       } else {
         AppPreferences.setLoginStatus(status: false);
-        sFirebaseAuth.signOut();
 
         navigatorState.pushReplacement(CustomPageRoute(
             screen:
@@ -80,7 +79,7 @@ class _SplashScreenState extends State<SplashScreen>
     } else {
       AppPreferences.setLoginStatus(status: false);
       AppPreferences.setOnBoardingStatus(status: false);
-      sFirebaseAuth.signOut();
+
       navigatorState.pushReplacement(CustomPageRoute(
           screen:
               const OnBoardingScreen())); //user has not see the onboarding screen

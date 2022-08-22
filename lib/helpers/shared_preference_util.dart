@@ -12,9 +12,25 @@ class AppPreferences {
 
   // log in value is true if user logged in successfully
   static const _loginInKey = 'firstNameKey';
+  static const _usernameKey = 'username';
+  static const _idKey = 'id';
 
   static Future setOnBoardingStatus({required bool status}) async {
     await _preference?.setBool(_onBoardingKey, status);
+  }
+
+  static Future setUserName({required String username}) async {
+    await _preference?.setString(
+      _usernameKey,
+      username,
+    );
+  }
+
+  static Future setId({required String id}) async {
+    await _preference?.setString(
+      _idKey,
+      id,
+    );
   }
 
   static Future setLoginStatus({required bool status}) async {
@@ -25,4 +41,6 @@ class AppPreferences {
       _preference?.getBool(_onBoardingKey) ?? false;
 
   static bool get loginStatus => _preference?.getBool(_loginInKey) ?? false;
+  static String get userId => _preference?.getString(_idKey) ?? '';
+  static String get userName => _preference?.getString(_usernameKey) ?? '';
 }

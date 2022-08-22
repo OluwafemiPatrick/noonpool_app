@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:noonpool/helpers/constants.dart';
-import 'package:noonpool/helpers/firebase_util.dart';
-import 'package:noonpool/model/coin_model.dart';
+import 'package:noonpool/helpers/shared_preference_util.dart';
+import 'package:noonpool/main.dart';
+import 'package:noonpool/model/coin_model/coin_model.dart';
 import 'package:noonpool/presentation/home/widget/home_coin_item.dart';
 import 'package:noonpool/presentation/home/widget/home_header_item.dart';
 
@@ -19,6 +19,35 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
+  bool _isLoading = true;
+  bool _hasError = false;
+  final List<CoinModel> allCoinData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, getData);
+  }
+
+  getData() async {
+    allCoinData.clear();
+    setState(() {
+      _isLoading = true;
+      _hasError = false;
+    });
+    try {
+      final data = await getAllCoinDetails();
+      allCoinData.addAll(data);
+    } catch (exception) {
+      MyApp.scaffoldMessengerKey.currentState
+          ?.showSnackBar(SnackBar(content: Text(exception.toString())));
+      _hasError = false;
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -26,8 +55,9 @@ class _HomeTabState extends State<HomeTab> {
     final bodyText2 = textTheme.bodyText2!;
     final lightText = bodyText2.copyWith(color: kLightText);
     const spacer = SizedBox(
-      height: kDefaultMargin,
+      height: kDefaultMargin / 2,
     );
+
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,7 +74,9 @@ class _HomeTabState extends State<HomeTab> {
           Padding(
             child: Text(
               'Statistics',
-              style: bodyText2.copyWith(fontSize: 20),
+              style: bodyText1.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
             padding: const EdgeInsets.only(
                 left: kDefaultMargin, right: kDefaultMargin),
@@ -59,47 +91,46 @@ class _HomeTabState extends State<HomeTab> {
           ),
           spacer,
           Expanded(
-            child: FutureBuilder<List<CoinModel>>(
-                future: getAllCoinDetails(),
-                builder: (ctx, asyncDataSnapshot) {
-                  if (asyncDataSnapshot.hasError) {
-                    // show error
-                    final error = asyncDataSnapshot.error.toString();
-                    return CustomErrorWidget(
-                        error: error,
+            child: _isLoading
+                ? buildLoadingBody()
+                : _hasError
+                    ? CustomErrorWidget(
+                        error:
+                            "An error occurred with the data fetch, please try again",
                         onRefresh: () {
-                          setState(() {});
-                        });
-                  } else {
-                    if (asyncDataSnapshot.hasData) {
-                      List<CoinModel> allData = asyncDataSnapshot.data ?? [];
-                      return ListView.builder(
-                        padding: const EdgeInsets.all(0),
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: allData.length,
-                        itemBuilder: (ctx, index) {
-                          return HomeCoinItem(coinModel: allData[index]);
-                        },
-                      );
-                    } else {
-                      //  loading progress bar
-                      return Center(
-                        child: Lottie.asset(
-                          'assets/lottie/loading.json',
-                          width: 100,
-                          animate: true,
-                          reverse: true,
-                          repeat: true,
-                          height: 100,
-                          fit: BoxFit.contain,
-                        ),
-                      );
-                    }
-                  }
-                }),
+                          getData();
+                        })
+                    : buildBody(),
           ),
         ],
       ),
+    );
+  }
+
+  ListView buildBody() {
+    return ListView.builder(
+      padding: const EdgeInsets.all(0),
+      physics: const BouncingScrollPhysics(),
+      itemCount: allCoinData.length,
+      itemBuilder: (ctx, index) {
+        return HomeCoinItem(
+          coinModel: allCoinData[index],
+        );
+      },
+    );
+  }
+
+  ListView buildLoadingBody() {
+    return ListView.builder(
+      padding: const EdgeInsets.all(0),
+      physics: const BouncingScrollPhysics(),
+      itemCount: 10,
+      itemBuilder: (ctx, index) {
+        return HomeCoinItem(
+          shimmerEnabled: true,
+          coinModel: CoinModel(),
+        );
+      },
     );
   }
 
@@ -159,8 +190,8 @@ class _HomeTabState extends State<HomeTab> {
       elevation: 0,
       backgroundColor: Colors.transparent,
       title: Text(
-        sFirebaseAuth.currentUser?.email ?? '',
-        style: bodyText1,
+        AppPreferences.userName,
+        style: bodyText1!.copyWith(fontWeight: FontWeight.bold),
       ),
     );
   }

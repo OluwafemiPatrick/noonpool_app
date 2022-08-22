@@ -6,7 +6,6 @@ import 'package:noonpool/helpers/text_button.dart';
 import 'package:noonpool/presentation/auth/register/registration_confirmation_screen.dart';
 
 import '../../../helpers/constants.dart';
-import '../../../helpers/firebase_util.dart';
 import '../../../helpers/page_route.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -105,11 +104,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
           password: password,
           userName: name,
         );
-        final Map<String, String> data = {'email': email, 'password': password};
+
         Navigator.of(context).pushReplacement(
           CustomPageRoute(
             screen: const RegistrationConfirmationScreen(),
-            argument: data,
+            argument: email,
           ),
         );
       } else {

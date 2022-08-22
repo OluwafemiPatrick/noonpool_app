@@ -7,9 +7,10 @@ import 'package:noonpool/helpers/shared_preference_util.dart';
 import 'package:noonpool/presentation/about_us/about_us_screen.dart';
 import 'package:noonpool/presentation/announcement/announcement_screen.dart';
 import 'package:noonpool/presentation/auth/login/login_sceen.dart';
+import 'package:noonpool/presentation/calculator/calculator_screen.dart';
 import 'package:noonpool/presentation/settings/widget/settings_item.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:noonpool/main.dart';
 import '../../helpers/constants.dart';
 
 class SettingsTab extends StatefulWidget {
@@ -94,7 +95,6 @@ class _SettingsTabState extends State<SettingsTab> {
               ),
               TextButton(
                 onPressed: () async {
-                  sFirebaseAuth.signOut();
                   AppPreferences.setLoginStatus(status: false);
                   Navigator.of(context).push(
                     CustomPageRoute(
@@ -143,7 +143,7 @@ class _SettingsTabState extends State<SettingsTab> {
     return SettingsItem(
         onPressed: () {
           launch(_emailLaunchFunction());
-          // ScaffoldMessenger.of(context).showSnackBar(
+          // MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
           //     const SnackBar(content: Text('Help Center pressed')));
         },
         title: 'Help Center',
@@ -169,7 +169,13 @@ class _SettingsTabState extends State<SettingsTab> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
-        children: [buildAnnouncementItem(), divider, buildChangePasswordItem()],
+        children: [
+          buildAnnouncementItem(),
+          divider,
+          buildChangePasswordItem(),
+          divider,
+          buildCalculator(),
+        ],
       ),
     );
   }
@@ -179,6 +185,19 @@ class _SettingsTabState extends State<SettingsTab> {
         onPressed: showChangePasswordDialog,
         title: 'Change Password',
         iconLocation: 'assets/icons/security.svg');
+  }
+
+  SettingsItem buildCalculator() {
+    return SettingsItem(
+        onPressed: () {
+          Navigator.of(context).push(
+            CustomPageRoute(
+              screen: const CalculatorScreen(),
+            ),
+          );
+        },
+        title: 'Calculator',
+        iconLocation: 'assets/icons/calculator.svg');
   }
 
   void showChangePasswordDialog() async {
@@ -227,17 +246,16 @@ class _SettingsTabState extends State<SettingsTab> {
 
   changePassword() async {
     try {
-      var email = sFirebaseAuth.currentUser?.email ?? '';
-      await forgotPassword(email: email);
+      // await forgotPassword(email: email);
       Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
+      MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
         const SnackBar(
           content: Text(
               'An email with a link to change your password has been sent to your account.'),
         ),
       );
     } catch (exception) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
         SnackBar(
           content: Text(exception.toString()),
         ),
@@ -352,13 +370,10 @@ class _SettingsTabState extends State<SettingsTab> {
     return emailLaunchUri.toString();
   }
 
-
   String _encodeQueryParameters(Map<String, String> params) {
     return params.entries
         .map((e) =>
-    '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+            '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
         .join('&');
   }
-
-
 }

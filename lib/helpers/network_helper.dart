@@ -1,37 +1,32 @@
 import 'dart:convert';
 import 'dart:io';
 
-import '../model/coin_model.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
+import 'package:noonpool/helpers/shared_preference_util.dart';
+import 'package:noonpool/model/coin_model/coin_model.dart';
+import 'package:noonpool/model/login_details/login_details.dart';
 
-//const String baseUrl = 'https://noonpool.herokuapp.com/api/v1/';
-// const String baseUrl = 'http://5.189.137.144:3505/api/v1/';
+import 'package:http/http.dart' as http;
+import 'package:noonpool/model/transactions/transactions.dart';
+import 'package:noonpool/model/wallet_data/datum.dart';
+import 'package:noonpool/model/wallet_data/wallet_data.dart';
+
 const String baseUrl = 'http://5.189.137.144:1027/api/v2/';
 
 Future<List<CoinModel>> getAllCoinDetails() async {
   try {
     final response = await http.get(
-      Uri.parse(baseUrl + 'fetchCoinData'),
+      Uri.parse(baseUrl + 'home/fetchCoinData'),
       headers: {'Content-Type': 'application/json'},
     );
 
-    var decode = jsonDecode(response.body);
+    final decode = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
       final allData = decode as List<dynamic>;
 
       final coinData = allData
-          .map((data) => CoinModel(
-              imageLocation: data['coin_logo'].toString().trim(),
-              coin: data['coin_name'].toString().trim(),
-              coinSubTitle: data['coin_symbol'].toString().trim(),
-              algorithm: data['algo'].toString().trim(),
-              id: data['_id'],
-              difficulty: data['difficulty'],
-              reward: data['reward'],
-              profit: data['profit'],
-              price: data['price'],
-              networkHashRate: data['net_hashrate']))
+          .map((data) => CoinModel.fromMap(data as Map<String, dynamic>))
           .toList();
 
       return coinData;
@@ -43,118 +38,6 @@ Future<List<CoinModel>> getAllCoinDetails() async {
         'Kindly enable your internet connection to load new data');
   } catch (e) {
     return Future.error(e.toString());
-  }
-}
-
-//http://5.189.137.144:1027/api/v2/auth/login
-Future<bool> signInToUserAccount({
-  required String password,
-  required String email,
-}) async {
-  try {
-    final response = await http.post(
-      Uri.parse("auth/login"),
-      body: jsonEncode({
-        "email": email,
-        "password": password,
-      }),
-      headers: {'Content-Type': 'application/json'},
-    );
-
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body)['verificationStatus'] ?? false;
-    } else {
-      return Future.error(
-          'An error occurred while accessing your account, please try again');
-    }
-  } on SocketException {
-    return Future.error(
-        'Kindly enable your internet connection to sign in to noonpool');
-  } catch (exception) {
-    return Future.error(exception.toString());
-  }
-}
-
-Future<void> createUserAccount({
-  required String password,
-  required String email,
-  required String userName,
-}) async {
-  try {
-    final response = await http.post(
-      Uri.parse("auth/createUserAccount"),
-      body: jsonEncode(
-          {"email": email, "username": userName, "password": password}),
-      headers: {'Content-Type': 'application/json'},
-    );
-
-    if (response.statusCode == 200) {
-      return;
-    } else {
-      return Future.error(
-          'An error occurred while creating your account, please try again');
-    }
-  } on SocketException {
-    return Future.error(
-        'Kindly enable your internet connection to sign up to noonpool');
-  } catch (exception) {
-    return Future.error(exception.toString());
-  }
-}
-
-/* Future createUserAccount(String username, email, id) async {
-  String param = "username=$username&email=$email&user_id=$id";
-  try {
-    final response = await http.get(
-      Uri.parse(baseUrl + 'createUserAccount?$param'),
-      headers: {'Content-Type': 'application/json'},
-    );
-
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      return Future.error('Error occurred, please try again');
-    }
-  } on SocketException {
-    return Future.error(
-        'Kindly enable your internet connection to load new data');
-  } catch (e) {
-    return Future.error(e.toString());
-  }
-} */
-
-Future<bool> checkUsername(String username) async {
-  try {
-    final response = await http.get(
-      Uri.parse(baseUrl + 'checkUsername?username=$username'),
-      headers: {'Content-Type': 'application/json'},
-    );
-
-    if (response.statusCode == 200) {
-      return true;
-    }
-    if (response.statusCode == 201) {
-      return false;
-    } else {
-      return Future.error('Error occurred, please try again');
-    }
-  } on SocketException {
-    return Future.error(
-        'Kindly enable your internet connection to load new data');
-  } catch (e) {
-    return Future.error(e.toString());
-  }
-}
-
-Future<dynamic> getHomepageData(String userId) async {
-  final url = baseUrl + 'getHomepageData?user_id=$userId';
-  final response = await http.get(Uri.parse(url));
-
-  if (response.statusCode == 201 || response.statusCode == 400) {
-    return null;
-  } else {
-    var data = jsonDecode(response.body);
-    return data;
   }
 }
 
@@ -211,19 +94,59 @@ Future<dynamic> fetchWorkerData(String workerName, poolUrl) async {
   }
 }
 
+/////////
 Future<void> sendUserOTP({required String email}) async {
   try {
     final response = await http.post(
-      Uri.parse("auth/sendOtp"),
-      body: jsonEncode({"email": email}),
+      Uri.parse(baseUrl + "auth/sendOtp"),
+      body: jsonEncode({
+        "email": email,
+      }),
       headers: {'Content-Type': 'application/json'},
     );
+    debugPrint(response.body.toString());
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      return Future.error(jsonDecode(response.body)['message'] ??
+          'An error occurred while sending an OTP,  please try again');
+    }
+  } on SocketException {
+    return Future.error(
+        'Kindly enable your internet connection to send an OTP');
+  } catch (exception) {
+    return Future.error(exception.toString());
+  }
+}
 
+Future<void> verifyUserOTP({
+  required String email,
+  required String code,
+}) async {
+  try {
+    final response = await http.post(
+      Uri.parse(baseUrl + "auth/emailVerification"),
+      body: jsonEncode({
+        "email": email,
+        "code": code,
+      }),
+      headers: {'Content-Type': 'application/json'},
+    );
+    debugPrint(response.request?.url.toString());
+    debugPrint(jsonEncode({
+      "email": email,
+      "code": code,
+    }).toString());
+    debugPrint(
+      response.body.toString(),
+    );
     if (response.statusCode == 200) {
       return;
     } else {
       return Future.error(
-          'An error occurred while sending a reset OTP,  please try again');
+        jsonDecode(response.body)['message'] ??
+            'An error occurred while verifying your account, please try again',
+      );
     }
   } on SocketException {
     return Future.error(
@@ -233,28 +156,204 @@ Future<void> sendUserOTP({required String email}) async {
   }
 }
 
-Future<void> verifyUserOTP(
-    {required String email, required String code}) async {
+Future<bool> checkUsername(String username) async {
+  try {
+    final response = await http.get(
+      Uri.parse(baseUrl + 'auth/checkUsername?username=$username'),
+      headers: {'Content-Type': 'application/json'},
+    );
+    debugPrint(response.body.toString());
+    debugPrint(response.statusCode.toString());
+
+    if (response.statusCode == 200) {
+      return true;
+    }
+    if (response.statusCode == 201) {
+      return false;
+    } else {
+      return Future.error('Error occurred, please try again');
+    }
+  } on SocketException {
+    return Future.error(
+        'Kindly enable your internet connection to load new data');
+  } catch (e) {
+    return Future.error(e.toString());
+  }
+}
+
+Future<void> createUserAccount({
+  required String password,
+  required String email,
+  required String userName,
+}) async {
   try {
     final response = await http.post(
-      Uri.parse("auth/emailVerification"),
+      Uri.parse(baseUrl + "auth/createUserAccount"),
       body: jsonEncode({
         "email": email,
-        "code": code,
+        "username": userName,
+        "password": password,
       }),
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+      },
     );
 
     if (response.statusCode == 200) {
       return;
     } else {
       return Future.error(
-          'An error occurred while sending a reset OTP,  please try again');
+          'An error occurred while creating your account, please try again');
+    }
+  } on SocketException {
+    return Future.error(
+        'Kindly enable your internet connection to sign up to noonpool');
+  } catch (exception) {
+    return Future.error(exception.toString());
+  }
+}
+
+Future<LoginDetails> signInToUserAccount({
+  required String password,
+  required String email,
+}) async {
+  try {
+    final response = await http.post(
+      Uri.parse(baseUrl + "auth/login"),
+      body: jsonEncode({
+        "email": email,
+        "password": password,
+      }),
+      headers: {'Content-Type': 'application/json'},
+    );
+    debugPrint(response.body.toString());
+
+    if (response.statusCode == 200) {
+      return LoginDetails.fromJson(response.body);
+    } else {
+      return Future.error(jsonDecode(response.body)['message'] ??
+          'An error occurred while accessing your account, please try again');
+    }
+  } on SocketException {
+    return Future.error(
+        'Kindly enable your internet connection to sign in to noonpool');
+  } catch (exception) {
+    return Future.error(exception.toString());
+  }
+}
+
+Future<void> resetPassword({
+  required String email,
+  required String password,
+}) async {
+  try {
+    final response = await http.post(
+      Uri.parse(baseUrl + "auth/passwordReset"),
+      body: jsonEncode({
+        "email": email,
+        "new_password": password,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+
+    debugPrint(
+      response.body.toString(),
+    );
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      return Future.error(
+        jsonDecode(response.body)['message'] ??
+            'An error occurred while resetting your password, please try again',
+      );
     }
   } on SocketException {
     return Future.error(
         'Kindly enable your internet connection to verfiy your account');
   } catch (exception) {
     return Future.error(exception.toString());
+  }
+}
+
+Future<WalletData> getWalletData() async {
+  final userId = AppPreferences.userId;
+  try {
+    final response = await http.get(
+      Uri.parse(baseUrl + "wallet/wallet_list?user_id=$userId"),
+      headers: {'Content-Type': 'application/json'},
+    );
+    debugPrint(response.request?.url.toString());
+    debugPrint(response.body.toString());
+
+    if (response.statusCode == 200) {
+      return WalletData.fromJson(response.body);
+    } else {
+      return Future.error(jsonDecode(response.body)['message'] ??
+          'An error occurred while fetchint your wallet information, please try again');
+    }
+  } on SocketException {
+    return Future.error(
+        'Kindly enable your internet connection to fetch wallet data');
+  } catch (exception) {
+    return Future.error(exception.toString());
+  }
+}
+
+Future<void> getWalletInformation(WalletDatum walletDatum) async {
+  final userId = AppPreferences.userId;
+
+  try {
+    final response = await http.get(
+      Uri.parse(
+          baseUrl + "wallet?id=$userId&network=${walletDatum.coinSymbol}"),
+      headers: {'Content-Type': 'application/json'},
+    );
+    debugPrint(response.request?.url.toString());
+    debugPrint(response.body.toString());
+
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      return Future.error(jsonDecode(response.body)['message'] ??
+          'An error occurred while fetchint your wallet information, please try again');
+    }
+  } on SocketException {
+    return Future.error(
+        'Kindly enable your internet connection to fetch wallet data');
+  } catch (exception) {
+    return Future.error(exception.toString());
+  }
+}
+
+Future<Transactions> getSummaryTransactions({
+  required String lastHash,
+  required String coin,
+}) async {
+  try {
+    final userId = AppPreferences.userId;
+
+//
+    final response = await http.get(
+      Uri.parse(baseUrl +
+          "wallet/getTransactionList?id=$userId&coin=$coin&last_trx_id=$lastHash"),
+      headers: {'Content-Type': 'application/json'},
+    );
+    debugPrint(response.request?.url.toString());
+    debugPrint(response.body.toString());
+    final decode = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      return Transactions.fromMap(decode);
+    } else {
+      return Future.error(decode['message'] ?? '');
+    }
+  } on SocketException {
+    return Future.error(
+        'There is either no or a very weak network connection.');
+  } catch (exception) {
+    debugPrint(exception.toString());
+    return Future.error('An error occurred while getting data');
   }
 }

@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:noonpool/helpers/constants.dart';
 import 'package:noonpool/helpers/elevated_button.dart';
+import 'package:noonpool/helpers/network_helper.dart';
 import 'package:noonpool/helpers/page_route.dart';
 import 'package:noonpool/helpers/text_button.dart';
 import 'package:pinput/pinput.dart';
-
+import 'package:noonpool/main.dart';
 import '../login/login_sceen.dart';
 
 class VerifyUserAccount extends StatefulWidget {
@@ -138,19 +139,29 @@ class _VerifyUserAccountState extends State<VerifyUserAccount> {
                       _isLoading = true;
                     });
                     try {
-                      // await verifyOTP(widget.email);
-                      ScaffoldMessenger.of(context).showSnackBar(
+                      final email = ((ModalRoute.of(context)
+                              ?.settings
+                              .arguments) as String?) ??
+                          '';
+                      final code = otpFieldController.text.trim();
+                      await verifyUserOTP(
+                        email: email,
+                        code: code,
+                      );
+                      MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
                         const SnackBar(
                           content: Text(
-                            "Your account has been verified, please proceed to Login ",
+                            "Your account has been verified, please proceed to login.",
                           ),
                         ),
                       );
                       Navigator.of(context).pushAndRemoveUntil(
-                          CustomPageRoute(screen: const LoginScreen()),
+                          CustomPageRoute(
+                            screen: const LoginScreen(),
+                          ),
                           (route) => route.isFirst);
                     } catch (exception) {
-                      ScaffoldMessenger.of(context).showSnackBar(
+                      MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
                         SnackBar(
                           content: Text(
                             exception.toString(),
@@ -166,10 +177,12 @@ class _VerifyUserAccountState extends State<VerifyUserAccount> {
                 const SizedBox(
                   height: kDefaultMargin / 2,
                 ),
-                CustomTextButton(
-                  onPressed: showResendDialog,
-                  widget: const Text(
-                    'Resend OTP',
+                SizedBox(
+                  child: CustomTextButton(
+                    onPressed: showResendDialog,
+                    widget: const Text(
+                      'Resend OTP',
+                    ),
                   ),
                 ),
                 const Spacer(),
@@ -191,20 +204,20 @@ class _VerifyUserAccountState extends State<VerifyUserAccount> {
       child: Container(
         decoration: BoxDecoration(
             color: Theme.of(context).canvasColor,
-            borderRadius: const BorderRadius.all(Radius.circular(15))),
-        padding: const EdgeInsets.all(30),
+            borderRadius: const BorderRadius.all(Radius.circular(10))),
+        padding: const EdgeInsets.all(10),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             const SizedBox(
-              height: 50,
-              width: 50,
+              height: 40,
+              width: 40,
               child: CircularProgressIndicator.adaptive(
                 backgroundColor: Colors.white,
               ),
             ),
             const SizedBox(
-              height: 40,
+              height: 20,
             ),
             Text(
               'Resending Verification, please wait',
@@ -228,17 +241,31 @@ class _VerifyUserAccountState extends State<VerifyUserAccount> {
       ),
     );
 
-/*     final accountDetails =
-        (ModalRoute.of(context)!.settings.arguments) as Map<String, String>;
-    final String response = await resendVerification(
-        email: accountDetails['email'] ?? '',
-        password: accountDetails['password'] ?? '');
- */
-    Navigator.of(context).pop();
-    /*   ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(response),
-      ),
-    );*/
+    try {
+      final email =
+          ((ModalRoute.of(context)?.settings.arguments) as String?) ?? '';
+
+      await sendUserOTP(
+        email: email,
+      );
+      Navigator.of(context).pop();
+      ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+        const SnackBar(
+          content: Text(
+            'A new OTP has been sent to your account',
+          ),
+        ),
+      );
+    } catch (exception) {
+      Navigator.of(context).pop();
+      ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+        SnackBar(
+          content: Text(
+            exception.toString(),
+          ),
+        ),
+      );
+      //
+    }
   }
 }

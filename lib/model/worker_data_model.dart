@@ -10,18 +10,17 @@ class WorkerDataModel {
   String? payPaid;
   String? work;
 
-  WorkerDataModel({
-    this.workerId,
-    this.hashrate,
-    this.sharesValid,
-    this.sharesInvalid,
-    this.sharesStale,
-    this.payBalance,
-    this.payGenerate,
-    this.payImmature,
-    this.payPaid,
-    this.work
-  });
+  WorkerDataModel(
+      {this.workerId,
+      this.hashrate,
+      this.sharesValid,
+      this.sharesInvalid,
+      this.sharesStale,
+      this.payBalance,
+      this.payGenerate,
+      this.payImmature,
+      this.payPaid,
+      this.work});
 
   WorkerDataModel.fromJson(Map<String, dynamic> json) {
     workerId = json['hashrate']['shared'].toString();

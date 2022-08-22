@@ -1,9 +1,4 @@
 // import 'dart:io';
-import 'package:firebase_auth/firebase_auth.dart';
-
-FirebaseAuth sFirebaseAuth = FirebaseAuth.instance;
-
-const String successful = '--';
 
 //*** FORGOT PASSWORD ***
 /* Future<void> forgotPassword({

@@ -32,14 +32,14 @@ class _ForgotPasswordConfirmationScreenState
             const Spacer(),
             SvgPicture.asset(
               'assets/icons/forgot_password_3.svg',
-              height: 280,
-              width: 280,
+              height: 250,
+              width: 250,
             ),
             const SizedBox(
               height: kDefaultMargin * 1.5,
             ),
             Text(
-              "You have successfully reset your password; please log in now.",
+              "Your password has been successfully reset; please login now.",
               style: bodyText1,
               textAlign: TextAlign.center,
             ),
@@ -53,7 +53,7 @@ class _ForgotPasswordConfirmationScreenState
                     (route) => route.isFirst);
               },
               widget: Text(
-                'Sign In',
+                'Login to account',
                 style: bodyText2!.copyWith(color: Colors.white),
               ),
             )
