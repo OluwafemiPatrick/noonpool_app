@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:noonpool/helpers/error_widget.dart';
@@ -34,7 +33,27 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
             if (asyncDataSnapshot.hasData) {
               List<CoinModel> allData = asyncDataSnapshot.data ?? [];
               if (allData.isNotEmpty) {
-                return _CalculatorTabBody(coinModel: allData[0]);
+                List<String> _coinList = ['LTC', 'BTC', 'DOGE', 'BCH'];
+                final selectedCoinData = <CoinModel>[];
+                for (final element in allData) {
+                  if (_coinList
+                      .contains(element.coinSymbol?.toUpperCase() ?? '')) {
+                    selectedCoinData.add(element);
+                  }
+                }
+
+                if (selectedCoinData.isEmpty) {
+                  return CustomErrorWidget(
+                      error: AppLocalizations.of(context)!
+                          .anErrorOccurredPleaseRefreshThePage,
+                      onRefresh: () {
+                        setState(() {});
+                      });
+                }
+
+                return _CalculatorTabBody(
+                  selectedCoins: selectedCoinData,
+                );
               } else {
                 return CustomErrorWidget(
                     error: AppLocalizations.of(context)!
@@ -65,10 +84,12 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
 }
 
 class _CalculatorTabBody extends StatefulWidget {
-  final CoinModel coinModel;
+  final List<CoinModel> selectedCoins;
 
-  const _CalculatorTabBody({Key? key, required this.coinModel})
-      : super(key: key);
+  const _CalculatorTabBody({
+    Key? key,
+    required this.selectedCoins,
+  }) : super(key: key);
 
   @override
   State<_CalculatorTabBody> createState() => _CalculatorTabBodyState();
@@ -81,9 +102,17 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
   final _formKey = GlobalKey<FormState>();
 
   final _validHashRateFocusNode = FocusNode();
-
+  final _hashRateController = TextEditingController();
+  int selectedCoinIndex = 0;
   double _estimatedAmount = 0.0;
   double _dollarValue = 0.0;
+
+  @override
+  void dispose() {
+    _hashRateController.dispose();
+    _validHashRateFocusNode.dispose();
+    super.dispose();
+  }
 
   void _saveForm() {
     final isValid = _formKey.currentState?.validate();
@@ -96,7 +125,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
     const mswMultiplier = 1000000000000;
 
     final firstCal = hashRate *
-        (widget.coinModel.reward ?? 0) *
+        (widget.selectedCoins[selectedCoinIndex].reward ?? 0) *
         mswMultiplier *
         24; // mswRewards 	= mswReward * mswTemp * mswMultiplier * 24;
 
@@ -104,14 +133,9 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
 
     setState(() {
       _estimatedAmount = profitability;
-      _dollarValue = profitability * (widget.coinModel.price ?? 0);
+      _dollarValue =
+          profitability * (widget.selectedCoins[selectedCoinIndex].price ?? 0);
     });
-  }
-
-  @override
-  void dispose() {
-    _validHashRateFocusNode.dispose();
-    super.dispose();
   }
 
   @override
@@ -245,7 +269,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
         margin: const EdgeInsets.only(
             left: kDefaultPadding, right: kDefaultPadding),
         child: Text(
-          widget.coinModel.difficulty.toString(),
+          widget.selectedCoins[selectedCoinIndex].difficulty.toString(),
           style: bodyText2,
         ),
         alignment: Alignment.centerLeft,
@@ -310,6 +334,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
             left: kDefaultPadding, right: kDefaultPadding),
         child: TextFormField(
           textInputAction: TextInputAction.done,
+          controller: _hashRateController,
           focusNode: _validHashRateFocusNode,
           style: bodyText2,
           decoration: InputDecoration(
@@ -378,7 +403,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
               width: kDefaultMargin / 5,
             ),
             Text(
-              widget.coinModel.coinSymbol ?? '',
+              widget.selectedCoins[selectedCoinIndex].coinSymbol ?? '',
               style: bodyText2,
             ),
             const Spacer(),
@@ -404,44 +429,59 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
         style: bodyText1,
       ),
       actions: [
-        Center(
+        Container(
+          alignment: Alignment.center,
           child: Container(
-            padding: const EdgeInsets.only(
-                top: kDefaultPadding / 4,
-                bottom: kDefaultPadding / 4,
-                left: kDefaultPadding / 2,
-                right: kDefaultPadding / 2),
+            padding: const EdgeInsets.all(kDefaultMargin / 4),
             decoration: BoxDecoration(
-                color: kLightBackgroud,
-                borderRadius: BorderRadius.circular(kDefaultMargin)),
-            child: Row(
-              children: [
-                ClipRRect(
-                  child: CachedNetworkImage(
-                    imageUrl: widget.coinModel.coinLogo ?? '',
-                    fit: BoxFit.fill,
-                    width: 25,
-                    height: 25,
-                    placeholder: (context, url) => const SizedBox(),
-                    errorWidget: (context, url, error) => const SizedBox(),
-                  ),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                const SizedBox(
-                  width: kDefaultMargin / 5,
-                ),
-                Text(
-                  widget.coinModel.coinSymbol ?? '',
-                  style: bodyText2,
-                ),
-              ],
+              color: kLightBackgroud,
+              borderRadius: BorderRadius.circular(kDefaultMargin / 2),
             ),
+            child: Row(children: [
+              const SizedBox(width: kDefaultMargin),
+              Text(widget.selectedCoins[selectedCoinIndex].coinSymbol ?? '',
+                  style: bodyText2),
+              dropDown(bodyText2),
+            ]),
           ),
         ),
         const SizedBox(
           width: kDefaultMargin / 2,
         )
       ],
+    );
+  }
+
+  Widget dropDown(TextStyle bodyText2) {
+    return SizedBox(
+      height: 30,
+      child: DropdownButton<int>(
+        underline: Container(),
+        itemHeight: null,
+        value: null,
+        icon: const Icon(
+          Icons.arrow_drop_down_sharp,
+          color: kPrimaryColor,
+        ),
+        items: widget.selectedCoins.map((CoinModel value) {
+          return DropdownMenuItem<int>(
+            value: widget.selectedCoins.indexOf(value),
+            child: Text(
+              value.coinSymbol ?? '',
+              style: bodyText2,
+            ),
+          );
+        }).toList(),
+        onChanged: (newValue) {
+          setState(() {
+            _hashRateController.text = '';
+            _initValues[_validHashRate] = '';
+            _dollarValue = 0;
+            _estimatedAmount = 0;
+            selectedCoinIndex = newValue ?? 0;
+          });
+        },
+      ),
     );
   }
 }

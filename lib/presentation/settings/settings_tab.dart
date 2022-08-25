@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lottie/lottie.dart';
 import 'package:noonpool/helpers/elevated_button.dart';
-import 'package:noonpool/helpers/locale_cubit.dart';
 import 'package:noonpool/helpers/page_route.dart';
 import 'package:noonpool/helpers/shared_preference_util.dart';
 import 'package:noonpool/presentation/about_us/about_us_screen.dart';
 import 'package:noonpool/presentation/announcement/announcement_screen.dart';
-import 'package:noonpool/presentation/auth/login/login_sceen.dart';
 import 'package:noonpool/presentation/calculator/calculator_screen.dart';
 import 'package:noonpool/presentation/language/language_changer.dart';
 import 'package:noonpool/presentation/settings/widget/settings_item.dart';
+import 'package:noonpool/presentation/splash_screen/splash_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:noonpool/main.dart';
 import '../../helpers/constants.dart';
@@ -98,10 +95,11 @@ class _SettingsTabState extends State<SettingsTab> {
               TextButton(
                 onPressed: () async {
                   AppPreferences.setLoginStatus(status: false);
-                  Navigator.of(context).push(
+                  Navigator.of(context).pushAndRemoveUntil(
                     CustomPageRoute(
-                      screen: const LoginScreen(),
+                      screen: const SplashScreen(),
                     ),
+                    (_) => false,
                   );
                 },
                 child: Text(
