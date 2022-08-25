@@ -17,9 +17,6 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
     final textTheme = Theme.of(context).textTheme;
     final bodyText1 = textTheme.bodyText1!;
     final bodyText2 = textTheme.bodyText2!;
-    const spacer = SizedBox(
-      height: kDefaultMargin * 2,
-    );
 
     return Scaffold(
       appBar: buildAppBar(bodyText1, bodyText2),
@@ -38,7 +35,7 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
       elevation: 0,
       backgroundColor: Colors.transparent,
       title: Text(
-        'Announcement',
+        AppLocalizations.of(context)!.announcement,
         style: bodyText1,
       ),
       leading: const BackButton(

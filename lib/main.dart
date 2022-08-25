@@ -1,8 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:noonpool/helpers/locale_cubit.dart';
 import 'package:noonpool/presentation/splash_screen/splash_screen.dart';
-
 import 'firebase_options.dart';
 import 'helpers/constants.dart';
 import 'helpers/shared_preference_util.dart';
@@ -22,7 +23,12 @@ void main() async {
   await AppPreferences.init();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  runApp(const MyApp());
+  runApp(
+    BlocProvider(
+      create: (context) => LocaleCubit(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -48,12 +54,26 @@ class MyApp extends StatelessWidget {
           ),
     );
 
-    return MaterialApp(
-      title: appName,
-      debugShowCheckedModeBanner: false,
-      theme: lightTheme,
-      scaffoldMessengerKey: scaffoldMessengerKey,
-      home: const SplashScreen(),
+    return BlocBuilder<LocaleCubit, Locale?>(
+      builder: (context, locale) {
+        return MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: locale, // NEW
+          localeResolutionCallback: (locale, supportedLocales) {
+            if (supportedLocales.contains(locale)) {
+              return locale;
+            }
+            // default language
+            return const Locale('en');
+          },
+          title: appName,
+          debugShowCheckedModeBanner: false,
+          theme: lightTheme,
+          scaffoldMessengerKey: scaffoldMessengerKey,
+          home: const SplashScreen(),
+        );
+      },
     );
   }
 }

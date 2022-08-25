@@ -42,7 +42,7 @@ class _RegistrationConfirmationScreenState
               height: kDefaultMargin,
             ),
             Text(
-              "Verify your mail",
+              AppLocalizations.of(context)!.verifyYourMail,
               style: bodyText1!.copyWith(fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
@@ -50,7 +50,8 @@ class _RegistrationConfirmationScreenState
               height: 10,
             ),
             Text(
-              "We have sent a OTP to your mail. Kindly click on proceed when you recieve it.",
+              AppLocalizations.of(context)!
+                  .weHaveSentAOtpToYourMailKindlyClickOnProceedWhenYouRecieveIt,
               style: bodyText2,
               textAlign: TextAlign.center,
             ),
@@ -65,7 +66,7 @@ class _RegistrationConfirmationScreenState
                 );
               },
               widget: Text(
-                'Verify OTP',
+                AppLocalizations.of(context)!.verifyOtp,
                 style: bodyText2!.copyWith(
                   color: Colors.white,
                 ),
@@ -76,8 +77,8 @@ class _RegistrationConfirmationScreenState
             ),
             CustomTextButton(
               onPressed: showResendDialog,
-              widget: const Text(
-                'Resend OTP',
+              widget: Text(
+                AppLocalizations.of(context)!.resendOtp,
               ),
             ),
           ],
@@ -112,7 +113,7 @@ class _RegistrationConfirmationScreenState
               height: 20,
             ),
             Text(
-              'Resending Verification, please wait',
+              AppLocalizations.of(context)!.resendingVerificationPleaseWait,
               style: bodyText2,
               textAlign: TextAlign.center,
             ),
@@ -141,9 +142,9 @@ class _RegistrationConfirmationScreenState
       );
       Navigator.of(context).pop();
       ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-            'A new OTP has been sent to your account',
+            AppLocalizations.of(context)!.aNewOtpHasBeenSentToYourAccount,
           ),
         ),
       );

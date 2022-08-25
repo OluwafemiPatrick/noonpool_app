@@ -61,9 +61,9 @@ class _LoginScreenState extends State<LoginScreen> {
       if (loginDetails.userDetails == null ||
           loginDetails.userDetails!.verified == null ||
           loginDetails.userDetails!.id == null) {
-        MyApp.scaffoldMessengerKey.currentState?.showSnackBar(const SnackBar(
-            content:
-                Text("An error occcurred while logging in to your account")));
+        MyApp.scaffoldMessengerKey.currentState?.showSnackBar(SnackBar(
+            content: Text(
+                AppLocalizations.of(context)!.anErrorOccurredWhileLogginIn)));
         return;
       }
 
@@ -114,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
               height: kDefaultMargin,
             ),
             Text(
-              'Email not verified, kindly click the  button below to verify your account',
+              AppLocalizations.of(context)!.emailNotVerifiedClickToVerify,
               style: bodyText2,
               textAlign: TextAlign.center,
             ),
@@ -127,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 showResendDialog();
               },
               widget: Text(
-                'Resend Verification Link',
+                AppLocalizations.of(context)!.resendVerificatoinLink,
                 style: bodyText2!.copyWith(
                   color: kPrimaryColor,
                 ),
@@ -177,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 20,
             ),
             Text(
-              'Resending Verification, please wait',
+              AppLocalizations.of(context)!.resendVerificatoinLink,
               style: bodyText2,
               textAlign: TextAlign.center,
             ),
@@ -205,8 +205,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
       Navigator.of(context).pop();
       MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
-        const SnackBar(
-          content: Text("A new OTP has been sent to your mail."),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.aNewOtpHasBeenSentToMail),
         ),
       );
       Navigator.of(context).push(
@@ -278,7 +278,7 @@ class _LoginScreenState extends State<LoginScreen> {
       elevation: 0,
       backgroundColor: Colors.transparent,
       title: Text(
-        'Sign In',
+        AppLocalizations.of(context)!.signIn,
         style: bodyText1,
       ),
     );
@@ -298,7 +298,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             )
           : Text(
-              'Sign In',
+              AppLocalizations.of(context)!.signIn,
               style: bodyText2.copyWith(color: Colors.white),
             ),
     );
@@ -309,8 +309,8 @@ class _LoginScreenState extends State<LoginScreen> {
       TextFormField(
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          labelText: "Email",
-          hintText: "Please enter your email address",
+          labelText: AppLocalizations.of(context)!.email,
+          hintText: AppLocalizations.of(context)!.pleaseEnterYourEmailAddress,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
           ),
@@ -331,9 +331,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@+[a-zA-Z0-9]+\.[a-zA-Z]")
               .hasMatch(value ?? "");
           if (value == null || value.isEmpty) {
-            return 'Please provide your email.';
+            return AppLocalizations.of(context)!.pleaseProvideYourEmail;
           } else if (!emailValid) {
-            return 'Please enter a valid email';
+            return AppLocalizations.of(context)!.pleaseProvideAValidEmail;
           }
           return null;
         },
@@ -365,8 +365,8 @@ class _LoginScreenState extends State<LoginScreen> {
               });
             },
           ),
-          labelText: "Password",
-          hintText: "Enter your password.",
+          labelText: AppLocalizations.of(context)!.password,
+          hintText: AppLocalizations.of(context)!.enterYourPassword,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
           ),
@@ -381,9 +381,9 @@ class _LoginScreenState extends State<LoginScreen> {
         keyboardType: TextInputType.visiblePassword,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please provide  your password';
-          } else if (value.length < 6) {
-            return 'Password must be more than 6 letters';
+            return AppLocalizations.of(context)!.pleaseProvideYourPassword;
+          } else if (value.length < 8) {
+            return AppLocalizations.of(context)!.passwordMustBeMoreThan8Letters;
           }
           return null;
         },
@@ -403,8 +403,8 @@ class _LoginScreenState extends State<LoginScreen> {
             CustomPageRoute(screen: const ForgotPasswordScreen()),
           );
         },
-        child: const Text(
-          'Forgot your Password?',
+        child: Text(
+          AppLocalizations.of(context)!.forgotYourPassword,
         ),
         style: TextButton.styleFrom(
           textStyle: bodyText2,
@@ -421,14 +421,14 @@ class _LoginScreenState extends State<LoginScreen> {
         mainAxisSize: MainAxisSize.max,
         children: [
           Text(
-            "Don't have an account?",
+            AppLocalizations.of(context)!.dontHaveAnAccount,
             style: bodyText2,
           ),
           const SizedBox(
             width: kDefaultMargin / 4,
           ),
           Text(
-            "Sign Up",
+            AppLocalizations.of(context)!.signUp,
             style: bodyText2.copyWith(color: kPrimaryColor),
           ),
         ],

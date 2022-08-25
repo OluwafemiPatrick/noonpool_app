@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:noonpool/helpers/constants.dart';
+import 'package:noonpool/helpers/locale_cubit.dart';
 import 'package:noonpool/helpers/page_route.dart';
 import 'package:noonpool/onboarding/onboarding.dart';
 
-import '../../helpers/firebase_util.dart';
 import '../../helpers/shared_preference_util.dart';
 import '../auth/login/login_sceen.dart';
 import '../main/main_screen.dart';
@@ -63,7 +64,20 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   void route() {
-    var navigatorState = Navigator.of(context);
+    final currentLocaleLanguageCode = AppPreferences.currentLocaleLanguageCode;
+    if (currentLocaleLanguageCode == AppPreferences.defaultLocaleLanguageCode) {
+      BlocProvider.of<LocaleCubit>(context).updateCurrentLocale(null);
+    } else {
+      appLocales(context).forEach((element) {
+        if (element.locale != null &&
+            element.locale!.languageCode == currentLocaleLanguageCode) {
+          BlocProvider.of<LocaleCubit>(context)
+              .updateCurrentLocale(element.locale);
+        }
+      });
+    }
+
+    final navigatorState = Navigator.of(context);
     if (AppPreferences.onBoardingStatus) {
       if (AppPreferences.loginStatus) {
         navigatorState

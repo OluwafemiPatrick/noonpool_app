@@ -73,7 +73,7 @@ class _HomeTabState extends State<HomeTab> {
           spacer,
           Padding(
             child: Text(
-              'Statistics',
+              AppLocalizations.of(context)!.statistics,
               style: bodyText1.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -95,8 +95,8 @@ class _HomeTabState extends State<HomeTab> {
                 ? buildLoadingBody()
                 : _hasError
                     ? CustomErrorWidget(
-                        error:
-                            "An error occurred with the data fetch, please try again",
+                        error: AppLocalizations.of(context)!
+                            .anErrorOccurredWithTheDataFetchPleaseTryAgain,
                         onRefresh: () {
                           getData();
                         })
@@ -144,11 +144,11 @@ class _HomeTabState extends State<HomeTab> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Coin',
+                  AppLocalizations.of(context)!.coin,
                   style: bodyText1,
                 ),
                 Text(
-                  'Algorithm',
+                  AppLocalizations.of(context)!.algorithm,
                   style: lightText,
                 ),
               ],
@@ -159,11 +159,11 @@ class _HomeTabState extends State<HomeTab> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'Price',
+                  AppLocalizations.of(context)!.price,
                   style: bodyText1,
                 ),
                 Text(
-                  'Mining Profit',
+                  AppLocalizations.of(context)!.miningProfit,
                   style: lightText,
                 ),
               ],
@@ -173,11 +173,11 @@ class _HomeTabState extends State<HomeTab> {
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
               Text(
-                'Difficulty',
+                AppLocalizations.of(context)!.difficulty,
                 style: bodyText1,
               ),
               Text(
-                'Network Hashrate',
+                AppLocalizations.of(context)!.networkHashrate,
                 style: lightText,
               ),
             ]),
@@ -205,20 +205,6 @@ class _HomeHeader extends StatefulWidget {
 }
 
 class _HomeHeaderState extends State<_HomeHeader> {
-  final List<Map<String, String>> viewPagerData = [
-    {
-      'image': 'assets/onboarding/onboarding_1.svg',
-      'title': 'View mining profits at a glance'
-    },
-    {
-      'title': 'Built in cryptocurrency wallet for managing assets',
-      'image': 'assets/onboarding/onboarding_2.svg'
-    },
-    {
-      'title': '24/7 stable and secure mining network',
-      'image': 'assets/onboarding/onboarding_3.svg'
-    },
-  ];
   Timer? _timer;
   final PageController _pageController = PageController();
   final duration = const Duration(seconds: 4);
@@ -232,13 +218,14 @@ class _HomeHeaderState extends State<_HomeHeader> {
   @override
   void initState() {
     super.initState();
+
     _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
       updateCurrentPage();
     });
   }
 
   void updateCurrentPage() {
-    var length = viewPagerData.length;
+    var length = 3;
     var page = _pageController.page;
     if (page == null) {
       return;
@@ -255,6 +242,20 @@ class _HomeHeaderState extends State<_HomeHeader> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Map<String, String>> viewPagerData = [
+      {
+        'image': 'assets/onboarding/onboarding_1.svg',
+        'title': AppLocalizations.of(context)!.viewMiningProfits,
+      },
+      {
+        'title': AppLocalizations.of(context)!.builtInCryptoCurrencyWallet,
+        'image': 'assets/onboarding/onboarding_2.svg'
+      },
+      {
+        'title': AppLocalizations.of(context)!.stableAndSecureMiningNetwork,
+        'image': 'assets/onboarding/onboarding_3.svg'
+      },
+    ];
     var size = MediaQuery.of(context).size;
     var width = size.width;
 

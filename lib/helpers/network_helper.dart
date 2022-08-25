@@ -31,7 +31,8 @@ Future<List<CoinModel>> getAllCoinDetails() async {
 
       return coinData;
     } else {
-      return Future.error('Error occurred, please try again');
+      return Future.error(jsonDecode(response.body)['message'] ??
+          'Error occurred, please try again');
     }
   } on SocketException {
     return Future.error(
@@ -171,7 +172,8 @@ Future<bool> checkUsername(String username) async {
     if (response.statusCode == 201) {
       return false;
     } else {
-      return Future.error('Error occurred, please try again');
+      return Future.error(jsonDecode(response.body)['message'] ??
+          'Error occurred, please try again');
     }
   } on SocketException {
     return Future.error(
@@ -202,7 +204,7 @@ Future<void> createUserAccount({
     if (response.statusCode == 200) {
       return;
     } else {
-      return Future.error(
+      return Future.error(jsonDecode(response.body)['message'] ??
           'An error occurred while creating your account, please try again');
     }
   } on SocketException {

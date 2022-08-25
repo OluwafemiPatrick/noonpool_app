@@ -36,8 +36,8 @@ class _ForgotPasswordStage1State extends State<ForgotPasswordStage1> {
         textInputAction: TextInputAction.done,
         style: bodyText2,
         decoration: InputDecoration(
-          labelText: 'Email Address',
-          hintText: "Please enter your email address",
+          labelText: AppLocalizations.of(context)!.email,
+          hintText: AppLocalizations.of(context)!.pleaseEnterYourEmailAddress,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
           ),
@@ -55,9 +55,9 @@ class _ForgotPasswordStage1State extends State<ForgotPasswordStage1> {
               .hasMatch(value ?? "");
 
           if (value == null || value.isEmpty) {
-            return 'Kindly provide your email.';
+            return AppLocalizations.of(context)!.pleaseProvideYourEmail;
           } else if (!emailValid) {
-            return 'Kindly enter a valid email';
+            return AppLocalizations.of(context)!.pleaseProvideAValidEmail;
           }
           return null;
         },
@@ -96,13 +96,14 @@ class _ForgotPasswordStage1State extends State<ForgotPasswordStage1> {
             const SizedBox(
               height: kDefaultMargin,
             ),
-            Text('Email Verification',
+            Text(AppLocalizations.of(context)!.emailVerification,
                 style: bodyText1.copyWith(
                   fontWeight: FontWeight.bold,
                 )),
             const SizedBox(height: (5)),
             Text(
-              'Kindly enter your email and we’ll send help you recover your password',
+              AppLocalizations.of(context)!
+                  .kindlyEnterYourEmailAndWellSendHelpYouRecoverYourPassword,
               style: bodyText2,
             ),
             const SizedBox(height: (20)),
@@ -120,7 +121,7 @@ class _ForgotPasswordStage1State extends State<ForgotPasswordStage1> {
                       ),
                     )
                   : Text(
-                      'Submit',
+                      AppLocalizations.of(context)!.submit,
                       style: bodyText2.copyWith(
                         color: Colors.white,
                       ),
@@ -152,8 +153,9 @@ class _ForgotPasswordStage1State extends State<ForgotPasswordStage1> {
       );
       () {
         MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
-          const SnackBar(
-              content: Text('A verification OTP has been sent to your mail')),
+          SnackBar(
+              content: Text(AppLocalizations.of(context)!
+                  .aVerificationOtpHasBeenSentToYourMail)),
         );
       }();
       widget.navigateNext(

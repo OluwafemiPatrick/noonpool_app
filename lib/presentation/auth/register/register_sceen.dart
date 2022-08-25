@@ -78,12 +78,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
       if (isAvailiable == true) {
         errorText = null;
       } else {
-        errorText = 'Username unavailiable';
+        errorText = AppLocalizations.of(context)!.usernameUnavailiable;
       }
     } catch (exception) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(exception.toString())));
-      errorText = 'Username unavailiable';
+      errorText = AppLocalizations.of(context)!.usernameUnavailiable;
     }
     _formKeyName.currentState?.validate();
   }
@@ -113,7 +113,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         );
       } else {
         showErrorDialog(
-            '$name has already been registered, kindly choose a different username');
+            '$name ${AppLocalizations.of(context)!.hasAlreadyBeenRegisteredKindlyChooseADifferentUsername}');
       }
     } catch (exception) {
       showErrorDialog(exception.toString());
@@ -221,7 +221,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       elevation: 0,
       backgroundColor: Colors.transparent,
       title: Text(
-        'Sign Up',
+        AppLocalizations.of(context)!.signUp,
         style: bodyText1,
       ),
     );
@@ -241,7 +241,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             )
           : Text(
-              'Sign Up',
+              AppLocalizations.of(context)!.signUp,
               style: bodyText2.copyWith(color: Colors.white),
             ),
     );
@@ -279,11 +279,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       alignment: Alignment.centerRight,
                       title: Text(
-                        'Username',
+                        AppLocalizations.of(context)!.username,
                         style: bodyText1,
                       ),
                       content: Text(
-                        'Please enter a unique username; this username will be associated with your account and will be used in the application.',
+                        AppLocalizations.of(context)!
+                            .pleaseEnterAUniqueUsernameThisUsernameWillBeAssociatedWithYourAccountAndWillBeUsedInTheApplication,
                         style: bodyText2,
                       ),
                       actions: [
@@ -293,7 +294,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           },
                           isFullWidth: false,
                           widget: Text(
-                            'Okay',
+                            AppLocalizations.of(context)!.okay,
                             style: bodyText2.copyWith(color: kPrimaryColor),
                           ),
                         ),
@@ -302,8 +303,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   });
             },
           ),
-          labelText: "Username",
-          hintText: "Please enter your username.",
+          labelText: AppLocalizations.of(context)!.username,
+          hintText: AppLocalizations.of(context)!.pleaseEnterYourUsername,
         ),
         style: bodyText2,
         onFieldSubmitted: (_) {
@@ -320,9 +321,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
         },
         validator: (value) {
           if (value == null || value.isEmpty || value.length < 8) {
-            return 'Username length must be greater than 8.';
+            return AppLocalizations.of(context)!
+                .usernameLengthMustBeGreaterThan8;
           } else if (!_validCharacters.hasMatch(value)) {
-            return 'Username cannot contain spaces or special characters';
+            return AppLocalizations.of(context)!
+                .usernameCannotContainSpacesOrSpecialCharacters;
           }
           return errorText;
         },
@@ -339,8 +342,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         textInputAction: TextInputAction.next,
         focusNode: _emailFocusNode,
         decoration: InputDecoration(
-          labelText: "Email",
-          hintText: "Please enter your email address",
+          labelText: AppLocalizations.of(context)!.email,
+          hintText: AppLocalizations.of(context)!.pleaseEnterYourEmailAddress,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
           ),
@@ -361,9 +364,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@+[a-zA-Z0-9]+\.[a-zA-Z]")
               .hasMatch(value ?? "");
           if (value == null || value.isEmpty) {
-            return 'Please provide your email.';
+            return AppLocalizations.of(context)!.pleaseEnterYourEmailAddress;
           } else if (!emailValid) {
-            return 'Please enter a valid email';
+            return AppLocalizations.of(context)!.pleaseProvideAValidEmail;
           }
           return null;
         },
@@ -396,8 +399,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               });
             },
           ),
-          labelText: "Password",
-          hintText: "Enter your password.",
+          labelText: AppLocalizations.of(context)!.password,
+          hintText: AppLocalizations.of(context)!.enterYourPassword,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
           ),
@@ -412,11 +415,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
         keyboardType: TextInputType.visiblePassword,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please provide  your password';
+            return AppLocalizations.of(context)!.pleaseProvideYourPassword;
           } else if (value != _initValues[_retypePassword]) {
-            return 'Passwords are not the  same';
+            return AppLocalizations.of(context)!.passwordsAreNotTheSame;
           } else if (value.length < 8) {
-            return 'Password must be more than 8 letters';
+            return AppLocalizations.of(context)!.passwordMustBeMoreThan8Letters;
           }
           return null;
         },
@@ -449,8 +452,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               });
             },
           ),
-          labelText: "Retype Password",
-          hintText: "Retype your password.",
+          labelText: AppLocalizations.of(context)!.retypePassword,
+          hintText: AppLocalizations.of(context)!.retypeYourPassword,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
           ),
@@ -465,11 +468,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
         keyboardType: TextInputType.visiblePassword,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please provide  your password';
+            return AppLocalizations.of(context)!.pleaseProvideYourPassword;
           } else if (value != _initValues[_password]) {
-            return 'Passwords are not the  same';
+            return AppLocalizations.of(context)!.passwordsAreNotTheSame;
           } else if (value.length < 8) {
-            return 'Password must be more than 8 letters';
+            return AppLocalizations.of(context)!.passwordMustBeMoreThan8Letters;
           }
           return null;
         },

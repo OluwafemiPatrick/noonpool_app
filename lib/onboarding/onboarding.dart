@@ -41,7 +41,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         ));
       },
       widget: Text(
-        'Sign In',
+        AppLocalizations.of(context)!.signIn,
         style: bodyText2.copyWith(
             color: kPrimaryColor, fontWeight: FontWeight.w600),
       ),
@@ -56,7 +56,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         ));
       },
       widget: Text(
-        'Create Account',
+        AppLocalizations.of(context)!.createAccount,
         style: bodyText2.copyWith(color: Colors.white),
       ),
     );
@@ -74,7 +74,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           padding: const EdgeInsets.only(
               left: kDefaultMargin, right: kDefaultMargin),
           child: Text(
-            'View mining profits at a glance',
+            AppLocalizations.of(context)!.viewMiningProfits,
             overflow: TextOverflow.fade,
             style: bodyText2,
             textAlign: TextAlign.center,
@@ -93,7 +93,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           padding: const EdgeInsets.only(
               left: kDefaultMargin, right: kDefaultMargin),
           child: Text(
-            'Built in cryptocurrency wallet for managing assets',
+            AppLocalizations.of(context)!.builtInCryptoCurrencyWallet,
             overflow: TextOverflow.fade,
             style: bodyText2,
             textAlign: TextAlign.center,
@@ -112,7 +112,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           padding: const EdgeInsets.only(
               left: kDefaultMargin, right: kDefaultMargin),
           child: Text(
-            '24/7 stable and secure mining network',
+            AppLocalizations.of(context)!.stableAndSecureMiningNetwork,
             overflow: TextOverflow.fade,
             style: bodyText2,
             textAlign: TextAlign.center,

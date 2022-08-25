@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:noonpool/helpers/elevated_button.dart';
-import 'package:noonpool/helpers/firebase_util.dart';
+import 'package:noonpool/helpers/locale_cubit.dart';
 import 'package:noonpool/helpers/page_route.dart';
 import 'package:noonpool/helpers/shared_preference_util.dart';
 import 'package:noonpool/presentation/about_us/about_us_screen.dart';
 import 'package:noonpool/presentation/announcement/announcement_screen.dart';
 import 'package:noonpool/presentation/auth/login/login_sceen.dart';
 import 'package:noonpool/presentation/calculator/calculator_screen.dart';
+import 'package:noonpool/presentation/language/language_changer.dart';
 import 'package:noonpool/presentation/settings/widget/settings_item.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:noonpool/main.dart';
@@ -54,7 +56,7 @@ class _SettingsTabState extends State<SettingsTab> {
       child: CustomElevatedButton(
         onPressed: () => showLogoutDialog(),
         widget: Text(
-          'Sign Out',
+          AppLocalizations.of(context)!.signOut,
           style: bodyText2.copyWith(color: Colors.white),
         ),
       ),
@@ -75,11 +77,11 @@ class _SettingsTabState extends State<SettingsTab> {
               ),
             ),
             title: Text(
-              'Sign out?',
+              AppLocalizations.of(context)!.signOut,
               style: bodyText1,
             ),
             content: Text(
-              'Do you wish to sign out of this device',
+              AppLocalizations.of(context)!.doYouWishToSignOutOfThisDevice,
               style: bodyText2,
             ),
             contentPadding: const EdgeInsets.all(kDefaultMargin / 2),
@@ -89,7 +91,7 @@ class _SettingsTabState extends State<SettingsTab> {
                   Navigator.of(context).pop();
                 },
                 child: Text(
-                  'Cancel',
+                  AppLocalizations.of(context)!.cancel,
                   style: bodyText2,
                 ),
               ),
@@ -103,7 +105,7 @@ class _SettingsTabState extends State<SettingsTab> {
                   );
                 },
                 child: Text(
-                  'Sign Out',
+                  AppLocalizations.of(context)!.signOut,
                   style: bodyText2.copyWith(color: kPrimaryColor),
                 ),
               ),
@@ -134,8 +136,11 @@ class _SettingsTabState extends State<SettingsTab> {
 
   SettingsItem buildLanguageItem() {
     return SettingsItem(
-        onPressed: showLanguageDialog,
-        title: 'Language',
+        onPressed: () {
+          Navigator.of(context)
+              .push(CustomPageRoute(screen: const LanguageChanger()));
+        },
+        title: AppLocalizations.of(context)!.language,
         iconLocation: 'assets/icons/language.svg');
   }
 
@@ -146,7 +151,7 @@ class _SettingsTabState extends State<SettingsTab> {
           // MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
           //     const SnackBar(content: Text('Help Center pressed')));
         },
-        title: 'Help Center',
+        title: AppLocalizations.of(context)!.helpCenter,
         iconLocation: 'assets/icons/help.svg');
   }
 
@@ -156,7 +161,7 @@ class _SettingsTabState extends State<SettingsTab> {
           Navigator.of(context)
               .push(CustomPageRoute(screen: const AboutUsScreen()));
         },
-        title: 'About NoonPool',
+        title: AppLocalizations.of(context)!.aboutNoonpool,
         iconLocation: 'assets/icons/about.svg');
   }
 
@@ -183,7 +188,7 @@ class _SettingsTabState extends State<SettingsTab> {
   SettingsItem buildChangePasswordItem() {
     return SettingsItem(
         onPressed: showChangePasswordDialog,
-        title: 'Change Password',
+        title: AppLocalizations.of(context)!.changePassword,
         iconLocation: 'assets/icons/security.svg');
   }
 
@@ -196,7 +201,7 @@ class _SettingsTabState extends State<SettingsTab> {
             ),
           );
         },
-        title: 'Calculator',
+        title: AppLocalizations.of(context)!.calculator,
         iconLocation: 'assets/icons/calculator.svg');
   }
 
@@ -214,12 +219,13 @@ class _SettingsTabState extends State<SettingsTab> {
               ),
             ),
             title: Text(
-              'Change Password',
+              AppLocalizations.of(context)!.changePassword,
               style: bodyText1,
             ),
             contentPadding: const EdgeInsets.all(kDefaultMargin / 2),
             content: Text(
-              'Do you want a link to change your password for your current account? ',
+              AppLocalizations.of(context)!
+                  .doYouWantALinkToChangeYourPasswordForYourCurrentAccount,
               style: bodyText2,
             ),
             actions: [
@@ -228,14 +234,14 @@ class _SettingsTabState extends State<SettingsTab> {
                   Navigator.of(context).pop();
                 },
                 child: Text(
-                  'Cancel',
+                  AppLocalizations.of(context)!.cancel,
                   style: bodyText2,
                 ),
               ),
               TextButton(
                 onPressed: changePassword,
                 child: Text(
-                  'Yes',
+                  AppLocalizations.of(context)!.yes,
                   style: bodyText2.copyWith(color: kPrimaryColor),
                 ),
               ),
@@ -249,9 +255,11 @@ class _SettingsTabState extends State<SettingsTab> {
       // await forgotPassword(email: email);
       Navigator.of(context).pop();
       MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-              'An email with a link to change your password has been sent to your account.'),
+            AppLocalizations.of(context)!
+                .anEmailWithALinkToChangeYourPasswordHasBeenSentToYourAccount,
+          ),
         ),
       );
     } catch (exception) {
@@ -269,7 +277,7 @@ class _SettingsTabState extends State<SettingsTab> {
           Navigator.of(context)
               .push(CustomPageRoute(screen: const AnnouncementScreen()));
         },
-        title: 'Announcement',
+        title: AppLocalizations.of(context)!.announcement,
         iconLocation: 'assets/icons/announcement.svg');
   }
 
@@ -278,84 +286,8 @@ class _SettingsTabState extends State<SettingsTab> {
       elevation: 0,
       backgroundColor: Colors.transparent,
       title: Text(
-        'Settings',
+        AppLocalizations.of(context)!.settings,
         style: bodyText1,
-      ),
-    );
-  }
-
-  void showLanguageDialog() async {
-    final textTheme = Theme.of(context).textTheme;
-    final bodyText1 = textTheme.bodyText1!;
-    final bodyText2 = textTheme.bodyText2!;
-
-    var height = MediaQuery.of(context).size.height;
-
-    Dialog dialog = Dialog(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(10),
-        ),
-      ),
-      elevation: 5,
-      child: Container(
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        padding: const EdgeInsets.only(
-            top: kDefaultPadding,
-            bottom: kDefaultPadding,
-            left: kDefaultPadding,
-            right: kDefaultPadding),
-        decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10))),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Lottie.asset('assets/lottie/language.json',
-                width: 260,
-                animate: true,
-                reverse: true,
-                repeat: true,
-                height: 240,
-                fit: BoxFit.fitWidth,
-                alignment: Alignment.center),
-            const SizedBox(
-              height: kDefaultMargin,
-            ),
-            Text(
-              'Language',
-              style: bodyText1,
-            ),
-            const SizedBox(
-              height: kDefaultMargin / 2,
-            ),
-            const Divider(),
-            ListTile(
-              contentPadding: const EdgeInsets.all(0),
-              trailing: Checkbox(
-                value: true,
-                onChanged: (bool? value) {},
-              ),
-              title: Text(
-                'English',
-                style: bodyText2,
-              ),
-            ),
-            const Divider(),
-          ],
-        ),
-      ),
-    );
-    showGeneralDialog(
-      context: context,
-      barrierLabel: "Announcement Dialog",
-      barrierDismissible: true,
-      barrierColor: Colors.black.withOpacity(0.5),
-      transitionDuration: const Duration(milliseconds: 500),
-      pageBuilder: (_, __, ___) => dialog,
-      transitionBuilder: (_, anim, __, child) => FadeTransition(
-        opacity: Tween(begin: 0.0, end: 1.0).animate(anim),
-        child: child,
       ),
     );
   }

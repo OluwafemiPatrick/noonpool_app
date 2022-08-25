@@ -68,9 +68,9 @@ class _VerifyUserAccountState extends State<VerifyUserAccount> {
         showCursor: true,
         validator: (s) {
           if (s == null || s.isEmpty) {
-            return "Please enter the pin you recieved";
+            return AppLocalizations.of(context)!.pleaseEnterThePinYouRecieved;
           } else if (s.trim().length < 4) {
-            return "Please enter the complete pin";
+            return AppLocalizations.of(context)!.pleaseEnterTheCompletePin;
           }
           return null;
         },
@@ -105,7 +105,8 @@ class _VerifyUserAccountState extends State<VerifyUserAccount> {
                 Align(
                   alignment: Alignment.center,
                   child: Text(
-                    "Please enter the OTP that was sent to your account.",
+                    AppLocalizations.of(context)!
+                        .pleaseEnterTheOtpThatWasSentToYourAccount,
                     style: bodyText1,
                     textAlign: TextAlign.center,
                   ),
@@ -127,7 +128,7 @@ class _VerifyUserAccountState extends State<VerifyUserAccount> {
                           ),
                         )
                       : Text(
-                          'Verify OTP',
+                          AppLocalizations.of(context)!.verifyOtp,
                           style: bodyText2.copyWith(color: Colors.white),
                         ),
                   onPressed: () async {
@@ -149,9 +150,10 @@ class _VerifyUserAccountState extends State<VerifyUserAccount> {
                         code: code,
                       );
                       MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
-                        const SnackBar(
+                        SnackBar(
                           content: Text(
-                            "Your account has been verified, please proceed to login.",
+                            AppLocalizations.of(context)!
+                                .yourAccountHasBeenVerifiedPleaseProceedToLogin,
                           ),
                         ),
                       );
@@ -180,8 +182,8 @@ class _VerifyUserAccountState extends State<VerifyUserAccount> {
                 SizedBox(
                   child: CustomTextButton(
                     onPressed: showResendDialog,
-                    widget: const Text(
-                      'Resend OTP',
+                    widget: Text(
+                      AppLocalizations.of(context)!.resendOtp,
                     ),
                   ),
                 ),
@@ -220,7 +222,7 @@ class _VerifyUserAccountState extends State<VerifyUserAccount> {
               height: 20,
             ),
             Text(
-              'Resending Verification, please wait',
+              AppLocalizations.of(context)!.resendingVerificationPleaseWait,
               style: bodyText2,
               textAlign: TextAlign.center,
             ),
@@ -250,9 +252,9 @@ class _VerifyUserAccountState extends State<VerifyUserAccount> {
       );
       Navigator.of(context).pop();
       ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-            'A new OTP has been sent to your account',
+            AppLocalizations.of(context)!.aNewOtpHasBeenSentToYourAccount,
           ),
         ),
       );

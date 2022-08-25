@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:noonpool/presentation/calculator/calculator_screen.dart';
+import 'package:noonpool/helpers/constants.dart';
 import 'package:noonpool/presentation/home/home_tab.dart';
 import 'package:noonpool/presentation/pool/pool_data.dart';
 import 'package:noonpool/presentation/settings/settings_tab.dart';
@@ -22,13 +22,6 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final StreamController<int> _positionStream = StreamController();
   final PageController _mainPageViewController = PageController();
-
-  List<Map<String, dynamic>> bottomNavItems = [
-    {"title": "Home", "icon": 'assets/icons/home.svg'},
-    {"title": "Pool", "icon": 'assets/icons/pool.svg'},
-    {"title": "Wallet", "icon": 'assets/icons/wallet.svg'},
-    {"title": "Settings", "icon": 'assets/icons/settings.svg'},
-  ];
 
   final List<Widget> _pages = [
     const HomeTab(),
@@ -92,7 +85,8 @@ class _MainScreenState extends State<MainScreen> {
                 fit: BoxFit.contain,
               ),
               Text(
-                'Please connect to an internet connection to load data',
+                AppLocalizations.of(context)!
+                    .pleaseConnectToAnInternetConnectionToLoadData,
                 style: bodyText2,
                 textAlign: TextAlign.center,
               ),
@@ -104,7 +98,7 @@ class _MainScreenState extends State<MainScreen> {
                     Navigator.of(context).pop();
                   },
                   widget: Text(
-                    'Okay',
+                    AppLocalizations.of(context)!.okay,
                     style: bodyText2!.copyWith(
                       color: Colors.white,
                     ),
@@ -131,6 +125,25 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    List<Map<String, dynamic>> bottomNavItems = [
+      {
+        "title": AppLocalizations.of(context)!.home,
+        "icon": 'assets/icons/home.svg'
+      },
+      {
+        "title": AppLocalizations.of(context)!.pool,
+        "icon": 'assets/icons/pool.svg'
+      },
+      {
+        "title": AppLocalizations.of(context)!.wallet,
+        "icon": 'assets/icons/wallet.svg'
+      },
+      {
+        "title": AppLocalizations.of(context)!.settings,
+        "icon": 'assets/icons/settings.svg'
+      },
+    ];
+
     return Scaffold(
       body: PageView(
         controller: _mainPageViewController,

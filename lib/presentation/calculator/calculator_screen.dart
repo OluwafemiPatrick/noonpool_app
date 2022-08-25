@@ -37,7 +37,8 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                 return _CalculatorTabBody(coinModel: allData[0]);
               } else {
                 return CustomErrorWidget(
-                    error: 'Error occurred, please refresh the page',
+                    error: AppLocalizations.of(context)!
+                        .anErrorOccurredPleaseRefreshThePage,
                     onRefresh: () {
                       setState(() {});
                     });
@@ -146,7 +147,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
             child: CustomElevatedButton(
               onPressed: _saveForm,
               widget: Text(
-                'Calculate',
+                AppLocalizations.of(context)!.calculate,
                 style: bodyText2.copyWith(
                   color: Colors.white,
                 ),
@@ -173,7 +174,8 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
       child: Padding(
         padding: const EdgeInsets.all(kDefaultPadding / 2),
         child: Text(
-          'The result is the theoretical PPS+ mining yield based on the set difficulty and the average miner fees in the past 7 days',
+          AppLocalizations.of(context)!
+              .theResultIsTheTheoreticalPpsMiningYieldBasedOnTheSetDifficultyAndTheAverageMinerFeesInThePast7Days,
           style: bodyText2.copyWith(color: kPrimaryColor),
         ),
       ),
@@ -184,7 +186,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
     return [
       Padding(
         child: Text(
-          'PPS fee rate',
+          AppLocalizations.of(context)!.ppsFeeRate,
           style: bodyText2,
         ),
         padding: const EdgeInsets.only(left: kDefaultMargin),
@@ -231,7 +233,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
     return [
       Padding(
         child: Text(
-          'Difficulty',
+          AppLocalizations.of(context)!.difficulty,
           style: bodyText2,
         ),
         padding: const EdgeInsets.only(left: kDefaultMargin),
@@ -263,7 +265,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
     return [
       Padding(
         child: Text(
-          'Number of miners',
+          AppLocalizations.of(context)!.numberOfMiners,
           style: bodyText2,
         ),
         padding: const EdgeInsets.only(left: kDefaultMargin),
@@ -295,7 +297,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
     return [
       Padding(
         child: Text(
-          'Valid hashRate',
+          AppLocalizations.of(context)!.validHashrate,
           style: bodyText2,
         ),
         padding: const EdgeInsets.only(left: kDefaultMargin),
@@ -355,7 +357,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
     return [
       Padding(
         child: Text(
-          'EST. Daily Yield',
+          AppLocalizations.of(context)!.estDailyYield,
           style: bodyText2,
         ),
         padding: const EdgeInsets.only(
@@ -398,7 +400,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
       automaticallyImplyLeading: false,
       backgroundColor: Colors.transparent,
       title: Text(
-        'Profit Calculator',
+        AppLocalizations.of(context)!.profitCalculator,
         style: bodyText1,
       ),
       actions: [

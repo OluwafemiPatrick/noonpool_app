@@ -47,8 +47,8 @@ class _ForgotPasswordStage3State extends State<ForgotPasswordStage3> {
         autocorrect: !_isPasswordNotVisible,
         style: bodyText2,
         decoration: InputDecoration(
-          labelText: "Password",
-          hintText: "Enter your password.",
+          labelText: AppLocalizations.of(context)!.password,
+          hintText: AppLocalizations.of(context)!.enterYourPassword,
           suffixIcon: IconButton(
             icon: Icon(
               _isPasswordNotVisible ? Icons.visibility : Icons.visibility_off,
@@ -74,11 +74,11 @@ class _ForgotPasswordStage3State extends State<ForgotPasswordStage3> {
         keyboardType: TextInputType.visiblePassword,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please provide  your password';
+            return AppLocalizations.of(context)!.pleaseProvideYourPassword;
           } else if (value.length < 8) {
-            return 'Password must be more than 8 letters';
+            return AppLocalizations.of(context)!.passwordMustBeMoreThan8Letters;
           } else if (value != _retypePasswordController.text) {
-            return 'Passwords are not the same';
+            return AppLocalizations.of(context)!.passwordsAreNotTheSame;
           }
           return null;
         },
@@ -111,8 +111,8 @@ class _ForgotPasswordStage3State extends State<ForgotPasswordStage3> {
               });
             },
           ),
-          labelText: "Retype Password",
-          hintText: "retype your password.",
+          labelText: AppLocalizations.of(context)!.retypePassword,
+          hintText: AppLocalizations.of(context)!.retypeYourPassword,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
           ),
@@ -127,11 +127,11 @@ class _ForgotPasswordStage3State extends State<ForgotPasswordStage3> {
         keyboardType: TextInputType.visiblePassword,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please confirm your password';
+            return AppLocalizations.of(context)!.pleaseConfirmYourPassword;
           } else if (value.length < 8) {
-            return 'Password must be more than 8 letters';
+            return AppLocalizations.of(context)!.passwordMustBeMoreThan8Letters;
           } else if (value != _passwordController.text) {
-            return 'Passwords are not the same';
+            return AppLocalizations.of(context)!.passwordsAreNotTheSame;
           }
           return null;
         },
@@ -169,13 +169,13 @@ class _ForgotPasswordStage3State extends State<ForgotPasswordStage3> {
             const SizedBox(
               height: kDefaultMargin * 2,
             ),
-            Text('Password Change',
+            Text(AppLocalizations.of(context)!.passwordChange,
                 style: bodyText1.copyWith(
                   fontWeight: FontWeight.bold,
                 )),
             const SizedBox(height: (5)),
             Text(
-              "Enter a new password for your account",
+              AppLocalizations.of(context)!.enterANewPasswordForYourAccount,
               style: bodyText2,
               textAlign: TextAlign.center,
             ),
@@ -197,7 +197,7 @@ class _ForgotPasswordStage3State extends State<ForgotPasswordStage3> {
                       ),
                     )
                   : Text(
-                      'Reset Password',
+                      AppLocalizations.of(context)!.resetPassword,
                       style: bodyText2.copyWith(color: Colors.white),
                     ),
               onPressed: () async {

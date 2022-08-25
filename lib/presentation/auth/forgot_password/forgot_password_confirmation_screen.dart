@@ -39,7 +39,8 @@ class _ForgotPasswordConfirmationScreenState
               height: kDefaultMargin * 1.5,
             ),
             Text(
-              "Your password has been successfully reset; please login now.",
+              AppLocalizations.of(context)!
+                  .yourPasswordHasBeenSuccessfullyResetPleaseLoginNow,
               style: bodyText1,
               textAlign: TextAlign.center,
             ),
@@ -53,7 +54,7 @@ class _ForgotPasswordConfirmationScreenState
                     (route) => route.isFirst);
               },
               widget: Text(
-                'Login to account',
+                AppLocalizations.of(context)!.loginToAccount,
                 style: bodyText2!.copyWith(color: Colors.white),
               ),
             )

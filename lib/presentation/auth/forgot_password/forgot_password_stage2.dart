@@ -74,9 +74,9 @@ class _ForgotPasswordStage2State extends State<ForgotPasswordStage2> {
         showCursor: true,
         validator: (s) {
           if (s == null || s.isEmpty) {
-            return "Please enter the pin you recieved";
+            return AppLocalizations.of(context)!.pleaseEnterThePinYouRecieved;
           } else if (s.trim().length < 4) {
-            return "Please enter the complete pin";
+            return AppLocalizations.of(context)!.pleaseEnterTheCompletePin;
           }
           return null;
         },
@@ -114,13 +114,13 @@ class _ForgotPasswordStage2State extends State<ForgotPasswordStage2> {
             const SizedBox(
               height: kDefaultMargin * 2,
             ),
-            Text('Otp Verification',
+            Text(AppLocalizations.of(context)!.otpVerification,
                 style: bodyText1.copyWith(
                   fontWeight: FontWeight.bold,
                 )),
             const SizedBox(height: (5)),
             Text(
-              "Enter the OTP that was sent to your account.",
+              AppLocalizations.of(context)!.enterTheOtpThatWasSentToYourAccount,
               style: bodyText2,
               textAlign: TextAlign.center,
             ),
@@ -142,7 +142,7 @@ class _ForgotPasswordStage2State extends State<ForgotPasswordStage2> {
                       ),
                     )
                   : Text(
-                      'Verify',
+                      AppLocalizations.of(context)!.verify,
                       style: bodyText2.copyWith(color: Colors.white),
                     ),
               onPressed: () {

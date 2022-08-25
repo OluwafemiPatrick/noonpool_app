@@ -19,7 +19,10 @@ class PoolTab extends StatefulWidget {
 
 class _PoolTabState extends State<PoolTab> {
   final StreamController<int> _poolStatisticsStream = StreamController();
-  final List<String> _poolStatisticsTitles = ['General', 'Mid-East'];
+  List<String> _poolStatisticsTitles(BuildContext context) => [
+        AppLocalizations.of(context)!.general,
+        AppLocalizations.of(context)!.midEast
+      ];
 
   String _username = '';
   List workerData = [];
@@ -78,7 +81,7 @@ class _PoolTabState extends State<PoolTab> {
       elevation: 0,
       backgroundColor: Colors.transparent,
       title: Text(
-        'Pool',
+        AppLocalizations.of(context)!.pool,
         style: bodyText1,
       ),
       actions: [
@@ -156,8 +159,8 @@ class _PoolTabState extends State<PoolTab> {
               coin = _selected!;
               port1 = '0';
               port2 = '0';
-              miningAdd = 'Coin not available';
-              stratumUrl = 'Coin not available';
+              miningAdd = AppLocalizations.of(context)!.coinNotAvailable;
+              stratumUrl = AppLocalizations.of(context)!.coinNotAvailable;
             });
             initState();
           }
@@ -167,8 +170,8 @@ class _PoolTabState extends State<PoolTab> {
               coin = _selected!;
               port1 = '0';
               port2 = '0';
-              miningAdd = 'Coin not available';
-              stratumUrl = 'Coin not available';
+              miningAdd = AppLocalizations.of(context)!.coinNotAvailable;
+              stratumUrl = AppLocalizations.of(context)!.coinNotAvailable;
             });
             initState();
           }
@@ -185,7 +188,7 @@ class _PoolTabState extends State<PoolTab> {
   Padding buildStatisticsItem() {
     return Padding(
       child: PoolStatisticsTitle(
-          titles: _poolStatisticsTitles,
+          titles: _poolStatisticsTitles(context),
           onTitleClicked: onPoolStatisticsTitleClicked,
           positionStream: _poolStatisticsStream.stream),
       padding:
@@ -197,7 +200,7 @@ class _PoolTabState extends State<PoolTab> {
     return [
       Padding(
         child: Text(
-          '$coin Mining Address',
+          '$coin ${AppLocalizations.of(context)!.miningAddress}',
           style: bodyText2.copyWith(color: kLightText),
         ),
         padding:
@@ -224,8 +227,9 @@ class _PoolTabState extends State<PoolTab> {
                 onTap: () {
                   Clipboard.setData(ClipboardData(text: miningAdd)).then((_) {
                     MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
-                        const SnackBar(
-                            content: Text("address copied to clipboard")));
+                        SnackBar(
+                            content: Text(AppLocalizations.of(context)!
+                                .addressCopiedToClipboard)));
                   });
                 },
               ),
@@ -240,7 +244,7 @@ class _PoolTabState extends State<PoolTab> {
     return [
       Padding(
         child: Text(
-          'Smart Minting URL',
+          AppLocalizations.of(context)!.smartMintingUrl,
           style: bodyText2.copyWith(color: kLightText),
         ),
         padding:
@@ -269,8 +273,9 @@ class _PoolTabState extends State<PoolTab> {
               onTap: () {
                 Clipboard.setData(ClipboardData(text: stratumUrl)).then((_) {
                   MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
-                      const SnackBar(
-                          content: Text("address copied to clipboard")));
+                      SnackBar(
+                          content: Text(AppLocalizations.of(context)!
+                              .addressCopiedToClipboard)));
                 });
               },
             ),
@@ -325,7 +330,8 @@ class _PoolTabState extends State<PoolTab> {
               children: [
                 Column(
                   children: [
-                    Text('All miners', style: bodyText2),
+                    Text(AppLocalizations.of(context)!.allMiners,
+                        style: bodyText2),
                     const SizedBox(
                       height: kDefaultMargin / 4,
                     ),
@@ -340,7 +346,8 @@ class _PoolTabState extends State<PoolTab> {
                 ),
                 Column(
                   children: [
-                    Text('Paid earnings', style: bodyText2),
+                    Text(AppLocalizations.of(context)!.paidEarnings,
+                        style: bodyText2),
                     const SizedBox(
                       height: kDefaultMargin / 4,
                     ),
@@ -356,7 +363,7 @@ class _PoolTabState extends State<PoolTab> {
                 Column(
                   children: [
                     Text(
-                      'Unpaid earnings',
+                      AppLocalizations.of(context)!.unpaidEarnings,
                       style: bodyText2,
                     ),
                     const SizedBox(
@@ -386,27 +393,27 @@ class _PoolTabState extends State<PoolTab> {
               children: [
                 Expanded(
                   child: Text(
-                    'WorkerID',
+                    AppLocalizations.of(context)!.workerid,
                     style: bodyText2,
                   ),
                 ),
                 Expanded(
                   child: Text(
-                    'Hashrate',
-                    style: bodyText2,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    'Valid Shares',
+                    AppLocalizations.of(context)!.hashrate,
                     style: bodyText2,
                     textAlign: TextAlign.center,
                   ),
                 ),
                 Expanded(
                   child: Text(
-                    'Invalid Shares',
+                    AppLocalizations.of(context)!.validShares,
+                    style: bodyText2,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    AppLocalizations.of(context)!.invalidShares,
                     style: bodyText2,
                     textAlign: TextAlign.center,
                   ),
@@ -441,7 +448,7 @@ class _PoolTabState extends State<PoolTab> {
       String workerId, hashrate, sharesValid, sharesInvalid) {
     final textTheme = Theme.of(context).textTheme;
     final bodyText2 = textTheme.bodyText2!;
-    String _workerId, _hashrate, _validS, _inValidS;
+    String _workerId, _hashrate;
 
     // format worker_id into proper name
     var split = workerId.split('.');
@@ -511,7 +518,7 @@ class _PoolTabState extends State<PoolTab> {
             height: kDefaultMargin / 2,
           ),
           Text(
-            'No worker data',
+            AppLocalizations.of(context)!.noWorkerData,
             style: bodyText2,
           ),
           const Spacer(),
