@@ -257,7 +257,8 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
   Container buildHeader(TextStyle bodyText2, TextStyle bodyText1) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+      height: MediaQuery.of(context).size.height / 6,
+      padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -265,26 +266,24 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
             'EST. Amount (${widget.walletDatum.coinSymbol})',
             style: bodyText2.copyWith(fontSize: 12),
           ),
-          const SizedBox(
-            height: 5,
-          ),
+          const SizedBox(height: 5),
           Row(
             children: [
               Text(
                 '${widget.walletDatum.balance ?? 0} ${widget.walletDatum.coinSymbol ?? ''}',
                 style: bodyText1.copyWith(
                   fontWeight: FontWeight.bold,
+                  fontSize: 16.0
                 ),
               ),
+              const SizedBox(width: 5,),
               Text(
                 '(\$ ${formatNumber((widget.walletDatum.usdPrice ?? 0) + .0)})',
                 style: bodyText2.copyWith(fontSize: 12),
               ),
             ],
           ),
-          const SizedBox(
-            height: 5,
-          ),
+          const Spacer(flex: 1),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -307,9 +306,7 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
                   ),
                 ),
               ),
-              const SizedBox(
-                width: 5,
-              ),
+              const SizedBox(width: 5),
               Expanded(
                 child: CustomOutlinedButton(
                   padding: const EdgeInsets.only(
@@ -322,37 +319,17 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
                     //
                   },
                   widget: Text(
-                    'Send',
+                    'Receive',
                     style: bodyText2.copyWith(
                       color: kPrimaryColor,
                     ),
                   ),
                 ),
               ),
-              const SizedBox(
-                width: 5,
-              ),
-              Expanded(
-                child: CustomOutlinedButton(
-                  padding: const EdgeInsets.only(
-                    left: kDefaultMargin / 4,
-                    right: kDefaultMargin / 4,
-                    top: 0,
-                    bottom: 0,
-                  ),
-                  onPressed: () {
-                    //
-                  },
-                  widget: Text(
-                    'Recieve',
-                    style: bodyText2.copyWith(
-                      color: kPrimaryColor,
-                    ),
-                  ),
-                ),
-              ),
+              const Spacer()
             ],
           ),
+          const Spacer(flex: 3),
         ],
       ),
     );

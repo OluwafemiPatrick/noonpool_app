@@ -28,6 +28,7 @@ dependencies:
   shared_preferences: ^2.0.12
   shimmer: ^2.0.0
   url_launcher: ^6.0.2
+  pull_to_refresh: ^2.0.0
 
 dev_dependencies:
   flutter_launcher_icons: "0.9.2"

@@ -7,6 +7,7 @@ import 'package:noonpool/main.dart';
 import 'package:noonpool/model/coin_model/coin_model.dart';
 import 'package:noonpool/presentation/home/widget/home_coin_item.dart';
 import 'package:noonpool/presentation/home/widget/home_header_item.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../helpers/error_widget.dart';
 import '../../helpers/network_helper.dart';
@@ -22,6 +23,7 @@ class _HomeTabState extends State<HomeTab> {
   bool _isLoading = true;
   bool _hasError = false;
   final List<CoinModel> allCoinData = [];
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   @override
   void initState() {
@@ -48,6 +50,7 @@ class _HomeTabState extends State<HomeTab> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -55,54 +58,58 @@ class _HomeTabState extends State<HomeTab> {
     final bodyText2 = textTheme.bodyText2!;
     final lightText = bodyText2.copyWith(color: kLightText);
     const spacer = SizedBox(
-      height: kDefaultMargin / 2,
+      height: kDefaultMargin / 1,
     );
 
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          buildAppBar(bodyText1),
-          const Padding(
-            child: _HomeHeader(),
-            padding:
-                EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
-          ),
-          spacer,
-          Padding(
-            child: Text(
-              AppLocalizations.of(context)!.statistics,
-              style: bodyText1.copyWith(
-                fontWeight: FontWeight.bold,
+      body: SmartRefresher(
+        enablePullDown: true,
+        header: const WaterDropHeader(waterDropColor: kPrimaryColor),
+        controller: _refreshController,
+        onRefresh: _onRefresh,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            buildAppBar(bodyText1),
+            const Padding(
+              child: _HomeHeader(),
+              padding: EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+            ),
+            spacer,
+            Padding(
+              child: Text(
+                AppLocalizations.of(context)!.statistics,
+                style: bodyText1.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              padding: const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+            ),
+            spacer,
+            Padding(
+              child: buildRow2(bodyText1, lightText),
+              padding: const EdgeInsets.only(
+                left: kDefaultMargin,
+                right: kDefaultMargin,
               ),
             ),
-            padding: const EdgeInsets.only(
-                left: kDefaultMargin, right: kDefaultMargin),
-          ),
-          spacer,
-          Padding(
-            child: buildRow2(bodyText1, lightText),
-            padding: const EdgeInsets.only(
-              left: kDefaultMargin,
-              right: kDefaultMargin,
+            spacer,
+            Expanded(
+              child: _isLoading
+                  ? buildLoadingBody()
+                  : _hasError
+                      ? CustomErrorWidget(
+                          error: AppLocalizations.of(context)!
+                              .anErrorOccurredWithTheDataFetchPleaseTryAgain,
+                          onRefresh: () {
+                            getData();
+                          })
+                      : buildBody(),
             ),
-          ),
-          spacer,
-          Expanded(
-            child: _isLoading
-                ? buildLoadingBody()
-                : _hasError
-                    ? CustomErrorWidget(
-                        error: AppLocalizations.of(context)!
-                            .anErrorOccurredWithTheDataFetchPleaseTryAgain,
-                        onRefresh: () {
-                          getData();
-                        })
-                    : buildBody(),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -195,6 +202,13 @@ class _HomeTabState extends State<HomeTab> {
       ),
     );
   }
+
+  void _onRefresh() async{
+    await Future.delayed(Duration.zero, getData).then((value) {
+      _refreshController.refreshCompleted();
+    });
+  }
+
 }
 
 class _HomeHeader extends StatefulWidget {

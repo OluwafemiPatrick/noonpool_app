@@ -69,9 +69,9 @@ class _WalletTabState extends State<WalletTab> {
         child: Column(
           children: [
             Container(
+              height: MediaQuery.of(context).size.height / 6,
               width: double.infinity,
-              padding: const EdgeInsets.only(
-                  left: 10, right: 10, top: 10, bottom: 10),
+              padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -79,26 +79,23 @@ class _WalletTabState extends State<WalletTab> {
                     'EST. Amount (BTC)',
                     style: bodyText2.copyWith(fontSize: 12),
                   ),
-                  const SizedBox(
-                    height: 5,
-                  ),
+                  const SizedBox(height: 5),
                   Row(
                     children: [
                       Text(
                         "0 ",
                         style: bodyText1.copyWith(
+                          fontSize: 16.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
                         '(\$0.0)',
-                        style: bodyText2.copyWith(fontSize: 12),
+                        style: bodyText2.copyWith(fontSize: 16),
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 5,
-                  ),
+                  const Spacer(flex: 1),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -136,40 +133,16 @@ class _WalletTabState extends State<WalletTab> {
                             //
                           },
                           widget: Text(
-                            'Send',
+                            'Receive',
                             style: bodyText2.copyWith(
                               color: kPrimaryColor,
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Expanded(
-                        child: CustomOutlinedButton(
-                          padding: const EdgeInsets.only(
-                            left: kDefaultMargin / 4,
-                            right: kDefaultMargin / 4,
-                            top: 0,
-                            bottom: 0,
-                          ),
-                          onPressed: () {
-                            //
-                          },
-                          widget: Text(
-                            'Buy',
-                            style: bodyText2.copyWith(
-                              color: kPrimaryColor,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                    ],
-                  )
+                      const Spacer()
+                    ]),
+                  const Spacer(flex: 4),
                 ],
               ),
             ),
@@ -274,8 +247,8 @@ class CoinShow extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            width: 46,
-            height: 46,
+            width: 40,
+            height: 40,
             clipBehavior: Clip.antiAliasWithSaveLayer,
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
@@ -318,24 +291,24 @@ class CoinShow extends StatelessWidget {
     final titleStyle = textTheme.bodyText1;
     final subTitleStyle = textTheme.bodyText2;
     return Container(
-      margin: const EdgeInsets.only(bottom: 4.0, top: 4.0),
-      padding: const EdgeInsets.all(5),
+      margin: const EdgeInsets.only(bottom: 8.0, top: 12.0),
+      padding: const EdgeInsets.only(left: 10.0, right: 15.0),
       child: Row(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
-              width: 46,
-              height: 46,
+              width: 40,
+              height: 40,
               clipBehavior: Clip.antiAliasWithSaveLayer,
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
               ),
               child: Image.network(
                 data.imageUrl ?? '',
-                height: 46,
-                width: 46,
+                height: 40,
+                width: 40,
                 fit: BoxFit.cover,
               ),
             ),

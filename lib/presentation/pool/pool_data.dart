@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:noonpool/main.dart';
 import 'package:noonpool/helpers/network_helper.dart';
 import 'package:noonpool/presentation/pool/widget/pool_statistics_title.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../helpers/constants.dart';
@@ -19,6 +20,8 @@ class PoolTab extends StatefulWidget {
 
 class _PoolTabState extends State<PoolTab> {
   final StreamController<int> _poolStatisticsStream = StreamController();
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+
   List<String> _poolStatisticsTitles(BuildContext context) => [
         AppLocalizations.of(context)!.general,
         AppLocalizations.of(context)!.midEast
@@ -27,18 +30,26 @@ class _PoolTabState extends State<PoolTab> {
   String _username = '';
   List workerData = [];
   String coin = 'LTC';
-  String port1 = '3070', port2 = '3080';
-  String miningAdd = 'litecoin.noonpool.com:3070';
-  String stratumUrl = 'stratum+tcp://litecoin.noonpool.com:3070';
-  String ltcUrl = 'http://litecoin.noonpool.com:6050/api/v1/Pool-Litecoin';
-  String btcUrl = 'http://bitcoin.noonpool.com:6055/api/v1/Pool-Bitcoin';
+  String port1 = '3055', port2 = '3056';
+  String miningAdd = 'litecoin.noonpool.com:3055';
+  String stratumUrl = 'stratum+tcp://litecoin.noonpool.com:3056';
+  String ltcUrl = 'http://litecoin.noonpool.com:6050/api/v1/Pool-Litecoin-Dogecoin';
+  String btcUrl = '';
   String bchUrl = '';
-  String dogeUrl = '';
+  String dogeUrl = 'http://litecoin.noonpool.com:6050/api/v1/Pool-Litecoin-Dogecoin';
+
 
   @override
   void initState() {
     getUsername();
     super.initState();
+  }
+
+  void _onRefresh() async{
+    await Future.delayed(Duration.zero, getUsername).then((value) {
+      _refreshController.refreshCompleted();
+    });
+
   }
 
   @override
@@ -51,30 +62,34 @@ class _PoolTabState extends State<PoolTab> {
     );
     return Scaffold(
       appBar: buildAppBar(bodyText1, bodyText2),
-      body: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            buildStatisticsItem(),
-            spacer,
-            ...buildBtcMiningAddress(bodyText2),
-            spacer,
-            ...buildSmartMiningUrl(bodyText2),
-            spacer,
-            buildExtraNote(bodyText2),
-            spacer,
-            buildStatistics(bodyText1, _username),
-            const SizedBox(
-              height: 10.0,
-            ),
-            Expanded(child: buildPoolData(bodyText2, spacer)),
-          ],
+      body: SmartRefresher(
+        enablePullDown: true,
+        header: const WaterDropHeader(waterDropColor: kPrimaryColor),
+        controller: _refreshController,
+        onRefresh: _onRefresh,
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              buildStatisticsItem(),
+              spacer,
+              ...buildBtcMiningAddress(bodyText2),
+              spacer,
+              ...buildSmartMiningUrl(bodyText2),
+              spacer,
+              buildExtraNote(bodyText2),
+              spacer,
+              buildStatistics(bodyText1, _username),
+              const SizedBox(height: 10.0),
+              Expanded(child: buildPoolData(bodyText2, spacer)),
+            ]),
         ),
       ),
     );
   }
+
 
   AppBar buildAppBar(TextStyle? bodyText1, TextStyle bodyText2) {
     return AppBar(
@@ -135,10 +150,10 @@ class _PoolTabState extends State<PoolTab> {
             setState(() {
               workerData = [];
               coin = _selected!;
-              port1 = '3070';
-              port2 = '3080';
-              miningAdd = 'litecoin.noonpool.com:3070';
-              stratumUrl = 'stratum+tcp://litecoin.noonpool.com:3070';
+              port1 = '3055';
+              port2 = '3056';
+              miningAdd = 'litecoin.noonpool.com:3055';
+              stratumUrl = 'stratum+tcp://litecoin.noonpool.com:3055';
             });
             initState();
           }
@@ -146,10 +161,10 @@ class _PoolTabState extends State<PoolTab> {
             setState(() {
               workerData = [];
               coin = _selected!;
-              port1 = '3333';
-              port2 = '3334';
-              miningAdd = 'bitcoin.noonpool.com:3333';
-              stratumUrl = 'stratum+tcp://bitcoin.noonpool.com:3333';
+              port1 = '0';
+              port2 = '0';
+              miningAdd = AppLocalizations.of(context)!.coinNotAvailable;
+              stratumUrl = AppLocalizations.of(context)!.coinNotAvailable;
             });
             initState();
           }
@@ -157,10 +172,10 @@ class _PoolTabState extends State<PoolTab> {
             setState(() {
               workerData = [];
               coin = _selected!;
-              port1 = '0';
-              port2 = '0';
-              miningAdd = AppLocalizations.of(context)!.coinNotAvailable;
-              stratumUrl = AppLocalizations.of(context)!.coinNotAvailable;
+              port1 = '3055';
+              port2 = '3056';
+              miningAdd = 'litecoin.noonpool.com:3055';
+              stratumUrl = 'stratum+tcp://litecoin.noonpool.com:3055';
             });
             initState();
           }
@@ -444,19 +459,23 @@ class _PoolTabState extends State<PoolTab> {
     );
   }
 
-  Widget displayWorkerData(
-      String workerId, hashrate, sharesValid, sharesInvalid) {
+  Widget displayWorkerData(String workerId, hashrate, sharesValid, sharesInvalid) {
     final textTheme = Theme.of(context).textTheme;
     final bodyText2 = textTheme.bodyText2!;
     String _workerId, _hashrate;
 
     // format worker_id into proper name
     var split = workerId.split('.');
-    if (split.length < 4 && split.length > 1) {
+    if (split.length == 2) {
+      var s1 = split[1];
+      _workerId = s1;
+    }
+    else if (split.length == 3) {
       var s1 = split[1];
       var s2 = split[2];
       _workerId = "$s1.$s2";
-    } else {
+    }
+    else {
       _workerId = workerId;
     }
 
@@ -473,7 +492,7 @@ class _PoolTabState extends State<PoolTab> {
           Expanded(
             child: Text(
               _workerId,
-              style: bodyText2,
+              style: bodyText2.copyWith(color: Colors.red),
             ),
           ),
           Expanded(
@@ -554,4 +573,5 @@ class _PoolTabState extends State<PoolTab> {
       });
     }
   }
+
 }
