@@ -492,7 +492,7 @@ class _PoolTabState extends State<PoolTab> {
           Expanded(
             child: Text(
               _workerId,
-              style: bodyText2.copyWith(color: Colors.red),
+              style: bodyText2,
             ),
           ),
           Expanded(

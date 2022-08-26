@@ -189,8 +189,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
 
   Card buildTopText(TextStyle bodyText2) {
     return Card(
-      margin:
-          const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+      margin: const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
       color: kLightBackgroud,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
@@ -424,9 +423,16 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
       elevation: 0,
       automaticallyImplyLeading: false,
       backgroundColor: Colors.transparent,
-      title: Text(
-        AppLocalizations.of(context)!.profitCalculator,
-        style: bodyText1,
+      title: Row(
+        children: [
+          const BackButton(
+            color: Colors.black,
+          ),
+          Text(
+            AppLocalizations.of(context)!.profitCalculator,
+            style: bodyText1,
+          ),
+        ],
       ),
       actions: [
         Container(

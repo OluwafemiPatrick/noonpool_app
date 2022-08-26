@@ -8,6 +8,7 @@ import 'package:noonpool/main.dart';
 import 'package:noonpool/model/wallet_data/datum.dart';
 import 'package:noonpool/model/wallet_data/wallet_data.dart';
 import 'package:noonpool/presentation/transactions/wallet_transaction_screen.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shimmer/shimmer.dart';
 
 class WalletTab extends StatefulWidget {
@@ -21,6 +22,8 @@ class _WalletTabState extends State<WalletTab> {
   bool _isLoading = true;
   bool _hasError = false;
   WalletData walletData = WalletData();
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+
   @override
   void initState() {
     super.initState();
@@ -50,6 +53,12 @@ class _WalletTabState extends State<WalletTab> {
     });
   }
 
+  void _onRefresh() async{
+    await Future.delayed(Duration.zero, getData).then((value) {
+      _refreshController.refreshCompleted();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -64,108 +73,114 @@ class _WalletTabState extends State<WalletTab> {
           style: bodyText1.copyWith(fontWeight: FontWeight.bold),
         ),
       ),
-      body: Container(
-        color: kLightBackgroud,
-        child: Column(
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height / 6,
-              width: double.infinity,
-              padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'EST. Amount (BTC)',
-                    style: bodyText2.copyWith(fontSize: 12),
-                  ),
-                  const SizedBox(height: 5),
-                  Row(
-                    children: [
-                      Text(
-                        "0 ",
-                        style: bodyText1.copyWith(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        '(\$0.0)',
-                        style: bodyText2.copyWith(fontSize: 16),
-                      ),
-                    ],
-                  ),
-                  const Spacer(flex: 1),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: CustomOutlinedButton(
-                          padding: const EdgeInsets.only(
-                            left: kDefaultMargin / 4,
-                            right: kDefaultMargin / 4,
-                            top: 0,
-                            bottom: 0,
-                          ),
-                          onPressed: () {
-                            //
-                          },
-                          widget: Text(
-                            'Withdraw',
-                            style: bodyText2.copyWith(
-                              color: kPrimaryColor,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Expanded(
-                        child: CustomOutlinedButton(
-                          padding: const EdgeInsets.only(
-                            left: kDefaultMargin / 4,
-                            right: kDefaultMargin / 4,
-                            top: 0,
-                            bottom: 0,
-                          ),
-                          onPressed: () {
-                            //
-                          },
-                          widget: Text(
-                            'Receive',
-                            style: bodyText2.copyWith(
-                              color: kPrimaryColor,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const Spacer()
-                    ]),
-                  const Spacer(flex: 4),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Container(
+      body: SmartRefresher(
+        enablePullDown: true,
+        header: const WaterDropHeader(waterDropColor: kPrimaryColor),
+        controller: _refreshController,
+        onRefresh: _onRefresh,
+        child: Container(
+          color: kLightBackgroud,
+          child: Column(
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height / 6,
                 width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
+                padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'EST. Amount (BTC)',
+                      style: bodyText2.copyWith(fontSize: 12),
+                    ),
+                    const SizedBox(height: 5),
+                    Row(
+                      children: [
+                        Text(
+                          "0 ",
+                          style: bodyText1.copyWith(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          '(\$0.0)',
+                          style: bodyText2.copyWith(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                    const Spacer(flex: 1),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: CustomOutlinedButton(
+                            padding: const EdgeInsets.only(
+                              left: kDefaultMargin / 4,
+                              right: kDefaultMargin / 4,
+                              top: 0,
+                              bottom: 0,
+                            ),
+                            onPressed: () {
+                              //
+                            },
+                            widget: Text(
+                              'Withdraw',
+                              style: bodyText2.copyWith(
+                                color: kPrimaryColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Expanded(
+                          child: CustomOutlinedButton(
+                            padding: const EdgeInsets.only(
+                              left: kDefaultMargin / 4,
+                              right: kDefaultMargin / 4,
+                              top: 0,
+                              bottom: 0,
+                            ),
+                            onPressed: () {
+                              //
+                            },
+                            widget: Text(
+                              'Receive',
+                              style: bodyText2.copyWith(
+                                color: kPrimaryColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const Spacer()
+                      ]),
+                    const Spacer(flex: 4),
+                  ],
                 ),
-                child: _isLoading
-                    ? buildLoadingBody()
-                    : _hasError
-                        ? CustomErrorWidget(
-                            error:
-                                "An error occurred with the data fetch, please try again",
-                            onRefresh: () {
-                              getData();
-                            })
-                        : buildBody(),
               ),
-            ),
-          ],
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white,
+                  ),
+                  child: _isLoading
+                      ? buildLoadingBody()
+                      : _hasError
+                          ? CustomErrorWidget(
+                              error:
+                                  "An error occurred with the data fetch, please try again",
+                              onRefresh: () {
+                                getData();
+                              })
+                          : buildBody(),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
