@@ -42,6 +42,8 @@ class AppPreferences {
 
   static Future setLoginStatus({required bool status}) async {
     await _preference?.setBool(_loginInKey, status);
+    await setUserName(username: '');
+    await setId(id: "");
   }
 
   static bool get onBoardingStatus =>
