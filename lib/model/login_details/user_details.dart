@@ -5,6 +5,7 @@ class UserDetails {
   String? email;
   String? id;
   String? username;
+  String? mnemonic;
   bool? verified;
 
   UserDetails({
@@ -12,12 +13,13 @@ class UserDetails {
     this.email,
     this.id,
     this.username,
+    this.mnemonic,
     this.verified,
   });
 
   @override
   String toString() {
-    return 'UserDetails(actCreationDate: $actCreationDate, email: $email, id: $id, username: $username, verified: $verified)';
+    return 'UserDetails(actCreationDate: $actCreationDate, email: $email, id: $id, username: $username, verified: $verified, mnemonic:$mnemonic)';
   }
 
   factory UserDetails.fromMap(Map<String, dynamic> data) => UserDetails(
@@ -25,6 +27,7 @@ class UserDetails {
         email: data['email'] as String?,
         id: data['id'] as String?,
         username: data['username'] as String?,
+        mnemonic: data['mnemonic'] as String?,
         verified: data['verified'] as bool?,
       );
 
@@ -33,6 +36,7 @@ class UserDetails {
         'email': email,
         'id': id,
         'username': username,
+        'mnemonic': mnemonic,
         'verified': verified,
       };
 
