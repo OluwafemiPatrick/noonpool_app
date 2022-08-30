@@ -352,7 +352,7 @@ class _LoginScreenState extends State<LoginScreen> {
         focusNode: _passwordFocusNode,
         enableSuggestions: !_isHidden,
         autocorrect: !_isHidden,
-        style: bodyText2.copyWith(fontSize: 16),
+        style: bodyText2,
         decoration: InputDecoration(
           suffixIcon: IconButton(
             icon: Icon(

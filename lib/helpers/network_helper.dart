@@ -348,7 +348,7 @@ Future<WalletTransactions> getSummaryTransactions({
     final decode = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
-      final data =
+      /*   final data =
           '''{"trxs":[{"hash":"0f56b189a12f4bba5f43be0427dc3c3e08dd7f5c49837b061d15979db4037d91","isSend":false, "network":"bitcoin-cash"},
 	{"hash":"f6b9bdbfa064a85f01fa812b962063f919bd7be6950cdb7a5aeace5cf72aae41","isSend":false, "network":"bitcoin-cash"},
 	{"hash":"b0054876934e4800ce0f64970dfa78daff4b5312f726823200617da8e3dfb72a","isSend":true, "network":"bitcoin-cash"},
@@ -357,11 +357,8 @@ Future<WalletTransactions> getSummaryTransactions({
       return WalletTransactions.fromMap(
         jsonDecode(data),
         coin.toLowerCase() != 'bch',
-      );
-      /*   return WalletTransactions.fromMap(
-        decode,
-        coin.toLowerCase() == 'bch',
       ); */
+      return WalletTransactions.fromMap(decode);
     } else {
       return Future.error(decode['message'] ?? '');
     }
@@ -370,6 +367,42 @@ Future<WalletTransactions> getSummaryTransactions({
         'There is either no or a very weak network connection.');
   } catch (exception) {
     debugPrint(exception.toString());
+    return Future.error('An error occurred while getting data');
+  }
+}
+
+sendFromWallet({
+  required String network,
+  required String reciever,
+  required double amount,
+}) async {
+  final userId = AppPreferences.userId;
+  try {
+    final body = <String, dynamic>{
+      "user_id": userId,
+      "reciepient": reciever,
+      "amount": amount,
+      "network": network,
+    };
+
+    final response = await http.post(
+      Uri.parse(baseUrl + "wallet/send"),
+      body: jsonEncode(body),
+      headers: {'Content-Type': 'application/json'},
+    );
+    debugPrint(response.request?.url.toString());
+    debugPrint(response.body.toString());
+    final decode = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      return Future.error(decode['message'] ?? '');
+    }
+  } on SocketException {
+    return Future.error(
+        'There is either no or a very weak network connection.');
+  } catch (exception) {
     return Future.error('An error occurred while getting data');
   }
 }

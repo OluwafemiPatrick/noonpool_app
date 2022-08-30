@@ -10,7 +10,7 @@ class WalletTransactions {
   @override
   String toString() => 'WalletTransactions(transactions: $transactions)';
 
-  factory WalletTransactions.fromMap(Map<String, dynamic> data, bool isKeyTrx) {
+  factory WalletTransactions.fromMap(Map<String, dynamic> data) {
     return WalletTransactions(
       transactions: ((data['trxs'] ?? data['transactions']) as List<dynamic>?)
           ?.map((e) => Transaction.fromMap(e as Map<String, dynamic>))
@@ -25,9 +25,9 @@ class WalletTransactions {
   /// `dart:convert`
   ///
   /// Parses the string and returns the resulting Json object as [WalletTransactions].
-  factory WalletTransactions.fromJson(String data, bool isKeyTrx) {
+  factory WalletTransactions.fromJson(String data) {
     return WalletTransactions.fromMap(
-        json.decode(data) as Map<String, dynamic>, isKeyTrx);
+        json.decode(data) as Map<String, dynamic>);
   }
 
   /// `dart:convert`

@@ -7,6 +7,7 @@ import 'package:noonpool/helpers/page_route.dart';
 import 'package:noonpool/main.dart';
 import 'package:noonpool/model/wallet_data/datum.dart';
 import 'package:noonpool/model/wallet_transactions/transaction_view.dart';
+import 'package:noonpool/presentation/send_assets/send_input.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../model/wallet_transactions/transaction.dart';
@@ -303,11 +304,11 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
               Text(
                 '${widget.walletDatum.balance ?? 0} ${widget.walletDatum.coinSymbol ?? ''}',
                 style: bodyText1.copyWith(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.0
-                ),
+                    fontWeight: FontWeight.bold, fontSize: 16.0),
               ),
-              const SizedBox(width: 5,),
+              const SizedBox(
+                width: 5,
+              ),
               Text(
                 '(\$ ${formatNumber((widget.walletDatum.usdPrice ?? 0) + .0)})',
                 style: bodyText2.copyWith(fontSize: 12),
@@ -357,7 +358,32 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
                   ),
                 ),
               ),
-              const Spacer()
+              const SizedBox(width: 5),
+              Expanded(
+                child: CustomOutlinedButton(
+                  padding: const EdgeInsets.only(
+                    left: kDefaultMargin / 4,
+                    right: kDefaultMargin / 4,
+                    top: 0,
+                    bottom: 0,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      CustomPageRoute(
+                        screen: SendInputScreen(
+                          walletDatum: widget.walletDatum,
+                        ),
+                      ),
+                    );
+                  },
+                  widget: Text(
+                    'Send',
+                    style: bodyText2.copyWith(
+                      color: kPrimaryColor,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
           const Spacer(flex: 3),

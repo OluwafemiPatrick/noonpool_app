@@ -4,9 +4,11 @@ import 'package:noonpool/helpers/error_widget.dart';
 import 'package:noonpool/helpers/network_helper.dart';
 import 'package:noonpool/helpers/outlined_button.dart';
 import 'package:noonpool/helpers/page_route.dart';
+import 'package:noonpool/helpers/shared_preference_util.dart';
 import 'package:noonpool/main.dart';
 import 'package:noonpool/model/wallet_data/datum.dart';
 import 'package:noonpool/model/wallet_data/wallet_data.dart';
+import 'package:noonpool/presentation/send_assets/send_asset_list.dart';
 import 'package:noonpool/presentation/transactions/wallet_transaction_screen.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shimmer/shimmer.dart';
@@ -22,7 +24,8 @@ class _WalletTabState extends State<WalletTab> {
   bool _isLoading = true;
   bool _hasError = false;
   WalletData walletData = WalletData();
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
 
   @override
   void initState() {
@@ -31,6 +34,7 @@ class _WalletTabState extends State<WalletTab> {
   }
 
   getData() async {
+    debugPrint(AppPreferences.userId);
     setState(() {
       _isLoading = true;
       _hasError = false;
@@ -53,7 +57,7 @@ class _WalletTabState extends State<WalletTab> {
     });
   }
 
-  void _onRefresh() async{
+  void _onRefresh() async {
     await Future.delayed(Duration.zero, getData).then((value) {
       _refreshController.refreshCompleted();
     });
@@ -111,51 +115,72 @@ class _WalletTabState extends State<WalletTab> {
                     ),
                     const Spacer(flex: 1),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: CustomOutlinedButton(
-                            padding: const EdgeInsets.only(
-                              left: kDefaultMargin / 4,
-                              right: kDefaultMargin / 4,
-                              top: 0,
-                              bottom: 0,
-                            ),
-                            onPressed: () {
-                              //
-                            },
-                            widget: Text(
-                              'Withdraw',
-                              style: bodyText2.copyWith(
-                                color: kPrimaryColor,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: CustomOutlinedButton(
+                              padding: const EdgeInsets.only(
+                                left: kDefaultMargin / 4,
+                                right: kDefaultMargin / 4,
+                                top: 0,
+                                bottom: 0,
+                              ),
+                              onPressed: () {
+                                //
+                              },
+                              widget: Text(
+                                'Withdraw',
+                                style: bodyText2.copyWith(
+                                  color: kPrimaryColor,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Expanded(
-                          child: CustomOutlinedButton(
-                            padding: const EdgeInsets.only(
-                              left: kDefaultMargin / 4,
-                              right: kDefaultMargin / 4,
-                              top: 0,
-                              bottom: 0,
-                            ),
-                            onPressed: () {
-                              //
-                            },
-                            widget: Text(
-                              'Receive',
-                              style: bodyText2.copyWith(
-                                color: kPrimaryColor,
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Expanded(
+                            child: CustomOutlinedButton(
+                              padding: const EdgeInsets.only(
+                                left: kDefaultMargin / 4,
+                                right: kDefaultMargin / 4,
+                                top: 0,
+                                bottom: 0,
+                              ),
+                              onPressed: () {
+                                //
+                              },
+                              widget: Text(
+                                'Receive',
+                                style: bodyText2.copyWith(
+                                  color: kPrimaryColor,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        const Spacer()
-                      ]),
+                          const SizedBox(width: 5),
+                          Expanded(
+                            child: CustomOutlinedButton(
+                              padding: const EdgeInsets.only(
+                                left: kDefaultMargin / 4,
+                                right: kDefaultMargin / 4,
+                                top: 0,
+                                bottom: 0,
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).push(CustomPageRoute(
+                                  screen: const SendAssetList(),
+                                ));
+                              },
+                              widget: Text(
+                                'Send',
+                                style: bodyText2.copyWith(
+                                  color: kPrimaryColor,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ]),
                     const Spacer(flex: 4),
                   ],
                 ),
