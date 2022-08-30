@@ -415,23 +415,27 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget buildRegisterButton(TextStyle bodyText2) {
     return InkWell(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Text(
-            AppLocalizations.of(context)!.dontHaveAnAccount,
-            style: bodyText2,
-          ),
-          const SizedBox(
-            width: kDefaultMargin / 4,
-          ),
-          Text(
-            AppLocalizations.of(context)!.signUp,
-            style: bodyText2.copyWith(color: kPrimaryColor),
-          ),
-        ],
+      splashColor: Colors.transparent,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Text(
+              AppLocalizations.of(context)!.dontHaveAnAccount,
+              style: bodyText2,
+            ),
+            const SizedBox(
+              width: kDefaultMargin / 4,
+            ),
+            Text(
+              AppLocalizations.of(context)!.signUp,
+              style: bodyText2.copyWith(color: kPrimaryColor),
+            ),
+          ],
+        ),
       ),
       onTap: () {
         Navigator.of(context)

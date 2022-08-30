@@ -3,10 +3,13 @@ import 'package:noonpool/helpers/constants.dart';
 import 'package:noonpool/helpers/error_widget.dart';
 import 'package:noonpool/helpers/network_helper.dart';
 import 'package:noonpool/helpers/outlined_button.dart';
+import 'package:noonpool/helpers/page_route.dart';
 import 'package:noonpool/main.dart';
-import 'package:noonpool/model/transactions/transaction.dart';
 import 'package:noonpool/model/wallet_data/datum.dart';
+import 'package:noonpool/model/wallet_transactions/transaction_view.dart';
 import 'package:shimmer/shimmer.dart';
+
+import '../../model/wallet_transactions/transaction.dart';
 
 class WalletTransactionsScreen extends StatefulWidget {
   final WalletDatum walletDatum;
@@ -24,7 +27,7 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
   bool _isOldDataLoading = false;
   bool _allLoaded = false;
   final ScrollController _scrollController = ScrollController();
-  int currentPage = 1;
+  int currentPage = 0;
   List<Transaction> allTransactions = [];
   @override
   void initState() {
@@ -59,12 +62,19 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
       final transactions = await getSummaryTransactions(
         coin: widget.walletDatum.coinSymbol ?? '',
         lastHash: '',
+        page: currentPage,
       );
       final data = transactions.transactions ?? [];
 
       allTransactions.addAll(data);
 
       _hasError = false;
+
+// runnig another get request to prevent error on loading more data on page scroll.
+//Page scroll requires that there is enough data for initial scrool.
+      if (allTransactions.isNotEmpty) {
+        await getData2();
+      }
     } catch (exception) {
       MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
         SnackBar(
@@ -80,6 +90,29 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
     });
   }
 
+  Future<void> getData2() async {
+    try {
+      currentPage++;
+      final transactions = await getSummaryTransactions(
+        coin: widget.walletDatum.coinSymbol ?? '',
+        lastHash: allTransactions.last.hash ?? '',
+        page: currentPage,
+      );
+      final data = transactions.transactions ?? [];
+
+      allTransactions.addAll(data);
+
+      setState(() {
+        _allLoaded = data.isEmpty;
+      });
+    } catch (exception) {
+      setState(() {
+        _allLoaded = true;
+      });
+      return Future.error(exception.toString());
+    }
+  }
+
   void getOldData() async {
     setState(() {
       _isOldDataLoading = true;
@@ -90,6 +123,7 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
       final transactions = await getSummaryTransactions(
         coin: widget.walletDatum.coinSymbol ?? '',
         lastHash: allTransactions.last.hash ?? '',
+        page: currentPage,
       );
       final data = transactions.transactions ?? [];
 
@@ -213,15 +247,12 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
   }
 
   void onTransactionItemPressed(Transaction trxSummary) {
-    /*    Navigator.push(
-      context,
-      createRoute(
-          page: TransactionDetailsScreen(
-            transaction: trxSummary,
-            assetDatum: widget.assetDatum,
-          ),
-          curveType: Curves.decelerate),
-    ); */
+    Navigator.of(context).push(CustomPageRoute(
+      screen: TransactionView(
+        name: widget.walletDatum.coinName ?? '',
+        hash: trxSummary.hash ?? '',
+      ),
+    ));
   }
 
   Widget buildOldProgressBar() {
@@ -502,45 +533,53 @@ class TransactionItem extends StatelessWidget {
 
     Map<String, dynamic> transactionType =
         transaction.getTransactionTypeDetails();
-    String transactionTypeName = transactionType['name'];
-    String transactionUserAddress = transactionType['address'];
-    Color transactionTypeColor = transactionType['color'];
-    IconData transactionTypeIcon = transactionType['icon'];
-    String transactionTypeIdentification = transactionType['identification'];
+    String transactionTypeName = transactionType['name'] ?? '';
+    String transactionUserAddress = transactionType['address'] ?? '';
+    Color? transactionTypeColor = transactionType['color'];
+    IconData? transactionTypeIcon = transactionType['icon'];
+    String transactionTypeIdentification =
+        transactionType['identification'] ?? '';
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          transaction.date ?? "",
-          style: subTitleStyle.copyWith(fontSize: 16),
-        ),
-        const SizedBox(
-          height: 5,
-        ),
+        if (transaction.date != null && transaction.date!.isNotEmpty)
+          Text(
+            transaction.date ?? "",
+            style: subTitleStyle.copyWith(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        if (transaction.date != null && transaction.date!.isNotEmpty)
+          const SizedBox(
+            height: 5,
+          ),
         Row(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                color: kPrimaryColor.withOpacity(0.05),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(20),
+            if (transactionTypeIcon != null)
+              Container(
+                decoration: BoxDecoration(
+                  color: kPrimaryColor.withOpacity(0.05),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                padding: const EdgeInsets.all(5),
+                child: Icon(
+                  transactionTypeIcon,
+                  color: transactionTypeColor,
+                  size: 25,
                 ),
               ),
-              padding: const EdgeInsets.all(5),
-              child: Icon(
-                transactionTypeIcon,
-                color: transactionTypeColor,
-                size: 25,
+            if (transactionTypeIcon != null)
+              const SizedBox(
+                width: 10,
               ),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -552,26 +591,40 @@ class TransactionItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      Text(
-                        transactionTypeName,
-                        style: titleStyle,
-                      ),
+                      if (transactionTypeName.isNotEmpty)
+                        Text(
+                          transactionTypeName,
+                          style: titleStyle,
+                        ),
                       const Spacer(),
-                      Text(
-                        transaction.amount ?? '',
-                        style:
-                            subTitleStyle.copyWith(fontWeight: FontWeight.w500),
-                      ),
+                      if (transaction.amount != null &&
+                          transaction.amount!.isNotEmpty)
+                        Text(
+                          transaction.amount ?? '',
+                          style: subTitleStyle.copyWith(
+                              fontWeight: FontWeight.w500),
+                        ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Text(
-                    '$transactionTypeIdentification: $transactionUserAddress ',
-                    style: subTitleStyle,
-                    softWrap: false,
-                  ),
+                  if (transactionTypeName.isNotEmpty ||
+                      (transaction.amount != null &&
+                          transaction.amount!.isNotEmpty))
+                    const SizedBox(
+                      height: 8,
+                    ),
+                  if (transactionUserAddress.isNotEmpty)
+                    Text(
+                      '$transactionTypeIdentification: $transactionUserAddress ',
+                      style: subTitleStyle,
+                      softWrap: false,
+                    )
+                  else if (transaction.hash != null &&
+                      transaction.hash!.isNotEmpty)
+                    Text(
+                      'Hash: ${transaction.hash} ',
+                      style: subTitleStyle,
+                      softWrap: false,
+                    )
                 ],
               ),
             )
