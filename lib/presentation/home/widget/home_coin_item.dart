@@ -23,11 +23,10 @@ class HomeCoinItem extends StatelessWidget {
     const spacer = SizedBox(width: kDefaultMargin / 2);
     return Padding(
       padding: const EdgeInsets.only(
-      //    top: kDefaultMargin / 5,
+          //    top: kDefaultMargin / 5,
           bottom: kDefaultMargin,
           left: kDefaultMargin / 2,
-          right: kDefaultMargin / 1.2
-      ),
+          right: kDefaultMargin / 1.2),
       child: shimmerEnabled
           ? Shimmer.fromColors(
               baseColor: Colors.grey.shade100,
@@ -180,19 +179,19 @@ class HomeCoinItem extends StatelessWidget {
   }
 
   Column buildHashRate(TextStyle bodyText1, TextStyle lightText) {
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(getDifficulty(coinModel.difficulty), style: bodyText1),
         const SizedBox(height: kDefaultMargin / 4),
-        Text(getHashrate(coinModel.netHashrate), style: lightText,
+        Text(
+          getHashrate(coinModel.netHashrate),
+          style: lightText,
         )
       ],
     );
   }
-
 
   String getDifficulty(var cDifficulty) {
     String difficulty = '';
@@ -206,73 +205,60 @@ class HomeCoinItem extends StatelessWidget {
     if (diffLength <= 3) {
       if (mod == 0) {
         difficulty = "$digit_1$digit_2$digit_3 H";
-      }
-      else if (mod == 1) {
+      } else if (mod == 1) {
         difficulty = "$digit_1$digit_2.$digit_3 H";
-      }
-      else {
+      } else {
         difficulty = "$digit_1.$digit_2$digit_3 H";
       }
     }
     if (diffLength > 3 && diffLength <= 6) {
       if (mod == 0) {
         difficulty = "$digit_1$digit_2$digit_3 KH";
-      }
-      else if (mod == 1) {
+      } else if (mod == 1) {
         difficulty = "$digit_1$digit_2.$digit_3 KH";
-      }
-      else {
+      } else {
         difficulty = "$digit_1.$digit_2$digit_3 KH";
       }
     }
     if (diffLength > 6 && diffLength <= 9) {
       if (mod == 0) {
         difficulty = "$digit_1$digit_2$digit_3 MH";
-      }
-      else if (mod == 1) {
+      } else if (mod == 1) {
         difficulty = "$digit_1$digit_2.$digit_3 MH";
-      }
-      else {
+      } else {
         difficulty = "$digit_1.$digit_2$digit_3 MH";
       }
     }
     if (diffLength > 9 && diffLength <= 12) {
       if (mod == 0) {
         difficulty = "$digit_1$digit_2$digit_3 GH";
-      }
-      else if (mod == 1) {
+      } else if (mod == 1) {
         difficulty = "$digit_1$digit_2.$digit_3 GH";
-      }
-      else {
+      } else {
         difficulty = "$digit_1.$digit_2$digit_3 GH";
       }
     }
     if (diffLength > 12 && diffLength <= 15) {
       if (mod == 0) {
         difficulty = "$digit_1$digit_2$digit_3 TH";
-      }
-      else if (mod == 1) {
+      } else if (mod == 1) {
         difficulty = "$digit_1$digit_2.$digit_3 TH";
-      }
-      else {
+      } else {
         difficulty = "$digit_1.$digit_2$digit_3 TH";
       }
     }
     if (diffLength > 15 && diffLength <= 18) {
       if (mod == 0) {
         difficulty = "$digit_1$digit_2$digit_3 PH";
-      }
-      else if (mod == 1) {
+      } else if (mod == 1) {
         difficulty = "$digit_1$digit_2.$digit_3 PH";
-      }
-      else {
+      } else {
         difficulty = "$digit_1.$digit_2$digit_3 PH";
       }
     }
 
     return difficulty;
   }
-
 
   String getHashrate(var cHashrate) {
     String hashrate = '';
@@ -286,82 +272,66 @@ class HomeCoinItem extends StatelessWidget {
     if (diffLength <= 3) {
       if (mod == 0) {
         hashrate = "$digit_1$digit_2$digit_3 H/s";
-      }
-      else if (mod == 1) {
+      } else if (mod == 1) {
         hashrate = "$digit_1$digit_2.$digit_3 H/s";
-      }
-      else {
+      } else {
         hashrate = "$digit_1.$digit_2$digit_3 H/s";
       }
     }
     if (diffLength > 3 && diffLength <= 6) {
       if (mod == 0) {
         hashrate = "$digit_1$digit_2$digit_3 KH/s";
-      }
-      else if (mod == 1) {
+      } else if (mod == 1) {
         hashrate = "$digit_1$digit_2.$digit_3 KH/s";
-      }
-      else {
+      } else {
         hashrate = "$digit_1.$digit_2$digit_3 KH/s";
       }
     }
     if (diffLength > 6 && diffLength <= 9) {
       if (mod == 0) {
         hashrate = "$digit_1$digit_2$digit_3 MH/s";
-      }
-      else if (mod == 1) {
+      } else if (mod == 1) {
         hashrate = "$digit_1$digit_2.$digit_3 MH/s";
-      }
-      else {
+      } else {
         hashrate = "$digit_1.$digit_2$digit_3 MH/s";
       }
     }
     if (diffLength > 9 && diffLength <= 12) {
       if (mod == 0) {
         hashrate = "$digit_1$digit_2$digit_3 GH/s";
-      }
-      else if (mod == 1) {
+      } else if (mod == 1) {
         hashrate = "$digit_1$digit_2.$digit_3 GH/s";
-      }
-      else {
+      } else {
         hashrate = "$digit_1.$digit_2$digit_3 GH/s";
       }
     }
     if (diffLength > 12 && diffLength <= 15) {
       if (mod == 0) {
         hashrate = "$digit_1$digit_2$digit_3 TH/s";
-      }
-      else if (mod == 1) {
+      } else if (mod == 1) {
         hashrate = "$digit_1$digit_2.$digit_3 TH/s";
-      }
-      else {
+      } else {
         hashrate = "$digit_1.$digit_2$digit_3 TH/s";
       }
     }
     if (diffLength > 15 && diffLength <= 18) {
       if (mod == 0) {
         hashrate = "$digit_1$digit_2$digit_3 PH/s";
-      }
-      else if (mod == 1) {
+      } else if (mod == 1) {
         hashrate = "$digit_1$digit_2.$digit_3 PH/s";
-      }
-      else {
+      } else {
         hashrate = "$digit_1.$digit_2$digit_3 PH/s";
       }
     }
     if (diffLength > 18 && diffLength <= 21) {
       if (mod == 0) {
         hashrate = "$digit_1$digit_2$digit_3 EH/s";
-      }
-      else if (mod == 1) {
+      } else if (mod == 1) {
         hashrate = "$digit_1$digit_2.$digit_3 EH/s";
-      }
-      else {
+      } else {
         hashrate = "$digit_1.$digit_2$digit_3 EH/s";
       }
     }
     return hashrate;
   }
-
-
 }

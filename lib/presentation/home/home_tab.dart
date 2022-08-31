@@ -23,7 +23,8 @@ class _HomeTabState extends State<HomeTab> {
   bool _isLoading = true;
   bool _hasError = false;
   final List<CoinModel> allCoinData = [];
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
 
   @override
   void initState() {
@@ -50,7 +51,6 @@ class _HomeTabState extends State<HomeTab> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -75,7 +75,8 @@ class _HomeTabState extends State<HomeTab> {
             buildAppBar(bodyText1),
             const Padding(
               child: _HomeHeader(),
-              padding: EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+              padding:
+                  EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
             ),
             spacer,
             Padding(
@@ -85,7 +86,8 @@ class _HomeTabState extends State<HomeTab> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              padding: const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+              padding: const EdgeInsets.only(
+                  left: kDefaultMargin, right: kDefaultMargin),
             ),
             spacer,
             Padding(
@@ -203,12 +205,11 @@ class _HomeTabState extends State<HomeTab> {
     );
   }
 
-  void _onRefresh() async{
+  void _onRefresh() async {
     await Future.delayed(Duration.zero, getData).then((value) {
       _refreshController.refreshCompleted();
     });
   }
-
 }
 
 class _HomeHeader extends StatefulWidget {

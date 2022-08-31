@@ -7,6 +7,7 @@ import 'package:noonpool/helpers/page_route.dart';
 import 'package:noonpool/main.dart';
 import 'package:noonpool/model/wallet_data/datum.dart';
 import 'package:noonpool/model/wallet_transactions/transaction_view.dart';
+import 'package:noonpool/presentation/recieve_assets/receive_asset.dart';
 import 'package:noonpool/presentation/send_assets/send_input.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -328,27 +329,11 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
                     bottom: 0,
                   ),
                   onPressed: () {
-                    //
-                  },
-                  widget: Text(
-                    'Withdraw',
-                    style: bodyText2.copyWith(
-                      color: kPrimaryColor,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 5),
-              Expanded(
-                child: CustomOutlinedButton(
-                  padding: const EdgeInsets.only(
-                    left: kDefaultMargin / 4,
-                    right: kDefaultMargin / 4,
-                    top: 0,
-                    bottom: 0,
-                  ),
-                  onPressed: () {
-                    //
+                    Navigator.of(context).push(CustomPageRoute(
+                      screen: ReceiveAssets(
+                        walletDatum: widget.walletDatum,
+                      ),
+                    ));
                   },
                   widget: Text(
                     'Receive',

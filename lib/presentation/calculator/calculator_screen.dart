@@ -189,7 +189,8 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
 
   Card buildTopText(TextStyle bodyText2) {
     return Card(
-      margin: const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
+      margin:
+          const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
       color: kLightBackgroud,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),

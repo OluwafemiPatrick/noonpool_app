@@ -7,6 +7,7 @@ import 'package:noonpool/model/coin_model/coin_model.dart';
 import 'package:noonpool/model/login_details/login_details.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:noonpool/model/recieve_data/recieve_data.dart';
 import 'package:noonpool/model/wallet_data/datum.dart';
 import 'package:noonpool/model/wallet_data/wallet_data.dart';
 import 'package:noonpool/model/wallet_transactions/wallet_transactions.dart';
@@ -396,6 +397,34 @@ sendFromWallet({
 
     if (response.statusCode == 200) {
       return;
+    } else {
+      return Future.error(decode['message'] ?? '');
+    }
+  } on SocketException {
+    return Future.error(
+        'There is either no or a very weak network connection.');
+  } catch (exception) {
+    return Future.error('An error occurred while getting data');
+  }
+}
+
+Future<RecieveData> walletData({
+  required WalletDatum walletDatum,
+}) async {
+  final userId = AppPreferences.userId;
+  try {
+    //
+    final response = await http.get(
+      Uri.parse(
+          baseUrl + "wallet?id=$userId&network=${walletDatum.coinSymbol}"),
+      headers: {'Content-Type': 'application/json'},
+    );
+    debugPrint(response.request?.url.toString());
+    debugPrint(response.body.toString());
+    final decode = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      return RecieveData.fromMap(decode, walletDatum.coinSymbol ?? '');
     } else {
       return Future.error(decode['message'] ?? '');
     }
