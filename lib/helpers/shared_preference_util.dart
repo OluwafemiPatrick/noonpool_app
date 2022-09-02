@@ -12,6 +12,7 @@ class AppPreferences {
 
   // log in value is true if user logged in successfully
   static const _loginInKey = 'firstNameKey';
+  static const _2faSecurity = '2faSecurity';
   static const _usernameKey = 'username';
   static const _localeLanguageCodeKey = 'localeLanguageCode';
   static const defaultLocaleLanguageCode = '---';
@@ -19,6 +20,10 @@ class AppPreferences {
 
   static Future setOnBoardingStatus({required bool status}) async {
     await _preference?.setBool(_onBoardingKey, status);
+  }
+
+  static Future set2faSecurity({required bool isEnabled}) async {
+    await _preference?.setBool(_2faSecurity, isEnabled);
   }
 
   static Future setLocaleLanguageCode(
@@ -50,6 +55,7 @@ class AppPreferences {
 
   static bool get onBoardingStatus =>
       _preference?.getBool(_onBoardingKey) ?? false;
+  static bool get get2faSecurity => _preference?.getBool(_2faSecurity) ?? false;
 
   static bool get loginStatus => _preference?.getBool(_loginInKey) ?? false;
   static String get userId => _preference?.getString(_idKey) ?? '';

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:noonpool/helpers/constants.dart';
 import 'package:noonpool/helpers/elevated_button.dart';
 import 'package:noonpool/helpers/network_helper.dart';
 import 'package:noonpool/model/wallet_data/datum.dart';
@@ -31,7 +32,7 @@ class _SendAssetState extends State<SendAsset> {
       elevation: 0,
       backgroundColor: Colors.transparent,
       title: Text(
-        'Send ${widget.assetDatum.coinSymbol}',
+        '${AppLocalizations.of(context)!.send} ${widget.assetDatum.coinSymbol}',
         style: bodyText1?.copyWith(fontWeight: FontWeight.bold),
       ),
       leading: const BackButton(
@@ -66,7 +67,7 @@ class _SendAssetState extends State<SendAsset> {
       );
 
       await showMessage(
-        'Your transaction was sent successfully.',
+        AppLocalizations.of(context)!.yourTransactionWasSentSuccessfully,
       );
       () {
         Navigator.of(context).pop();
@@ -90,18 +91,18 @@ class _SendAssetState extends State<SendAsset> {
       barrierDismissible: false, // user must tap button for close dialog!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Transaction Confirmation'),
-          content: const Text(
-              'Do you want to transfer this amount to the selected address?'),
+          title: Text(AppLocalizations.of(context)!.transactionConfirmation),
+          content: Text(AppLocalizations.of(context)!
+              .doYouWantToTransferThisAmountToTheSelectedAddress),
           actions: <Widget>[
             TextButton(
-              child: const Text('Cancel'),
+              child: Text(AppLocalizations.of(context)!.cancel),
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
             ),
             TextButton(
-              child: const Text('Confirm'),
+              child: Text(AppLocalizations.of(context)!.confirm),
               onPressed: () {
                 Navigator.of(context).pop(true);
               },
@@ -118,11 +119,11 @@ class _SendAssetState extends State<SendAsset> {
       barrierDismissible: false, // user must tap button for close dialog!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Transaction Status'),
+          title: Text(AppLocalizations.of(context)!.transactionStatus),
           content: Text(message),
           actions: <Widget>[
             TextButton(
-              child: const Text('Confirm'),
+              child: Text(AppLocalizations.of(context)!.confirm),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -182,16 +183,17 @@ class _SendAssetState extends State<SendAsset> {
             height: 40,
           ),
           ReceiptDetailsTab(
-              heading: 'Asset',
+              heading: AppLocalizations.of(context)!.asset,
               tailingText:
                   "${widget.assetDatum.coinName} (${widget.assetDatum.coinSymbol})"),
 
           ReceiptDetailsTab(
-              heading: 'To', tailingText: widget.recipientAddress),
+              heading: AppLocalizations.of(context)!.to,
+              tailingText: widget.recipientAddress),
           // const ReceiptDetailsTab(     heading: 'Network Fee', tailingText: '0.00012 BCH = \$ 0.12'),
           // const ReceiptDetailsTab( heading: 'Neutron Fee', tailingText: '\$ 0.5'),
           ReceiptDetailsTab(
-              heading: 'Max Total',
+              heading: AppLocalizations.of(context)!.maxTotal,
               tailingText: '-${widget.amount} ${widget.assetDatum.coinSymbol}'),
           const SizedBox(
             height: 40,
@@ -207,7 +209,7 @@ class _SendAssetState extends State<SendAsset> {
                     ),
                   )
                 : Text(
-                    "Confirm",
+                    AppLocalizations.of(context)!.confirm,
                     style: bodyText2.copyWith(color: Colors.white),
                   ),
           ),

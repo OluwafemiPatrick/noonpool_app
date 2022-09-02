@@ -74,7 +74,7 @@ class _WalletTabState extends State<WalletTab> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         title: Text(
-          "Wallet",
+          AppLocalizations.of(context)!.wallet,
           style: bodyText1.copyWith(fontWeight: FontWeight.bold),
         ),
       ),
@@ -95,7 +95,7 @@ class _WalletTabState extends State<WalletTab> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'EST. Amount (BTC)',
+                      '${AppLocalizations.of(context)!.estAmount} (BTC)',
                       style: bodyText2.copyWith(fontSize: 12),
                     ),
                     const SizedBox(height: 5),
@@ -132,7 +132,7 @@ class _WalletTabState extends State<WalletTab> {
                                 ));
                               },
                               widget: Text(
-                                'Receive',
+                                AppLocalizations.of(context)!.receive,
                                 style: bodyText2.copyWith(
                                   color: kPrimaryColor,
                                 ),
@@ -154,7 +154,7 @@ class _WalletTabState extends State<WalletTab> {
                                 ));
                               },
                               widget: Text(
-                                'Send',
+                                AppLocalizations.of(context)!.send,
                                 style: bodyText2.copyWith(
                                   color: kPrimaryColor,
                                 ),
@@ -177,8 +177,8 @@ class _WalletTabState extends State<WalletTab> {
                       ? buildLoadingBody()
                       : _hasError
                           ? CustomErrorWidget(
-                              error:
-                                  "An error occurred with the data fetch, please try again",
+                              error: AppLocalizations.of(context)!
+                                  .anErrorOccurredWithTheDataFetchPleaseTryAgain,
                               onRefresh: () {
                                 getData();
                               })
@@ -203,13 +203,21 @@ class _WalletTabState extends State<WalletTab> {
         return CoinShow(
           data: walletDatum[index],
           onPressed: () {
-            Navigator.of(context).push(
-              CustomPageRoute(
-                screen: WalletTransactionsScreen(
-                  walletDatum: walletDatum[index],
+            final acceptedCoins = ['btc', 'ltc', 'doge', 'bch'];
+            if (acceptedCoins
+                .contains(walletDatum[index].coinSymbol?.toLowerCase())) {
+              Navigator.of(context).push(
+                CustomPageRoute(
+                  screen: WalletTransactionsScreen(
+                    walletDatum: walletDatum[index],
+                  ),
                 ),
-              ),
-            );
+              );
+            } else {
+              MyApp.scaffoldMessengerKey.currentState?.showSnackBar(SnackBar(
+                  content: Text(
+                      "${walletDatum[index].coinName} ${AppLocalizations.of(context)!.isCurrentlyUnavailaleWeWouldNotifyYouOnceItIsAvailiable}")));
+            }
           },
         );
       },
@@ -365,7 +373,7 @@ class CoinShow extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            "Frozen: ${data.frozen}",
+                            "${AppLocalizations.of(context)!.frozen}: ${data.frozen}",
                             style: subTitleStyle,
                           ),
                           const Spacer(),

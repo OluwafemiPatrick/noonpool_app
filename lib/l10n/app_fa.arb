@@ -120,5 +120,60 @@
 "validShares":"سهام معتبر",
 "invalidShares":"سهام نامعتبر",
 "noWorkerData":"داده های کارگری وجود ندارد",
-"aNewOtpHasBeenSentToYourAccount":"یک OTP جدید به حساب شما ارسال شده است"
+"aNewOtpHasBeenSentToYourAccount":"یک OTP جدید به حساب شما ارسال شده است",
+"miningProfit":"سود معدن",
+"hashrateTrend":"هاشرت ترند",
+"cummulativeEarnings":"درآمد انباشته",
+"h24Profit":"سود 24 ساعته",
+"h10Min":"10 دقیقه",
+"h1Hour":"1 ساعت",
+"h1Day":"1 روز",
+"statistics":"آمار",
+"twoFactorAuthentication":"احراز هویت دو مرحله ای",
+"authTurnedOff":"احراز هویت دو مرحله ای شما خاموش شده است.",
+"enableAuthentication":"احراز هویت را فعال کنید",
+"pleaseDownloadTheApplicationGoogleAuthenticatorOnYourMobileDeviceAndScanTheCode":"1. لطفاً برنامه Google Authenticator را در دستگاه تلفن همراه خود دانلود کنید و کد زیر را اسکن کنید. اگر قبلاً آن را انجام داده اید لطفاً این مرحله را نادیده بگیرید.",
+"pleaseEnterTheGeneratedCodeBelowANewCodeWillBeGeneratedAutomaticallyEvery30Seconds":"2. لطفا کد تولید شده را در زیر وارد کنید. هر 30 ثانیه یک کد جدید به صورت خودکار تولید می شود و برای ایمن کردن تراکنش های ورود و کیف پول شما مانند برداشت استفاده می شود.",
+"enable2fa":"2FA را فعال کنید",
+"enabledSuccessfully":"با موفقیت فعال شد",
+"theCodeEnteredDoesNotMatch":"کد وارد شده مطابقت ندارد.",
+"verifyCode":"کد را تأیید کنید",
+"toProceedPleaseEnterTheCodeFromTheGoogleAuthenticatorApplication":"برای ادامه، لطفاً کد را از برنامه Google Authenticator وارد کنید.",
+"verify":"تأیید کنید",
+"theCodeEnteredDoesNotMatch":"کد وارد شده مطابقت ندارد.",
+"wallet":"کیف پول",
+"estAmount":"EST. میزان",
+"receive":"دريافت كردن",
+"send":"ارسال",
+"isCurrentlyUnavailaleWeWouldNotifyYouOnceItIsAvailiable":"در حال حاضر در دسترس نیست، پس از در دسترس بودن به شما اطلاع خواهیم داد",
+"frozen":"منجمد",
+"noData":"اطلاعاتی وجود ندارد!",
+"noDataFoundPleaseCheckBackLaterForYourTransactionHistory":"هیچ داده ای یافت نشد، لطفاً بعداً برای سابقه تراکنش خود دوباره بررسی کنید",
+"hash":"هش",
+"youShouldOnlySend":"فقط باید بفرستید",
+"toThisAddressSendingAnyOtherCoinsMayResultInPermanentLoss":"به این آدرس ارسال هر سکه دیگری ممکن است منجر به از دست دادن دائمی شود.",
+"copy":"کپی 🀄",
+"walletAddressHasBeenCopiedToYourClipboard":"آدرس کیف پول در کلیپ بورد شما کپی شده است",
+"share":"اشتراک گذاری",
+"shareWalletAddress":"آدرس کیف پول را به اشتراک بگذارید",
+"noAssetFoundKindlyEnterANewSearchQuery":"هیچ دارایی یافت نشد، لطفاً یک عبارت جستجوی جدید وارد کنید",
+"noDataFoundPleaseCheckBackLater":"داده ای یافت نشد، لطفاً بعداً دوباره بررسی کنید",
+"search":"جستجو کردن",
+"yourTransactionWasSentSuccessfully":"تراکنش شما با موفقیت ارسال شد.",
+"transactionConfirmation":"تایید معامله",
+"doYouWantToTransferThisAmountToTheSelectedAddress":"آیا می خواهید این مبلغ را به آدرس انتخاب شده انتقال دهید؟",
+"confirm":"تایید",
+"transactionStatus":"وضعیت تراکنش",
+"asset":"دارایی",
+"to":"به",
+"maxTotal":"حداکثر مجموع",
+"continueH":"ادامه هید",
+"amount":"میزان",
+"max":"حداکثر",
+"pleaseProvideTheAmount":"لطفا مبلغ رو بفرمایید",
+"pleaseEnterAValidAmount":"لطفا یک مقدار معتبر وارد کنید",
+"youCanNotSendMoreThanYouPresentlyHave":"شما نمی توانید بیش از آنچه در حال حاضر دارید ارسال کنید.",
+"recipientAdddress":"آدرس گیرنده",
+"pleaseProvideTheRecipientAddress":"لطفا آدرس گیرنده را بفرمایید",
+"permissionsNotGranted":"مجوزها داده نشده است"
 }

@@ -66,7 +66,7 @@ class _ReceiveAssetsState extends State<ReceiveAssets> {
       elevation: 0,
       backgroundColor: Colors.transparent,
       title: Text(
-        'Receive ${widget.walletDatum.coinSymbol}',
+        '${AppLocalizations.of(context)!.receive} ${widget.walletDatum.coinSymbol}',
         style: bodyText1?.copyWith(fontWeight: FontWeight.bold),
       ),
       leading: const BackButton(
@@ -92,8 +92,8 @@ class _ReceiveAssetsState extends State<ReceiveAssets> {
         ? buildProgressBar()
         : _hasError
             ? CustomErrorWidget(
-                error:
-                    "An error occurred with the data fetch, please try again",
+                error: AppLocalizations.of(context)!
+                    .anErrorOccurredWithTheDataFetchPleaseTryAgain,
                 onRefresh: () {
                   getData();
                 })
@@ -109,7 +109,7 @@ class _ReceiveAssetsState extends State<ReceiveAssets> {
                         height: 20,
                       ),
                       Text(
-                        'You should only send ${widget.walletDatum.coinName} cash (${widget.walletDatum.coinSymbol}) to this address. Sending any other coins may result in permanent loss.',
+                        '${AppLocalizations.of(context)!.youShouldOnlySend} ${widget.walletDatum.coinName} (${widget.walletDatum.coinSymbol}) ${AppLocalizations.of(context)!.toThisAddressSendingAnyOtherCoinsMayResultInPermanentLoss}',
                         textAlign: TextAlign.center,
                         style: bodyText2,
                       ),
@@ -130,7 +130,7 @@ class _ReceiveAssetsState extends State<ReceiveAssets> {
       mainAxisSize: MainAxisSize.max,
       children: [
         RoundedIconWithTitle(
-            title: 'Copy',
+            title: AppLocalizations.of(context)!.copy,
             icon: Icons.copy_rounded,
             onPressed: () async {
               try {
@@ -138,9 +138,11 @@ class _ReceiveAssetsState extends State<ReceiveAssets> {
                     recieveData.coinInfo?.address ?? '');
                 () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
+                    SnackBar(
                       content: Text(
-                          'Wallet address has been copied to your clipboard'),
+                        AppLocalizations.of(context)!
+                            .walletAddressHasBeenCopiedToYourClipboard,
+                      ),
                     ),
                   );
                 }();
@@ -155,11 +157,11 @@ class _ReceiveAssetsState extends State<ReceiveAssets> {
               }
             }),
         RoundedIconWithTitle(
-            title: 'Share',
+            title: AppLocalizations.of(context)!.share,
             icon: Icons.share_rounded,
             onPressed: () {
               Share.share(recieveData.coinInfo?.address ?? '',
-                  subject: 'Share wallet address');
+                  subject: AppLocalizations.of(context)!.shareWalletAddress);
             }),
       ],
     );

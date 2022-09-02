@@ -6,11 +6,13 @@ import 'package:noonpool/presentation/about_us/about_us_screen.dart';
 import 'package:noonpool/presentation/announcement/announcement_screen.dart';
 import 'package:noonpool/presentation/calculator/calculator_screen.dart';
 import 'package:noonpool/presentation/language/language_changer.dart';
+import 'package:noonpool/presentation/settings/otp_screen.dart';
 import 'package:noonpool/presentation/settings/widget/settings_item.dart';
 import 'package:noonpool/presentation/splash_screen/splash_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:noonpool/main.dart';
 import '../../helpers/constants.dart';
+import 'verify_otp.dart';
 
 class SettingsTab extends StatefulWidget {
   const SettingsTab({Key? key}) : super(key: key);
@@ -126,7 +128,9 @@ class _SettingsTabState extends State<SettingsTab> {
           divider,
           buildHelpCenterItem(),
           divider,
-          buildLanguageItem()
+          buildLanguageItem(),
+          divider,
+          build2faSecurity()
         ],
       ),
     );
@@ -142,12 +146,36 @@ class _SettingsTabState extends State<SettingsTab> {
         iconLocation: 'assets/icons/language.svg');
   }
 
+  SettingsItem2 build2faSecurity() {
+    return SettingsItem2(
+      value: AppPreferences.get2faSecurity,
+      onPressed: (newValue) async {
+        if (newValue) {
+          // set the auth
+          await Navigator.of(context)
+              .push(CustomPageRoute(screen: const OtpScreen()));
+          setState(() {});
+        } else {
+          await Navigator.of(context).push(CustomPageRoute(screen: VerifyOtp(
+            onNext: () {
+              // call the backend to  update user status
+              AppPreferences.set2faSecurity(isEnabled: newValue);
+              MyApp.scaffoldMessengerKey.currentState?.showSnackBar(SnackBar(
+                  content: Text(AppLocalizations.of(context)!.authTurnedOff)));
+            },
+          )));
+          setState(() {});
+        }
+      },
+      title: AppLocalizations.of(context)!.twoFactorAuthentication,
+      iconLocation: Icons.security_rounded,
+    );
+  }
+
   SettingsItem buildHelpCenterItem() {
     return SettingsItem(
         onPressed: () {
           launch(_emailLaunchFunction());
-          // MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
-          //     const SnackBar(content: Text('Help Center pressed')));
         },
         title: AppLocalizations.of(context)!.helpCenter,
         iconLocation: 'assets/icons/help.svg');

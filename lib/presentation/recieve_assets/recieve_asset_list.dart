@@ -4,6 +4,7 @@ import 'package:noonpool/helpers/constants.dart';
 import 'package:noonpool/helpers/error_widget.dart';
 import 'package:noonpool/helpers/network_helper.dart';
 import 'package:noonpool/helpers/page_route.dart';
+import 'package:noonpool/main.dart';
 import 'package:noonpool/model/wallet_data/datum.dart';
 import 'package:noonpool/model/wallet_data/wallet_data.dart';
 import 'package:noonpool/presentation/recieve_assets/receive_asset.dart';
@@ -82,7 +83,7 @@ class _RecieveAssetListState extends State<RecieveAssetList> {
       elevation: 0,
       backgroundColor: Colors.transparent,
       title: Text(
-        'Recieve',
+        AppLocalizations.of(context)!.receive,
         style: bodyText1?.copyWith(fontWeight: FontWeight.bold),
       ),
       leading: const BackButton(
@@ -101,7 +102,7 @@ class _RecieveAssetListState extends State<RecieveAssetList> {
       mainAxisSize: MainAxisSize.max,
       children: [
         Text(
-          'No Data!',
+          AppLocalizations.of(context)!.noData,
           style: bodyText1,
           textAlign: TextAlign.center,
         ),
@@ -111,8 +112,9 @@ class _RecieveAssetListState extends State<RecieveAssetList> {
         ),
         Text(
           _isSearch
-              ? 'No asset found, kindly enter a new search query'
-              : 'No data found, please check back later',
+              ? AppLocalizations.of(context)!
+                  .noAssetFoundKindlyEnterANewSearchQuery
+              : AppLocalizations.of(context)!.noDataFoundPleaseCheckBackLater,
           textAlign: TextAlign.center,
           style: bodyText2,
         ),
@@ -131,33 +133,47 @@ class _RecieveAssetListState extends State<RecieveAssetList> {
           ? buildProgressBar()
           : _hasError
               ? CustomErrorWidget(
-                  error:
-                      "An error occurred with the data fetch, please try again",
+                  error: AppLocalizations.of(context)!
+                      .anErrorOccurredWithTheDataFetchPleaseTryAgain,
                   onRefresh: () {
                     fetchUserAssets();
                   })
-              : coinDatas.isEmpty
-                  ? buildEmptyItem()
-                  : Column(
-                      children: [
-                        buildSearchBar(),
-                        Expanded(
-                          child: ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            padding: const EdgeInsets.all(0),
-                            itemBuilder: (ctx, index) => SendAssetListItem(
-                              walletDatum: coinDatas[index],
-                              onPressed: (model) {
-                                Navigator.of(context).push(CustomPageRoute(
-                                  screen: ReceiveAssets(walletDatum: model),
-                                ));
-                              },
+              : Column(
+                  children: [
+                    if (coinDatas.isNotEmpty || _isSearch) buildSearchBar(),
+                    Expanded(
+                      child: coinDatas.isEmpty
+                          ? buildEmptyItem()
+                          : ListView.builder(
+                              physics: const BouncingScrollPhysics(),
+                              padding: const EdgeInsets.all(0),
+                              itemBuilder: (ctx, index) => SendAssetListItem(
+                                walletDatum: coinDatas[index],
+                                onPressed: (model) {
+                                  final acceptedCoins = [
+                                    'btc',
+                                    'ltc',
+                                    'doge',
+                                    'bch'
+                                  ];
+                                  if (acceptedCoins.contains(
+                                      model.coinSymbol?.toLowerCase())) {
+                                    Navigator.of(context).push(CustomPageRoute(
+                                      screen: ReceiveAssets(walletDatum: model),
+                                    ));
+                                  } else {
+                                    MyApp.scaffoldMessengerKey.currentState
+                                        ?.showSnackBar(SnackBar(
+                                            content: Text(
+                                                "${model.coinName} ${AppLocalizations.of(context)!.isCurrentlyUnavailaleWeWouldNotifyYouOnceItIsAvailiable}")));
+                                  }
+                                },
+                              ),
+                              itemCount: coinDatas.length,
                             ),
-                            itemCount: coinDatas.length,
-                          ),
-                        ),
-                      ],
                     ),
+                  ],
+                ),
     );
   }
 
@@ -178,7 +194,7 @@ class _RecieveAssetListState extends State<RecieveAssetList> {
         style: bodyText2,
         cursorColor: kTextColor,
         decoration: InputDecoration(
-          hintText: "Search",
+          hintText: AppLocalizations.of(context)!.search,
           prefixIcon: const Icon(Icons.search_rounded, color: kTextColor),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
@@ -242,7 +258,11 @@ class SendAssetListItem extends StatelessWidget {
                   highlightColor: Colors.grey.shade300,
                   child: shimmerBody(),
                 )
-              : buildBody(titleStyle, subTitleStyle),
+              : buildBody(
+                  titleStyle,
+                  subTitleStyle,
+                  context,
+                ),
         ),
       ),
     );
@@ -290,7 +310,8 @@ class SendAssetListItem extends StatelessWidget {
     );
   }
 
-  SizedBox buildBody(TextStyle titleStyle, TextStyle subTitleStyle) {
+  SizedBox buildBody(
+      TextStyle titleStyle, TextStyle subTitleStyle, BuildContext context) {
     return SizedBox(
       height: 50,
       width: double.infinity,
@@ -346,7 +367,7 @@ class SendAssetListItem extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            "Frozen: ${walletDatum.frozen}",
+                            "${AppLocalizations.of(context)!.frozen}: ${walletDatum.frozen}",
                             style: subTitleStyle,
                           ),
                           const Spacer(),

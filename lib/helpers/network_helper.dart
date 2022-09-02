@@ -12,7 +12,8 @@ import 'package:noonpool/model/wallet_data/datum.dart';
 import 'package:noonpool/model/wallet_data/wallet_data.dart';
 import 'package:noonpool/model/wallet_transactions/wallet_transactions.dart';
 
-const String baseUrl = 'http://5.189.137.144:1027/api/v2/';
+// const String baseUrl = 'http://5.189.137.144:1027/api/v2/';
+const String baseUrl = 'http://5.189.137.144:3505/api/v2/';
 
 Future<List<CoinModel>> getAllCoinDetails() async {
   try {

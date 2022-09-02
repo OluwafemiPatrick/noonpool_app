@@ -87,7 +87,7 @@ class _SendInputScreenState extends State<SendInputScreen> {
       elevation: 0,
       backgroundColor: Colors.transparent,
       title: Text(
-        'Send ${widget.walletDatum.coinSymbol}',
+        '${AppLocalizations.of(context)!.send} ${widget.walletDatum.coinSymbol}',
         style: bodyText1,
       ),
       leading: const BackButton(
@@ -132,14 +132,15 @@ class _SendInputScreenState extends State<SendInputScreen> {
         controller: _amountTextController,
         style: bodyText2,
         decoration: InputDecoration(
-          labelText: 'Amount ${widget.walletDatum.coinSymbol}',
+          labelText:
+              '${AppLocalizations.of(context)!.amount} ${widget.walletDatum.coinSymbol}',
           suffixIcon: TextButton(
             onPressed: () {
               _amountTextController.text =
                   (widget.walletDatum.balance ?? 0).toString();
             },
             child: Text(
-              'Max ${widget.walletDatum.coinSymbol}',
+              '${AppLocalizations.of(context)!.max} ${widget.walletDatum.coinSymbol}',
               style: bodyText2.copyWith(
                 fontSize: 12,
               ),
@@ -160,11 +161,12 @@ class _SendInputScreenState extends State<SendInputScreen> {
         validator: (value) {
           final parsedDouble = double.tryParse(value ?? '');
           if (value == null || value.isEmpty) {
-            return 'Please provide  the amount';
+            return AppLocalizations.of(context)!.pleaseProvideTheAmount;
           } else if (parsedDouble == null || parsedDouble == 0) {
-            return 'Please enter a valid amount';
+            return AppLocalizations.of(context)!.pleaseEnterAValidAmount;
           } else if (parsedDouble > (widget.walletDatum.balance ?? 0)) {
-            return 'You can not send more than you presently have. ';
+            return AppLocalizations.of(context)!
+                .youCanNotSendMoreThanYouPresentlyHave;
           }
           return null;
         },
@@ -174,7 +176,9 @@ class _SendInputScreenState extends State<SendInputScreen> {
 
   Widget buildContinueButton() {
     return CustomOutlinedButton(
-        onPressed: _saveForm, widget: const Text("Continue"));
+      onPressed: _saveForm,
+      widget: Text(AppLocalizations.of(context)!.continueH),
+    );
   }
 
   List<Widget> buildRecipientField(TextStyle bodyText2) {
@@ -183,7 +187,7 @@ class _SendInputScreenState extends State<SendInputScreen> {
         textInputAction: TextInputAction.next,
         controller: _recipientAddressController,
         decoration: InputDecoration(
-          labelText: "Recipient Adddress",
+          labelText: AppLocalizations.of(context)!.recipientAdddress,
           suffixIcon: IconButton(
             icon: const Icon(
               Icons.qr_code_scanner_rounded,
@@ -225,7 +229,8 @@ class _SendInputScreenState extends State<SendInputScreen> {
         },
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please provide the recipient address.';
+            return AppLocalizations.of(context)!
+                .pleaseProvideTheRecipientAddress;
           }
           return null;
         },
@@ -282,7 +287,8 @@ class __QrScannerState extends State<_QrScanner> {
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
     if (!p) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Permissions not granted')),
+        SnackBar(
+            content: Text(AppLocalizations.of(context)!.permissionsNotGranted)),
       );
     }
   }
@@ -292,8 +298,6 @@ class __QrScannerState extends State<_QrScanner> {
 
     late StreamSubscription<Barcode> subscription;
     subscription = controller.scannedDataStream.listen((scanData) {
-      debugPrint('Going back');
-
       Navigator.pop(context, scanData.code ?? '');
       subscription.cancel();
     });

@@ -6,11 +6,10 @@ import 'package:noonpool/helpers/outlined_button.dart';
 import 'package:noonpool/helpers/page_route.dart';
 import 'package:noonpool/main.dart';
 import 'package:noonpool/model/wallet_data/datum.dart';
-import 'package:noonpool/model/wallet_transactions/transaction_view.dart';
+import 'package:noonpool/presentation/transactions/transaction_view.dart';
 import 'package:noonpool/presentation/recieve_assets/receive_asset.dart';
 import 'package:noonpool/presentation/send_assets/send_input.dart';
 import 'package:shimmer/shimmer.dart';
-
 import '../../model/wallet_transactions/transaction.dart';
 
 class WalletTransactionsScreen extends StatefulWidget {
@@ -178,8 +177,8 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
                   ? buildLoadingBody()
                   : _hasError
                       ? CustomErrorWidget(
-                          error:
-                              "An error occurred with the data fetch, please try again",
+                          error: AppLocalizations.of(context)!
+                              .anErrorOccurredWithTheDataFetchPleaseTryAgain,
                           onRefresh: () {
                             getData();
                           })
@@ -231,7 +230,7 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
       mainAxisSize: MainAxisSize.max,
       children: [
         Text(
-          'No Data!',
+          AppLocalizations.of(context)!.noData,
           style: bodyText1,
           textAlign: TextAlign.center,
         ),
@@ -240,7 +239,8 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
           width: double.infinity,
         ),
         Text(
-          'No data found, please check back later for your transaction history',
+          AppLocalizations.of(context)!
+              .noDataFoundPleaseCheckBackLaterForYourTransactionHistory,
           textAlign: TextAlign.center,
           style: bodyText2,
         ),
@@ -296,7 +296,7 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'EST. Amount (${widget.walletDatum.coinSymbol})',
+            '${AppLocalizations.of(context)!.estAmount} (${widget.walletDatum.coinSymbol})',
             style: bodyText2.copyWith(fontSize: 12),
           ),
           const SizedBox(height: 5),
@@ -336,7 +336,7 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
                     ));
                   },
                   widget: Text(
-                    'Receive',
+                    AppLocalizations.of(context)!.receive,
                     style: bodyText2.copyWith(
                       color: kPrimaryColor,
                     ),
@@ -362,7 +362,7 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
                     );
                   },
                   widget: Text(
-                    'Send',
+                    AppLocalizations.of(context)!.send,
                     style: bodyText2.copyWith(
                       color: kPrimaryColor,
                     ),
@@ -609,7 +609,7 @@ class TransactionItem extends StatelessWidget {
                   else if (transaction.hash != null &&
                       transaction.hash!.isNotEmpty)
                     Text(
-                      'Hash: ${transaction.hash} ',
+                      '${AppLocalizations.of(context)!.hash}: ${transaction.hash} ',
                       style: subTitleStyle,
                       softWrap: false,
                     )

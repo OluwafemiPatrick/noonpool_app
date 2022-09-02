@@ -213,7 +213,8 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
           AppLocalizations.of(context)!.ppsFeeRate,
           style: bodyText2,
         ),
-        padding: const EdgeInsets.only(left: kDefaultMargin),
+        padding:
+            const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
       ),
       const SizedBox(
         height: kDefaultMargin / 4,
@@ -260,7 +261,8 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
           AppLocalizations.of(context)!.difficulty,
           style: bodyText2,
         ),
-        padding: const EdgeInsets.only(left: kDefaultMargin),
+        padding:
+            const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
       ),
       const SizedBox(
         height: kDefaultMargin / 4,
@@ -292,7 +294,8 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
           AppLocalizations.of(context)!.numberOfMiners,
           style: bodyText2,
         ),
-        padding: const EdgeInsets.only(left: kDefaultMargin),
+        padding:
+            const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
       ),
       const SizedBox(
         height: kDefaultMargin / 4,
@@ -324,7 +327,8 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
           AppLocalizations.of(context)!.validHashrate,
           style: bodyText2,
         ),
-        padding: const EdgeInsets.only(left: kDefaultMargin),
+        padding:
+            const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
       ),
       const SizedBox(
         height: kDefaultMargin / 4,

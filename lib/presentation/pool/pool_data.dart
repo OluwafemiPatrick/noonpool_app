@@ -7,7 +7,6 @@ import 'package:noonpool/main.dart';
 import 'package:noonpool/helpers/network_helper.dart';
 import 'package:noonpool/presentation/pool/widget/pool_statistics_title.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../helpers/constants.dart';
 import '../../helpers/svg_image.dart';
@@ -84,7 +83,7 @@ class _PoolTabState extends State<PoolTab> {
               spacer,
               Padding(
                 child: Text(
-                  'Mining Profit -> ',
+                  '${AppLocalizations.of(context)!.miningProfit} -> ',
                   style: bodyText1,
                 ),
                 padding: const EdgeInsets.only(
@@ -95,7 +94,7 @@ class _PoolTabState extends State<PoolTab> {
               spacer,
               Padding(
                 child: Text(
-                  'Hashrate Trend -> ',
+                  '${AppLocalizations.of(context)!.hashrateTrend} -> ',
                   style: bodyText1,
                 ),
                 padding: const EdgeInsets.only(
@@ -130,7 +129,7 @@ class _PoolTabState extends State<PoolTab> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("24H Profit", style: bodyText2),
+          Text(AppLocalizations.of(context)!.h24Profit, style: bodyText2),
           const SizedBox(
             height: kDefaultMargin / 4,
           ),
@@ -141,7 +140,7 @@ class _PoolTabState extends State<PoolTab> {
           ),
           spacer,
           Text(
-            "Cummulative Earnings",
+            AppLocalizations.of(context)!.cummulativeEarnings,
             style: bodyText2,
           ),
           const SizedBox(
@@ -176,7 +175,7 @@ class _PoolTabState extends State<PoolTab> {
         children: [
           Column(
             children: [
-              Text("10 Min", style: bodyText2),
+              Text(AppLocalizations.of(context)!.h10Min, style: bodyText2),
               const SizedBox(
                 height: kDefaultMargin / 4,
               ),
@@ -189,7 +188,7 @@ class _PoolTabState extends State<PoolTab> {
           ),
           Column(
             children: [
-              Text("1 hour", style: bodyText2),
+              Text(AppLocalizations.of(context)!.h1Hour, style: bodyText2),
               const SizedBox(
                 height: kDefaultMargin / 4,
               ),
@@ -203,7 +202,7 @@ class _PoolTabState extends State<PoolTab> {
           Column(
             children: [
               Text(
-                "1 Day",
+                AppLocalizations.of(context)!.h1Day,
                 style: bodyText2,
               ),
               const SizedBox(
@@ -446,7 +445,7 @@ class _PoolTabState extends State<PoolTab> {
   Padding buildStatistics(TextStyle bodyText1, String workerName) {
     return Padding(
       child: Text(
-        'Statistics -> $workerName',
+        '${AppLocalizations.of(context)!.statistics} -> $workerName',
         style: bodyText1,
       ),
       padding:
