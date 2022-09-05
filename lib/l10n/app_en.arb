@@ -176,8 +176,11 @@
 "youCanNotSendMoreThanYouPresentlyHave":"You can not send more than you presently have.",
 "recipientAdddress":"Recipient Adddress",
 "pleaseProvideTheRecipientAddress":"Please provide the recipient address.",
-"permissionsNotGranted":"Permissions not granted"
- 
+"permissionsNotGranted":"Permissions not granted",
+
+"updateSuccessful":"Update Successful",
+"requestProcessing":"Request Processing",
+"pleaseBePatientWhileWeProcessYourRequest":"Please be patient while we process your request."
  
 
 

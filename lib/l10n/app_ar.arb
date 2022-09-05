@@ -175,5 +175,11 @@
 "youCanNotSendMoreThanYouPresentlyHave":"لا يمكنك إرسال أكثر مما لديك حاليًا.",
 "recipientAdddress":"عنوان المستلم",
 "pleaseProvideTheRecipientAddress":"يرجى تقديم عنوان المستلم.",
-"permissionsNotGranted":"لم يتم منح الأذونات"
+"permissionsNotGranted":"لم يتم منح الأذونات",
+
+"updateSuccessful":"تم التحديث بنجاح",
+"requestProcessing":"طلب المعالجة",
+"pleaseBePatientWhileWeProcessYourRequest":"يرجى التحلي بالصبر بينما نعالج طلبك."
+ 
+
 }

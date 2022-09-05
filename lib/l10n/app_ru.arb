@@ -175,6 +175,11 @@
 "youCanNotSendMoreThanYouPresentlyHave":"Вы не можете отправить больше, чем у вас есть на данный момент.",
 "recipientAdddress":"Адрес получателя",
 "pleaseProvideTheRecipientAddress":"Укажите адрес получателя.",
-"permissionsNotGranted":"Разрешения не предоставлены"
+"permissionsNotGranted":"Разрешения не предоставлены",
+
+"updateSuccessful":"Обновление успешно",
+"requestProcessing":"Обработка запроса",
+"pleaseBePatientWhileWeProcessYourRequest":"Пожалуйста, будьте терпеливы в то время как мы обрабатываем Ваш запрос."
+ 
 }
 

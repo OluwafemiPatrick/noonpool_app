@@ -175,5 +175,10 @@
 "youCanNotSendMoreThanYouPresentlyHave":"你不能发送比你现在拥有的更多的东西。",
 "recipientAdddress":"收件人地址",
 "pleaseProvideTheRecipientAddress":"请提供收件人地址。",
-"permissionsNotGranted":"未授予权限"
+"permissionsNotGranted":"未授予权限",
+
+"updateSuccessful":"更新成功",
+"requestProcessing":"请求处理",
+"pleaseBePatientWhileWeProcessYourRequest":"在我们处理您的请求时请耐心等待。"
+ 
 }

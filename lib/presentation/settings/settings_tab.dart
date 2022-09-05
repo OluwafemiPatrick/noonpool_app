@@ -171,8 +171,10 @@ class _SettingsTabState extends State<SettingsTab> {
                     );
                     Navigator.of(context).pop();
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Update Successful'),
+                      SnackBar(
+                        content: Text(
+                          AppLocalizations.of(context)!.updateSuccessful,
+                        ),
                       ),
                     );
                   } catch (exception) {
@@ -235,12 +237,16 @@ class _SettingsTabState extends State<SettingsTab> {
             const SizedBox(
               height: 10,
             ),
-            Text('Request Processing', style: bodyText1),
+            Text(AppLocalizations.of(context)!.requestProcessing,
+                style: bodyText1),
             const SizedBox(
               height: 5,
             ),
-            Text('Please be patient while we process your request.',
-                textAlign: TextAlign.center, style: bodyText2),
+            Text(
+                AppLocalizations.of(context)!
+                    .pleaseBePatientWhileWeProcessYourRequest,
+                textAlign: TextAlign.center,
+                style: bodyText2),
           ],
         ),
       )),

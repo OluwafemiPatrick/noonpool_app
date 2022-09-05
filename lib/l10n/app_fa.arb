@@ -175,5 +175,10 @@
 "youCanNotSendMoreThanYouPresentlyHave":"شما نمی توانید بیش از آنچه در حال حاضر دارید ارسال کنید.",
 "recipientAdddress":"آدرس گیرنده",
 "pleaseProvideTheRecipientAddress":"لطفا آدرس گیرنده را بفرمایید",
-"permissionsNotGranted":"مجوزها داده نشده است"
+"permissionsNotGranted":"مجوزها داده نشده است",
+
+"updateSuccessful":"بروز رسانی موفق",
+"requestProcessing":"پردازش درخواست",
+"pleaseBePatientWhileWeProcessYourRequest":"لطفا در مدت زمانی که ما درخواست شما را بررسی می کنیم صبور باشید."
+ 
 }

@@ -175,5 +175,10 @@
 "youCanNotSendMoreThanYouPresentlyHave":"Şu anda sahip olduğunuzdan fazlasını gönderemezsiniz.",
 "recipientAdddress":"Alıcı Adresi",
 "pleaseProvideTheRecipientAddress":"Lütfen alıcı adresini belirtin.",
-"permissionsNotGranted":"İzinler verilmedi"
+"permissionsNotGranted":"İzinler verilmedi",
+
+"updateSuccessful":"Güncelleme Başarılı",
+"requestProcessing":"Talep İşleme",
+"pleaseBePatientWhileWeProcessYourRequest":"Talebinizi işleme koyarken lütfen sabırlı olun."
+ 
 }
