@@ -132,7 +132,7 @@
 "twoFactorAuthentication":"双重身份验证",
 "authTurnedOff":"您的双因素身份验证已关闭。",
 "enableAuthentication":"启用身份验证",
-"pleaseDownloadTheApplicationGoogleAuthenticatorOnYourMobileDeviceAndScanTheCode":"1. 请在您的移动设备上下载应用程序谷歌身份验证器并扫描下方二维码。如果您之前已经完成此步骤，请忽略此步骤。",
+"pleaseDownloadTheApplicationGoogleAuthenticatorOnYourMobileDeviceAndScanTheCode":"1. 请在您的移动设备上下载应用程序谷歌身份验证器并扫描下方二维码。",
 "pleaseEnterTheGeneratedCodeBelowANewCodeWillBeGeneratedAutomaticallyEvery30Seconds":"2. 请在下方输入生成的代码；每 30 秒将自动生成一个新代码，用于保护您的登录和钱包交易，例如提款。",
 "enable2fa":"启用 2FA",
 "enabledSuccessfully":"启用成功",

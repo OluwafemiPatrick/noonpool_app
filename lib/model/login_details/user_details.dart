@@ -7,6 +7,8 @@ class UserDetails {
   String? username;
   String? mnemonic;
   bool? verified;
+  String? secret;
+  bool? g2FAEnabled;
 
   UserDetails({
     this.actCreationDate,
@@ -15,11 +17,13 @@ class UserDetails {
     this.username,
     this.mnemonic,
     this.verified,
+    this.secret,
+    this.g2FAEnabled,
   });
 
   @override
   String toString() {
-    return 'UserDetails(actCreationDate: $actCreationDate, email: $email, id: $id, username: $username, verified: $verified, mnemonic:$mnemonic)';
+    return 'UserDetails(actCreationDate: $actCreationDate, email: $email, id: $id, username: $username, verified: $verified, mnemonic:$mnemonic, secret:$secret, g2FAEnabled:$g2FAEnabled)';
   }
 
   factory UserDetails.fromMap(Map<String, dynamic> data) => UserDetails(
@@ -28,14 +32,18 @@ class UserDetails {
         id: data['id'] as String?,
         username: data['username'] as String?,
         mnemonic: data['mnemonic'] as String?,
+        secret: data['secret'] as String?,
         verified: data['verified'] as bool?,
+        g2FAEnabled: data['g2FA_enabled'] as bool?,
       );
 
   Map<String, dynamic> toMap() => {
         'act_creation_date': actCreationDate,
         'email': email,
         'id': id,
+        'secret': secret,
         'username': username,
+        'g2FA_enabled': g2FAEnabled,
         'mnemonic': mnemonic,
         'verified': verified,
       };

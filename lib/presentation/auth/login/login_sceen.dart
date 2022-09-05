@@ -6,6 +6,7 @@ import 'package:noonpool/presentation/auth/forgot_password/forgot_password.dart'
 import 'package:noonpool/presentation/auth/register/register_sceen.dart';
 
 import 'package:noonpool/main.dart';
+import 'package:noonpool/presentation/settings/verify_otp.dart';
 import '../../../helpers/constants.dart';
 import '../../../helpers/page_route.dart';
 import '../../../helpers/shared_preference_util.dart';
@@ -68,15 +69,37 @@ class _LoginScreenState extends State<LoginScreen> {
       }
 
       if (loginDetails.userDetails!.verified!) {
-        AppPreferences.setUserName(
-            username: loginDetails.userDetails?.username ?? '');
-        AppPreferences.setId(id: loginDetails.userDetails?.id ?? '');
-        AppPreferences.setLoginStatus(status: true);
-        AppPreferences.setOnBoardingStatus(status: true);
-        Navigator.of(context).pushAndRemoveUntil(
-          CustomPageRoute(screen: const MainScreen()),
-          (route) => false,
-        );
+        proceed() {
+          AppPreferences.setUserName(
+              username: loginDetails.userDetails?.username ?? '');
+          AppPreferences.setId(id: loginDetails.userDetails?.id ?? '');
+          AppPreferences.setLoginStatus(status: true);
+          AppPreferences.setOnBoardingStatus(status: true);
+          AppPreferences.set2faSecurityStatus(
+            isEnabled: loginDetails.userDetails!.g2FAEnabled ?? false,
+          );
+
+          Navigator.of(context).pushAndRemoveUntil(
+            CustomPageRoute(
+              screen: const MainScreen(),
+            ),
+            (route) => false,
+          );
+        }
+
+        if (loginDetails.userDetails!.g2FAEnabled == true) {
+          Navigator.of(context).push(
+            CustomPageRoute(
+              screen: VerifyOtp(
+                backEnaled: false,
+                onNext: (_) => proceed(),
+                id: loginDetails.userDetails!.id ?? '',
+              ),
+            ),
+          );
+        } else {
+          proceed();
+        }
       } else {
         showVerificationDialog();
       }

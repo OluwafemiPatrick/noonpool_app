@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:noonpool/helpers/elevated_button.dart';
+import 'package:noonpool/helpers/network_helper.dart';
 import 'package:noonpool/helpers/page_route.dart';
 import 'package:noonpool/helpers/shared_preference_util.dart';
 import 'package:noonpool/presentation/about_us/about_us_screen.dart';
@@ -148,7 +149,7 @@ class _SettingsTabState extends State<SettingsTab> {
 
   SettingsItem2 build2faSecurity() {
     return SettingsItem2(
-      value: AppPreferences.get2faSecurity,
+      value: AppPreferences.get2faSecurityEnabled,
       onPressed: (newValue) async {
         if (newValue) {
           // set the auth
@@ -156,14 +157,46 @@ class _SettingsTabState extends State<SettingsTab> {
               .push(CustomPageRoute(screen: const OtpScreen()));
           setState(() {});
         } else {
-          await Navigator.of(context).push(CustomPageRoute(screen: VerifyOtp(
-            onNext: () {
-              // call the backend to  update user status
-              AppPreferences.set2faSecurity(isEnabled: newValue);
-              MyApp.scaffoldMessengerKey.currentState?.showSnackBar(SnackBar(
-                  content: Text(AppLocalizations.of(context)!.authTurnedOff)));
-            },
-          )));
+          await Navigator.of(context).push(
+            CustomPageRoute(
+              screen: VerifyOtp(
+                id: AppPreferences.userId,
+                onNext: (secret) async {
+                  showLoadingData();
+
+                  try {
+                    await set2FAStatus(
+                      status: false,
+                      secret: secret,
+                    );
+                    Navigator.of(context).pop();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Update Successful'),
+                      ),
+                    );
+                  } catch (exception) {
+                    Navigator.of(context).pop();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(exception.toString()),
+                      ),
+                    );
+                  }
+                  setState(() {
+                    AppPreferences.set2faSecurityStatus(isEnabled: false);
+                  });
+
+                  MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
+                    SnackBar(
+                      content:
+                          Text(AppLocalizations.of(context)!.authTurnedOff),
+                    ),
+                  );
+                },
+              ),
+            ),
+          );
           setState(() {});
         }
       },
@@ -172,10 +205,72 @@ class _SettingsTabState extends State<SettingsTab> {
     );
   }
 
+  showLoadingData() async {
+    final textTheme = Theme.of(context).textTheme;
+    final bodyText1 = textTheme.bodyText1!;
+    final bodyText2 = textTheme.bodyText2!;
+    Dialog dialog = Dialog(
+      backgroundColor: Colors.black,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(10),
+        ),
+      ),
+      elevation: 5,
+      child: Material(
+          child: Padding(
+        padding:
+            const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(
+              height: 40,
+              width: 40,
+              child: CircularProgressIndicator.adaptive(
+                backgroundColor: Colors.white,
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text('Request Processing', style: bodyText1),
+            const SizedBox(
+              height: 5,
+            ),
+            Text('Please be patient while we process your request.',
+                textAlign: TextAlign.center, style: bodyText2),
+          ],
+        ),
+      )),
+    );
+
+    showGeneralDialog(
+      context: context,
+      barrierLabel: "Request Processing",
+      barrierDismissible: false,
+      barrierColor: Colors.black.withOpacity(0.5),
+      transitionDuration: const Duration(milliseconds: 500),
+      pageBuilder: (_, __, ___) => dialog,
+      transitionBuilder: (_, anim, __, child) => FadeTransition(
+        opacity: Tween(begin: 0.0, end: 1.0).animate(anim),
+        child: child,
+      ),
+    );
+  }
+
   SettingsItem buildHelpCenterItem() {
     return SettingsItem(
-        onPressed: () {
-          launch(_emailLaunchFunction());
+        onPressed: () async {
+          final url = _emailLaunchFunction();
+          final canLaunch = await canLaunchUrl(url);
+          if (canLaunch) {
+            launchUrl(_emailLaunchFunction());
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text('Kindly send a mail to  $supportEmailAddress ')));
+          }
         },
         title: AppLocalizations.of(context)!.helpCenter,
         iconLocation: 'assets/icons/help.svg');
@@ -318,14 +413,14 @@ class _SettingsTabState extends State<SettingsTab> {
     );
   }
 
-  _emailLaunchFunction() {
+  Uri _emailLaunchFunction() {
     Uri emailLaunchUri = Uri(
       scheme: 'mailto',
       path: supportEmailAddress,
       query: _encodeQueryParameters(
           <String, String>{'subject': 'Customer Support: NoonPool App'}),
     );
-    return emailLaunchUri.toString();
+    return emailLaunchUri;
   }
 
   String _encodeQueryParameters(Map<String, String> params) {

@@ -132,7 +132,7 @@
 "twoFactorAuthentication":"İki Faktörlü Kimlik Doğrulama",
 "authTurnedOff":"İki faktörlü kimlik doğrulamanız kapatıldı.",
 "enableAuthentication":"Kimlik doğrulamayı etkinleştir",
-"pleaseDownloadTheApplicationGoogleAuthenticatorOnYourMobileDeviceAndScanTheCode":"1. Lütfen Google Authenticator uygulamasını mobil cihazınıza indirin ve aşağıdaki kodu tarayın. Lütfen daha önce yaptıysanız bu adımı dikkate almayın.",
+"pleaseDownloadTheApplicationGoogleAuthenticatorOnYourMobileDeviceAndScanTheCode":"1. Lütfen Google Authenticator uygulamasını mobil cihazınıza indirin ve aşağıdaki kodu tarayın.",
 "pleaseEnterTheGeneratedCodeBelowANewCodeWillBeGeneratedAutomaticallyEvery30Seconds":"2. Lütfen oluşturulan kodu aşağıya giriniz; Her 30 saniyede bir otomatik olarak yeni bir kod oluşturulacak ve giriş ve para çekme gibi cüzdan işlemlerinizi güvence altına almak için kullanılacaktır.",
 "enable2fa":"2FA'yı etkinleştir",
 "enabledSuccessfully":"Başarıyla Etkinleştirildi",

@@ -133,7 +133,7 @@
 "twoFactorAuthentication":"Two-Factor Authentication",
 "authTurnedOff":"Your two-factor authentication has been turned off.",
 "enableAuthentication":"Enable authentication",
-"pleaseDownloadTheApplicationGoogleAuthenticatorOnYourMobileDeviceAndScanTheCode":"1. Please download the application Google Authenticator on your mobile device and scan the code below. Please disregard this step if you have already done it before it.",
+"pleaseDownloadTheApplicationGoogleAuthenticatorOnYourMobileDeviceAndScanTheCode":"1. Please download the application Google Authenticator on your mobile device and scan the code below.",
 "pleaseEnterTheGeneratedCodeBelowANewCodeWillBeGeneratedAutomaticallyEvery30Seconds":"2. Please enter the generated code below; a new code will be generated automatically every 30 seconds and will be used to secure your login and wallet transactions such as withdrawal.",
 "enable2fa":"Enable 2FA",
 "enabledSuccessfully":"Enabled Successfully",

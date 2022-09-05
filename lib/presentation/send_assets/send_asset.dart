@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:noonpool/helpers/constants.dart';
 import 'package:noonpool/helpers/elevated_button.dart';
 import 'package:noonpool/helpers/network_helper.dart';
+import 'package:noonpool/helpers/shared_preference_util.dart';
 import 'package:noonpool/model/wallet_data/datum.dart';
+import 'package:noonpool/presentation/settings/verify_otp.dart';
 
+import '../../helpers/page_route.dart';
 import 'receipt_detail_tab.dart';
 
 class SendAsset extends StatefulWidget {
@@ -48,7 +51,19 @@ class _SendAssetState extends State<SendAsset> {
 
     final action = await confirmTransaction();
     if (action != null && action) {
-      showSendAssetStatus();
+      if (AppPreferences.get2faSecurityEnabled) {
+        Navigator.of(context).push(
+          CustomPageRoute(
+            screen: VerifyOtp(
+              backEnaled: false,
+              onNext: (_) => showSendAssetStatus(),
+              id: AppPreferences.userId,
+            ),
+          ),
+        );
+      } else {
+        showSendAssetStatus();
+      }
     }
   }
 
@@ -56,6 +71,7 @@ class _SendAssetState extends State<SendAsset> {
     final reciever = widget.recipientAddress;
     final network = widget.assetDatum.coinSymbol ?? '';
     final amount = widget.amount;
+
     setState(() {
       _isLoading = true;
     });

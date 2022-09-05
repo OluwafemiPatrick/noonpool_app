@@ -8,12 +8,13 @@ import 'package:noonpool/model/login_details/login_details.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:noonpool/model/recieve_data/recieve_data.dart';
+import 'package:noonpool/model/user_secret.dart';
 import 'package:noonpool/model/wallet_data/datum.dart';
 import 'package:noonpool/model/wallet_data/wallet_data.dart';
 import 'package:noonpool/model/wallet_transactions/wallet_transactions.dart';
 
-// const String baseUrl = 'http://5.189.137.144:1027/api/v2/';
-const String baseUrl = 'http://5.189.137.144:3505/api/v2/';
+const String baseUrl = 'http://5.189.137.144:1027/api/v2/';
+// const String baseUrl = 'http://5.189.137.144:3505/api/v2/';
 
 Future<List<CoinModel>> getAllCoinDetails() async {
   try {
@@ -117,6 +118,56 @@ Future<void> sendUserOTP({required String email}) async {
   } on SocketException {
     return Future.error(
         'Kindly enable your internet connection to send an OTP');
+  } catch (exception) {
+    return Future.error(exception.toString());
+  }
+}
+
+Future<void> set2FAStatus({
+  required bool status,
+  required String secret,
+}) async {
+  try {
+    final id = AppPreferences.userId;
+    final response = await http.post(
+      Uri.parse(baseUrl + "auth/google_2FA"),
+      body: jsonEncode({
+        "id": id,
+        "isSecret": status,
+        "secret": secret,
+      }),
+      headers: {'Content-Type': 'application/json'},
+    );
+    debugPrint(response.body.toString());
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      return Future.error(jsonDecode(response.body)['message'] ??
+          'An error occurred while performing your reqest,  please try again');
+    }
+  } on SocketException {
+    return Future.error(
+        'Kindly enable your internet connection to send an OTP');
+  } catch (exception) {
+    return Future.error(exception.toString());
+  }
+}
+
+Future<UserSecret> get2FAStatus({required String id}) async {
+  try {
+    final response = await http.get(
+      Uri.parse(baseUrl + "auth/google_2FA?id=$id"),
+      headers: {'Content-Type': 'application/json'},
+    );
+    debugPrint(response.body.toString());
+    if (response.statusCode == 200) {
+      return UserSecret.fromJson(response.body);
+    } else {
+      return Future.error(jsonDecode(response.body)['message'] ??
+          'An error occurred while performing your reqest,  please try again');
+    }
+  } on SocketException {
+    return Future.error('Kindly enable your internet connection');
   } catch (exception) {
     return Future.error(exception.toString());
   }

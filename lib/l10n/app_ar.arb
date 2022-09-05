@@ -132,7 +132,7 @@
 "twoFactorAuthentication":"توثيق ذو عاملين",
 "authTurnedOff":"تم إيقاف تشغيل المصادقة ذات العاملين.",
 "enableAuthentication":"تمكين المصادقة",
-"pleaseDownloadTheApplicationGoogleAuthenticatorOnYourMobileDeviceAndScanTheCode":"1. يرجى تنزيل تطبيق Google Authenticator على جهازك المحمول ومسح الرمز أدناه. يرجى تجاهل هذه الخطوة إذا كنت قد قمت بها بالفعل من قبل.",
+"pleaseDownloadTheApplicationGoogleAuthenticatorOnYourMobileDeviceAndScanTheCode":"1. يرجى تنزيل تطبيق Google Authenticator على جهازك المحمول ومسح الرمز أدناه.",
 "pleaseEnterTheGeneratedCodeBelowANewCodeWillBeGeneratedAutomaticallyEvery30Seconds":"2. الرجاء إدخال الرمز الذي تم إنشاؤه أدناه ؛ سيتم إنشاء رمز جديد تلقائيًا كل 30 ثانية وسيتم استخدامه لتأمين معاملات تسجيل الدخول والمحفظة مثل السحب.",
 "enable2fa":"تمكين 2FA",
 "enabledSuccessfully":"تم التمكين بنجاح",

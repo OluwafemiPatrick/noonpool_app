@@ -1,21 +1,21 @@
 import 'dart:async';
-
+import 'dart:math';
+import 'package:base32/base32.dart';
 import 'package:flutter/material.dart';
 import 'package:noonpool/helpers/constants.dart';
 import 'package:noonpool/helpers/elevated_button.dart';
+import 'package:noonpool/helpers/network_helper.dart';
+import 'package:noonpool/helpers/outlined_button.dart';
 import 'package:noonpool/helpers/shared_preference_util.dart';
 import 'package:noonpool/main.dart';
 import 'package:otp/otp.dart';
 import 'package:pinput/pinput.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class OtpScreen extends StatefulWidget {
-  final bool isFromLogin;
-  final VoidCallback? onNext;
   const OtpScreen({
     Key? key,
-    this.isFromLogin = false,
-    this.onNext,
   }) : super(key: key);
 
   @override
@@ -23,27 +23,40 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
+  String secretKey = '';
+  bool _isLoading = false;
   final otpFieldController = TextEditingController(text: "");
   final _formKey = GlobalKey<FormState>();
-  late StreamSubscription _twoFASubscription;
+  StreamSubscription? _twoFASubscription;
+
   dynamic _currentOtp;
-  final otpStream = Stream<dynamic>.periodic(
-    const Duration(seconds: 0),
-    (val) => OTP.generateTOTPCodeString(
-        'JBSWY3DPEHPK3PXP', DateTime.now().millisecondsSinceEpoch,
-        length: 6, interval: 30, algorithm: Algorithm.SHA1, isGoogle: true),
-  ).asBroadcastStream();
+  Stream<dynamic>? otpStream;
   @override
   void initState() {
-    _twoFASubscription = otpStream.listen((event) {
-      _currentOtp = event;
-    });
+    secretKey = SecretGenerator.getSecret(10);
+    otpStream = Stream<dynamic>.periodic(
+      const Duration(seconds: 0),
+      (val) => OTP.generateTOTPCodeString(
+        secretKey,
+        DateTime.now().millisecondsSinceEpoch,
+        length: 6,
+        interval: 30,
+        algorithm: Algorithm.SHA1,
+        isGoogle: true,
+      ),
+    ).asBroadcastStream();
+
+    if (otpStream != null) {
+      _twoFASubscription = otpStream!.listen((event) {
+        _currentOtp = event;
+      });
+    }
     super.initState();
   }
 
   @override
   void dispose() {
-    _twoFASubscription.cancel();
+    _twoFASubscription?.cancel();
     super.dispose();
   }
 
@@ -119,31 +132,56 @@ class _OtpScreenState extends State<OtpScreen> {
               height: 20,
             ),
             CustomElevatedButton(
-              widget: Text(
-                AppLocalizations.of(context)!.enable2fa,
-                style: bodyText2.copyWith(
-                  color: Colors.white,
-                ),
-              ),
+              widget: _isLoading
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator.adaptive(
+                        backgroundColor: Colors.white,
+                      ),
+                    )
+                  : Text(
+                      AppLocalizations.of(context)!.enable2fa,
+                      style: bodyText2.copyWith(
+                        color: Colors.white,
+                      ),
+                    ),
               onPressed: () async {
                 final isValid = _formKey.currentState?.validate();
-                if ((isValid ?? false) == false) {
+                if ((isValid ?? false) == false || _isLoading) {
                   return;
                 }
 
                 final otp = otpFieldController.text.trim();
 
                 if (otp == _currentOtp) {
-                  MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
+                  setState(() {
+                    _isLoading = true;
+                  });
+                  try {
+                    await set2FAStatus(
+                      status: true,
+                      secret: secretKey,
+                    );
+                    MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
                       SnackBar(
-                          content: Text(AppLocalizations.of(context)!
-                              .enabledSuccessfully)));
-                  //todo update settings to true on the backend ;
-                  AppPreferences.set2faSecurity(isEnabled: true);
-                  Navigator.pop(context);
-                  if (widget.isFromLogin) {
-                    widget.onNext!();
+                        content: Text(
+                            AppLocalizations.of(context)!.enabledSuccessfully),
+                      ),
+                    );
+                    AppPreferences.set2faSecurityStatus(isEnabled: true);
+
+                    Navigator.pop(context);
+                  } catch (exception) {
+                    MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
+                      SnackBar(
+                        content: Text(exception.toString()),
+                      ),
+                    );
                   }
+                  setState(() {
+                    _isLoading = false;
+                  });
                 } else {
                   MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
                       SnackBar(
@@ -162,6 +200,9 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   Card buildQrCode(TextStyle? bodyText2) {
+    //         'otpauth://totp/com.noonpool.app?Algorithm=SHA1&digits=6&secret=JBSWY3DPEHPK3PXP&issuer=Noonpool&period=30',
+    final otpUrl =
+        'otpauth://totp/${AppPreferences.userName}?Algorithm=SHA1&digits=6&secret=$secretKey&issuer=Noonpool&period=30';
     return Card(
       elevation: 3,
       margin: const EdgeInsets.all(20),
@@ -176,8 +217,7 @@ class _OtpScreenState extends State<OtpScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             QrImage(
-              data:
-                  'otpauth://totp/com.noonpool.app?Algorithm=SHA1&digits=6&secret=JBSWY3DPEHPK3PXP&issuer=Noonpool&period=30',
+              data: otpUrl,
               version: QrVersions.auto,
               size: 250,
             ),
@@ -185,9 +225,30 @@ class _OtpScreenState extends State<OtpScreen> {
               height: 10,
             ),
             Text(
-              '',
+              'OR',
               textAlign: TextAlign.center,
-              style: bodyText2,
+              style: bodyText2?.copyWith(color: kPrimaryColor),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            CustomOutlinedButton(
+              onPressed: () async {
+                try {
+                  if (await canLaunchUrlString(otpUrl)) {
+                    await launchUrlString(otpUrl);
+                  }
+                } catch (_) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text(
+                        'An error occurred, please manually scan the QR code from the application.',
+                      ),
+                    ),
+                  );
+                }
+              },
+              widget: const Text("Use This Device"),
             ),
           ],
         ),
@@ -250,5 +311,19 @@ class _OtpScreenState extends State<OtpScreen> {
         },
       ),
     );
+  }
+}
+
+class SecretGenerator {
+  static const _chars =
+      'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+
+  static String getSecret(int length) {
+    final Random _rnd = Random.secure();
+
+    final rawString = String.fromCharCodes(Iterable.generate(
+        length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
+
+    return base32.encodeString(rawString);
   }
 }

@@ -132,7 +132,7 @@
 "twoFactorAuthentication":"Двухфакторная аутентификация",
 "authTurnedOff":"У вас отключена двухфакторная аутентификация.",
 "enableAuthentication":"Включить аутентификацию",
-"pleaseDownloadTheApplicationGoogleAuthenticatorOnYourMobileDeviceAndScanTheCode":"1. Загрузите приложение Google Authenticator на свое мобильное устройство и отсканируйте приведенный ниже код. Пожалуйста, пропустите этот шаг, если вы уже сделали это раньше.",
+"pleaseDownloadTheApplicationGoogleAuthenticatorOnYourMobileDeviceAndScanTheCode":"1. Загрузите приложение Google Authenticator на свое мобильное устройство и отсканируйте приведенный ниже код.",
 "pleaseEnterTheGeneratedCodeBelowANewCodeWillBeGeneratedAutomaticallyEvery30Seconds":"2. Пожалуйста, введите сгенерированный код ниже; новый код будет генерироваться автоматически каждые 30 секунд и будет использоваться для защиты вашего входа в систему и транзакций кошелька, таких как снятие средств.",
 "enable2fa":"Включить двухфакторную аутентификацию",
 "enabledSuccessfully":"Активировано успешно",

@@ -132,7 +132,7 @@
 "twoFactorAuthentication":"احراز هویت دو مرحله ای",
 "authTurnedOff":"احراز هویت دو مرحله ای شما خاموش شده است.",
 "enableAuthentication":"احراز هویت را فعال کنید",
-"pleaseDownloadTheApplicationGoogleAuthenticatorOnYourMobileDeviceAndScanTheCode":"1. لطفاً برنامه Google Authenticator را در دستگاه تلفن همراه خود دانلود کنید و کد زیر را اسکن کنید. اگر قبلاً آن را انجام داده اید لطفاً این مرحله را نادیده بگیرید.",
+"pleaseDownloadTheApplicationGoogleAuthenticatorOnYourMobileDeviceAndScanTheCode":"1. لطفاً برنامه Google Authenticator را در دستگاه تلفن همراه خود دانلود کنید و کد زیر را اسکن کنید.",
 "pleaseEnterTheGeneratedCodeBelowANewCodeWillBeGeneratedAutomaticallyEvery30Seconds":"2. لطفا کد تولید شده را در زیر وارد کنید. هر 30 ثانیه یک کد جدید به صورت خودکار تولید می شود و برای ایمن کردن تراکنش های ورود و کیف پول شما مانند برداشت استفاده می شود.",
 "enable2fa":"2FA را فعال کنید",
 "enabledSuccessfully":"با موفقیت فعال شد",
