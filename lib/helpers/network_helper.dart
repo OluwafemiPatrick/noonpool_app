@@ -13,7 +13,7 @@ import 'package:noonpool/model/wallet_data/datum.dart';
 import 'package:noonpool/model/wallet_data/wallet_data.dart';
 import 'package:noonpool/model/wallet_transactions/wallet_transactions.dart';
 
-const String baseUrl = 'http://5.189.137.144:1027/api/v2/';
+const String baseUrl = 'http://5.189.137.144:1028/api/v2/';
 // const String baseUrl = 'http://5.189.137.144:3505/api/v2/';
 
 Future<List<CoinModel>> getAllCoinDetails() async {
@@ -47,8 +47,9 @@ Future<List<CoinModel>> getAllCoinDetails() async {
 
 Future<dynamic> fetchWorkerData(String workerName, poolUrl) async {
   final url = '$poolUrl/miners?method=$workerName';
-  final response = await http.get(Uri.parse(url));
 
+  final response = await http.get(Uri.parse(url));
+  debugPrint(response.request?.url.toString());
   if (response.statusCode == 200) {
     var workerData = jsonDecode(response.body);
     List workers = workerData['body']['primary']['workers']['shared'];

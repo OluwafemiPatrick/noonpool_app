@@ -35,16 +35,20 @@ class _PoolTabState extends State<PoolTab> {
   String miningAdd = 'litecoin.noonpool.com:3055';
   String stratumUrl = 'stratum+tcp://litecoin.noonpool.com:3056';
   String ltcUrl =
-      'http://litecoin.noonpool.com:6050/api/v1/Pool-Litecoin-Dogecoin';
+      'http://litecoin.noonpool.com:3055/api/v1/Pool-Litecoin-Dogecoin/';
+
   String btcUrl = '';
-  String bchUrl = '';
+  String bchUrl =
+      'http://bitcoincash.noonpool.com:3035/api/v1/Pool-BitcoinCash/';
   String dogeUrl =
-      'http://litecoin.noonpool.com:6050/api/v1/Pool-Litecoin-Dogecoin';
+      'http://litecoin.noonpool.com:3055/api/v1/Pool-Litecoin-Dogecoin/';
 
   @override
   void initState() {
-    getUsername();
     super.initState();
+    Future.delayed(Duration.zero, () {
+      getUsername();
+    });
   }
 
   void _onRefresh() async {
@@ -129,7 +133,7 @@ class _PoolTabState extends State<PoolTab> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(AppLocalizations.of(context)!.h24Profit, style: bodyText2),
+          Text(AppLocalizations.of(context)!.estEarning, style: bodyText2),
           const SizedBox(
             height: kDefaultMargin / 4,
           ),
@@ -507,7 +511,7 @@ class _PoolTabState extends State<PoolTab> {
                 Column(
                   children: [
                     Text(
-                      AppLocalizations.of(context)!.unpaidEarnings,
+                      AppLocalizations.of(context)!.activeMiners,
                       style: bodyText2,
                     ),
                     const SizedBox(
@@ -557,7 +561,7 @@ class _PoolTabState extends State<PoolTab> {
                 ),
                 Expanded(
                   child: Text(
-                    AppLocalizations.of(context)!.invalidShares,
+                    AppLocalizations.of(context)!.stat,
                     style: bodyText2,
                     textAlign: TextAlign.center,
                   ),
