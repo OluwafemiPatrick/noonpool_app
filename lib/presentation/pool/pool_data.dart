@@ -2,11 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:focus_detector/focus_detector.dart';
+import 'package:noonpool/helpers/error_widget.dart';
 import 'package:noonpool/helpers/shared_preference_util.dart';
 import 'package:noonpool/main.dart';
 import 'package:noonpool/helpers/network_helper.dart';
+import 'package:noonpool/model/worker_data/worker_data.dart';
 import 'package:noonpool/presentation/pool/widget/pool_statistics_title.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../helpers/constants.dart';
 import '../../helpers/svg_image.dart';
@@ -19,6 +23,9 @@ class PoolTab extends StatefulWidget {
 }
 
 class _PoolTabState extends State<PoolTab> {
+  bool _isLoading = true;
+  bool _hasError = false;
+
   final StreamController<int> _poolStatisticsStream = StreamController();
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -28,10 +35,10 @@ class _PoolTabState extends State<PoolTab> {
         AppLocalizations.of(context)!.midEast
       ];
 
-  String _username = '';
-  List workerData = [];
+  WorkerData workerData = WorkerData();
   String coin = 'LTC';
-  String port1 = '3055', port2 = '3056';
+  String port1 = '3055';
+  String port2 = '3056';
   String miningAdd = 'litecoin.noonpool.com:3055';
   String stratumUrl = 'stratum+tcp://litecoin.noonpool.com:3056';
   String ltcUrl =
@@ -43,18 +50,9 @@ class _PoolTabState extends State<PoolTab> {
   String dogeUrl =
       'http://litecoin.noonpool.com:3055/api/v1/Pool-Litecoin-Dogecoin/';
 
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(Duration.zero, () {
-      getUsername();
-    });
-  }
-
   void _onRefresh() async {
-    await Future.delayed(Duration.zero, getUsername).then((value) {
-      _refreshController.refreshCompleted();
-    });
+    await getUserData();
+    _refreshController.refreshCompleted();
   }
 
   @override
@@ -62,56 +60,65 @@ class _PoolTabState extends State<PoolTab> {
     final textTheme = Theme.of(context).textTheme;
     final bodyText1 = textTheme.bodyText1!;
     final bodyText2 = textTheme.bodyText2!;
+
+    return FocusDetector(
+      onFocusGained: () {
+        getUserData();
+      },
+      child: Scaffold(
+        appBar: buildAppBar(bodyText1, bodyText2),
+        body: buildBody(bodyText2, bodyText1),
+      ),
+    );
+  }
+
+  SmartRefresher buildBody(TextStyle bodyText2, TextStyle bodyText1) {
     const spacer = SizedBox(
       height: kDefaultMargin,
     );
-    return Scaffold(
-      appBar: buildAppBar(bodyText1, bodyText2),
-      body: SmartRefresher(
-        enablePullDown: true,
-        header: const WaterDropHeader(waterDropColor: kPrimaryColor),
-        controller: _refreshController,
-        onRefresh: _onRefresh,
-        child: SingleChildScrollView(
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              buildStatisticsItem(),
-              spacer,
-              ...buildBtcMiningAddress(bodyText2),
-              spacer,
-              ...buildSmartMiningUrl(bodyText2),
-              spacer,
-              buildExtraNote(bodyText2),
-              spacer,
-              Padding(
-                child: Text(
-                  '${AppLocalizations.of(context)!.miningProfit} -> ',
-                  style: bodyText1,
-                ),
-                padding: const EdgeInsets.only(
-                    left: kDefaultMargin, right: kDefaultMargin),
+    return SmartRefresher(
+      enablePullDown: true,
+      header: const WaterDropHeader(waterDropColor: kPrimaryColor),
+      controller: _refreshController,
+      onRefresh: _onRefresh,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            buildStatisticsItem(),
+            spacer,
+            ...buildMiningAddress(bodyText2),
+            spacer,
+            ...buildSmartMiningUrl(bodyText2),
+            spacer,
+            buildExtraNote(bodyText2),
+            spacer,
+            Padding(
+              child: Text(
+                '${AppLocalizations.of(context)!.miningProfit} -> ',
+                style: bodyText1,
               ),
-              const SizedBox(height: 10.0),
-              buildMiningProfitData(bodyText2, spacer),
-              spacer,
-              Padding(
-                child: Text(
-                  '${AppLocalizations.of(context)!.hashrateTrend} -> ',
-                  style: bodyText1,
-                ),
-                padding: const EdgeInsets.only(
-                    left: kDefaultMargin, right: kDefaultMargin),
+              padding: const EdgeInsets.only(
+                  left: kDefaultMargin, right: kDefaultMargin),
+            ),
+            const SizedBox(height: 10.0),
+            buildMiningProfitData(bodyText2, spacer),
+            spacer,
+            Padding(
+              child: Text(
+                '${AppLocalizations.of(context)!.hashrateTrend} -> ',
+                style: bodyText1,
               ),
-              const SizedBox(height: 10.0),
-              buildHashrateTrend(bodyText2, spacer),
-              spacer,
-              buildStatistics(bodyText1, _username),
-              const SizedBox(height: 10.0),
-              buildPoolData(bodyText2, spacer),
-            ]),
-          ),
+              padding: const EdgeInsets.only(
+                  left: kDefaultMargin, right: kDefaultMargin),
+            ),
+            const SizedBox(height: 10.0),
+            buildHashrateTrend(bodyText2, spacer),
+            spacer,
+            buildStatistics(bodyText1),
+            const SizedBox(height: 10.0),
+            buildPoolData(bodyText2, spacer),
+          ],
         ),
       ),
     );
@@ -138,7 +145,7 @@ class _PoolTabState extends State<PoolTab> {
             height: kDefaultMargin / 4,
           ),
           Text(
-            '0 $coin',
+            ' ${workerData.data?.estEarnings ?? ''} $coin',
             style:
                 bodyText2.copyWith(fontSize: 15, fontWeight: FontWeight.w500),
           ),
@@ -151,7 +158,7 @@ class _PoolTabState extends State<PoolTab> {
             height: kDefaultMargin / 4,
           ),
           Text(
-            '0 $coin',
+            ' ${workerData.data?.cumEarnings ?? ''} $coin',
             style:
                 bodyText2.copyWith(fontSize: 15, fontWeight: FontWeight.w500),
           ),
@@ -184,7 +191,7 @@ class _PoolTabState extends State<PoolTab> {
                 height: kDefaultMargin / 4,
               ),
               Text(
-                '0 H/s',
+                '${workerData.data?.hash10min ?? ''} H/s',
                 style: bodyText2.copyWith(
                     fontSize: 15, fontWeight: FontWeight.w500),
               ),
@@ -197,7 +204,7 @@ class _PoolTabState extends State<PoolTab> {
                 height: kDefaultMargin / 4,
               ),
               Text(
-                '0 H/s',
+                '${workerData.data?.hash1hr ?? ''} H/s',
                 style: bodyText2.copyWith(
                     fontSize: 15, fontWeight: FontWeight.w500),
               ),
@@ -213,7 +220,7 @@ class _PoolTabState extends State<PoolTab> {
                 height: kDefaultMargin / 4,
               ),
               Text(
-                '0 H/s',
+                '${workerData.data?.hash1day ?? ''} H/s',
                 style: bodyText2.copyWith(
                     fontSize: 15, fontWeight: FontWeight.w500),
               ),
@@ -281,47 +288,47 @@ class _PoolTabState extends State<PoolTab> {
           _selected = newValue.toString();
           if (_selected == 'LTC') {
             setState(() {
-              workerData = [];
+              workerData = WorkerData();
               coin = _selected!;
               port1 = '3055';
               port2 = '3056';
               miningAdd = 'litecoin.noonpool.com:3055';
               stratumUrl = 'stratum+tcp://litecoin.noonpool.com:3055';
             });
-            initState();
+            getUserData();
           }
           if (_selected == 'BTC') {
             setState(() {
-              workerData = [];
+              workerData = WorkerData();
               coin = _selected!;
               port1 = '0';
               port2 = '0';
               miningAdd = AppLocalizations.of(context)!.coinNotAvailable;
               stratumUrl = AppLocalizations.of(context)!.coinNotAvailable;
             });
-            initState();
+            getUserData();
           }
           if (_selected == 'DOGE') {
             setState(() {
-              workerData = [];
+              workerData = WorkerData();
               coin = _selected!;
               port1 = '3055';
               port2 = '3056';
               miningAdd = 'litecoin.noonpool.com:3055';
               stratumUrl = 'stratum+tcp://litecoin.noonpool.com:3055';
             });
-            initState();
+            getUserData();
           }
           if (_selected == 'BCH') {
             setState(() {
-              workerData = [];
+              workerData = WorkerData();
               coin = _selected!;
               port1 = '0';
               port2 = '0';
               miningAdd = AppLocalizations.of(context)!.coinNotAvailable;
               stratumUrl = AppLocalizations.of(context)!.coinNotAvailable;
             });
-            initState();
+            getUserData();
           }
         },
       ),
@@ -344,7 +351,7 @@ class _PoolTabState extends State<PoolTab> {
     );
   }
 
-  List<Widget> buildBtcMiningAddress(TextStyle bodyText2) {
+  List<Widget> buildMiningAddress(TextStyle bodyText2) {
     return [
       Padding(
         child: Text(
@@ -446,10 +453,12 @@ class _PoolTabState extends State<PoolTab> {
     );
   }
 
-  Padding buildStatistics(TextStyle bodyText1, String workerName) {
+  Padding buildStatistics(
+    TextStyle bodyText1,
+  ) {
     return Padding(
       child: Text(
-        '${AppLocalizations.of(context)!.statistics} -> $workerName',
+        '${AppLocalizations.of(context)!.statistics} -> ${AppPreferences.userName}',
         style: bodyText1,
       ),
       padding:
@@ -458,6 +467,8 @@ class _PoolTabState extends State<PoolTab> {
   }
 
   Container buildPoolData(TextStyle bodyText2, SizedBox spacer) {
+    final style1 =
+        bodyText2.copyWith(fontSize: 15, fontWeight: FontWeight.w500);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: kDefaultPadding),
@@ -484,11 +495,8 @@ class _PoolTabState extends State<PoolTab> {
                       height: kDefaultMargin / 4,
                     ),
                     Text(
-                      workerData.isNotEmpty
-                          ? workerData.length.toString()
-                          : '0',
-                      style: bodyText2.copyWith(
-                          fontSize: 15, fontWeight: FontWeight.w500),
+                      workerData.data?.minersAll?.toString() ?? '0',
+                      style: style1,
                     ),
                   ],
                 ),
@@ -500,11 +508,8 @@ class _PoolTabState extends State<PoolTab> {
                       height: kDefaultMargin / 4,
                     ),
                     Text(
-                      workerData.isNotEmpty
-                          ? workerData[0]['paidEarning']
-                          : '0',
-                      style: bodyText2.copyWith(
-                          fontSize: 15, fontWeight: FontWeight.w500),
+                      workerData.data?.earningsPaid?.toString() ?? '0',
+                      style: style1,
                     ),
                   ],
                 ),
@@ -518,11 +523,8 @@ class _PoolTabState extends State<PoolTab> {
                       height: kDefaultMargin / 4,
                     ),
                     Text(
-                      workerData.isNotEmpty
-                          ? workerData[0]['unpaidEarning']
-                          : '0',
-                      style: bodyText2.copyWith(
-                          fontSize: 15, fontWeight: FontWeight.w500),
+                      workerData.data?.minersActive?.toString() ?? '0',
+                      style: style1,
                     ),
                   ],
                 ),
@@ -570,19 +572,12 @@ class _PoolTabState extends State<PoolTab> {
             ),
           ),
           const SizedBox(height: 12.0),
-          if (workerData.isNotEmpty)
-            ListView.builder(
-              itemCount: workerData.length,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (_, index) {
-                return displayWorkerData(
-                  workerData[index]['workerId'],
-                  workerData[index]['hashrate'],
-                  workerData[index]['sharesValid'],
-                  workerData[index]['sharesInvalid'],
-                );
-              },
-            )
+          if (_isLoading)
+            buildLoadingBody()
+          else if (_hasError)
+            buildErrorWidget()
+          else if (workerData.data?.subWorkers?.isNotEmpty == true)
+            buildSubWorkersData()
           else
             noWorkerData(bodyText2)
         ],
@@ -590,14 +585,135 @@ class _PoolTabState extends State<PoolTab> {
     );
   }
 
-  Widget displayWorkerData(
-      String workerId, hashrate, sharesValid, sharesInvalid) {
+  Widget buildErrorWidget() {
+    return Container(
+      alignment: Alignment.center,
+      height: 500.0,
+      child: CustomErrorWidget(
+          error: AppLocalizations.of(context)!
+              .anErrorOccurredWithTheDataFetchPleaseTryAgain,
+          onRefresh: () {
+            getUserData();
+          }),
+    );
+  }
+
+  ListView buildSubWorkersData() {
+    return ListView.builder(
+      itemCount: workerData.data?.subWorkers?.length ?? 0,
+      padding: const EdgeInsets.all(0),
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemBuilder: (_, index) {
+        final item = workerData.data?.subWorkers?[index];
+        return _PoolDataWidget(
+          workerId: item?.workerId ?? '',
+          hashrate: item?.hashrate?.toString() ?? '',
+          sharesValid: item?.estEarning?.toString() ?? '',
+          stat: item?.stat ?? '',
+        );
+      },
+    );
+  }
+
+  ListView buildLoadingBody() {
+    return ListView.builder(
+      padding: const EdgeInsets.all(0),
+      itemCount: 10,
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemBuilder: (_, index) {
+        return const _PoolDataWidget(
+          workerId: '',
+          hashrate: '',
+          sharesValid: '',
+          stat: '',
+          shimmerEnabled: true,
+        );
+      },
+    );
+  }
+
+  Widget noWorkerData(TextStyle bodyText2) {
+    return Container(
+      alignment: Alignment.center,
+      height: 250.0,
+      child: Column(
+        children: [
+          const Spacer(),
+          const SvgImage(
+            iconLocation: 'assets/icons/no_worker_data.svg',
+            name: 'no worker data',
+            color: kPrimaryColor,
+            size: 100,
+          ),
+          const SizedBox(
+            height: kDefaultMargin / 2,
+          ),
+          Text(
+            AppLocalizations.of(context)!.noWorkerData,
+            style: bodyText2,
+          ),
+          const Spacer(),
+        ],
+      ),
+    );
+  }
+
+  getUserData() async {
+    _isLoading = true;
+
+    try {
+      workerData = await fetchWorkerData(coin);
+      _hasError = false;
+    } catch (exception) {
+      MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
+        SnackBar(
+          content: Text(
+            exception.toString(),
+          ),
+        ),
+      );
+      _hasError = true;
+    }
+    _isLoading = false;
+    setState(() {});
+  }
+}
+
+class _PoolDataWidget extends StatelessWidget {
+  final String hashrate;
+  final String workerId;
+  final String sharesValid;
+  final String stat;
+  final bool shimmerEnabled;
+  const _PoolDataWidget({
+    Key? key,
+    this.shimmerEnabled = false,
+    required this.workerId,
+    required this.hashrate,
+    required this.sharesValid,
+    required this.stat,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return shimmerEnabled
+        ? Shimmer.fromColors(
+            baseColor: Colors.grey.shade100,
+            highlightColor: Colors.grey.shade300,
+            child: shimmerBody(),
+          )
+        : buildBody(context);
+  }
+
+  Widget buildBody(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final bodyText2 = textTheme.bodyText2!;
     String _workerId, _hashrate;
 
     // format worker_id into proper name
-    var split = workerId.split('.');
+    final split = workerId.split('.');
     if (split.length == 2) {
       var s1 = split[1];
       _workerId = s1;
@@ -610,13 +726,12 @@ class _PoolTabState extends State<PoolTab> {
     }
 
     // remove decimal figures from hashrate
-    var rate = double.parse(hashrate);
+    final rate = double.parse(hashrate);
     _hashrate = rate.toStringAsFixed(0);
 
     return Container(
       width: MediaQuery.of(context).size.width,
-      padding: const EdgeInsets.symmetric(horizontal: kDefaultMargin / 2),
-      margin: const EdgeInsets.only(bottom: 12.0),
+      padding: const EdgeInsets.all(kDefaultMargin / 2),
       child: Row(
         children: [
           Expanded(
@@ -641,7 +756,7 @@ class _PoolTabState extends State<PoolTab> {
           ),
           Expanded(
             child: Text(
-              sharesInvalid == 'null' ? '0' : sharesInvalid,
+              stat == 'null' ? '0' : stat,
               style: bodyText2,
               textAlign: TextAlign.center,
             ),
@@ -651,53 +766,41 @@ class _PoolTabState extends State<PoolTab> {
     );
   }
 
-  Widget noWorkerData(TextStyle bodyText2) {
-    return SizedBox(
-      height: 250.0,
-      child: Column(
+  Widget shimmerBody() {
+    return Container(
+      padding: const EdgeInsets.all(kDefaultMargin / 2),
+      child: Row(
         children: [
-          const Spacer(),
-          const SvgImage(
-            iconLocation: 'assets/icons/no_worker_data.svg',
-            name: 'no worker data',
-            color: kPrimaryColor,
-            size: 100,
+          Expanded(
+            child: Container(
+              width: double.infinity,
+              height: 20,
+              color: kPrimaryColor,
+            ),
           ),
-          const SizedBox(
-            height: kDefaultMargin / 2,
+          Expanded(
+            child: Container(
+              width: double.infinity,
+              height: 20,
+              color: kPrimaryColor,
+            ),
           ),
-          Text(
-            AppLocalizations.of(context)!.noWorkerData,
-            style: bodyText2,
+          Expanded(
+            child: Container(
+              width: double.infinity,
+              height: 20,
+              color: kPrimaryColor,
+            ),
           ),
-          const Spacer(),
+          Expanded(
+            child: Container(
+              width: double.infinity,
+              height: 20,
+              color: kPrimaryColor,
+            ),
+          ),
         ],
       ),
     );
-  }
-
-  getUsername() async {
-    String? name = AppPreferences.userName;
-
-    String? poolUrl;
-    if (coin == 'LTC') {
-      setState(() => poolUrl = ltcUrl);
-    }
-    if (coin == 'BTC') {
-      setState(() => poolUrl = btcUrl);
-    }
-    if (coin == 'BCH') {
-      setState(() => poolUrl = bchUrl);
-    }
-    if (coin == 'DOGE') {
-      setState(() => poolUrl = dogeUrl);
-    }
-
-    List result = await fetchWorkerData(name, poolUrl);
-
-    setState(() {
-      _username = name;
-      workerData = result;
-    });
   }
 }

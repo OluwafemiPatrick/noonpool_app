@@ -12,6 +12,7 @@ import 'package:noonpool/model/user_secret.dart';
 import 'package:noonpool/model/wallet_data/datum.dart';
 import 'package:noonpool/model/wallet_data/wallet_data.dart';
 import 'package:noonpool/model/wallet_transactions/wallet_transactions.dart';
+import 'package:noonpool/model/worker_data/worker_data.dart';
 
 const String baseUrl = 'http://5.189.137.144:1028/api/v2/';
 // const String baseUrl = 'http://5.189.137.144:3505/api/v2/';
@@ -45,61 +46,28 @@ Future<List<CoinModel>> getAllCoinDetails() async {
   }
 }
 
-Future<dynamic> fetchWorkerData(String workerName, poolUrl) async {
-  final url = '$poolUrl/miners?method=$workerName';
+Future<WorkerData> fetchWorkerData(String pool) async {
+  String name = AppPreferences.userName;
 
-  final response = await http.get(Uri.parse(url));
-  debugPrint(response.request?.url.toString());
-  if (response.statusCode == 200) {
-    var workerData = jsonDecode(response.body);
-    List workers = workerData['body']['primary']['workers']['shared'];
-    List dataToReturn = [];
+  try {
+    final response = await http.get(
+      Uri.parse(baseUrl +
+          "pool/getPoolPageData?worker_name=$name&pool=${pool.toLowerCase()}"),
+    );
 
-    String paidEarning =
-        workerData['body']['primary']['payments']['paid'].toString();
-    String unpaidEarning =
-        workerData['body']['primary']['payments']['balances'].toString();
-
-    for (var name in workers) {
-      String subUrl = '$poolUrl/miners?method=$name';
-      var res = await http.get(Uri.parse(subUrl));
-
-      Map<String, dynamic> list = json.decode(res.body);
-      var subList = list['body']['primary'];
-
-      String hashrate = subList['hashrate']['shared'].toString();
-      String sharesValid = subList['shares']['shared']['valid'].toString();
-      String sharesInvalid = subList['shares']['shared']['invalid'].toString();
-      String sharesStale = subList['shares']['shared']['stale'].toString();
-      String payBalance = subList['payments']['balances'].toString();
-      String payGenerate = subList['payments']['generate'].toString();
-      String payImmature = subList['payments']['immature'].toString();
-      String payPaid = subList['payments']['paid'].toString();
-      String work = subList['work']['shared'].toString();
-
-      Map<String, String> workerD = {
-        'workerId': name,
-        'hashrate': hashrate,
-        'sharesValid': sharesValid,
-        'sharesInvalid': sharesInvalid,
-        'sharesStale': sharesStale,
-        'payBalance': payBalance,
-        'payGenerate': payGenerate,
-        'payImmature': payImmature,
-        'payPaid': payPaid,
-        'work': work,
-        'paidEarning': paidEarning,
-        'unpaidEarning': unpaidEarning
-      };
-      dataToReturn.add(workerD);
+    debugPrint(response.request?.url.toString());
+    final data = jsonDecode(response.body);
+    if (response.statusCode <= 299) {
+      return WorkerData.fromMap(data);
+    } else {
+      return Future.error(
+          data['message'] ?? 'An error occcurred while fetching worker data');
     }
-    return dataToReturn;
-  } else {
-    return null;
+  } catch (exception) {
+    return Future.error(exception.toString());
   }
 }
 
-/////////
 Future<void> sendUserOTP({required String email}) async {
   try {
     final response = await http.post(
@@ -402,16 +370,6 @@ Future<WalletTransactions> getSummaryTransactions({
     final decode = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
-      /*   final data =
-          '''{"trxs":[{"hash":"0f56b189a12f4bba5f43be0427dc3c3e08dd7f5c49837b061d15979db4037d91","isSend":false, "network":"bitcoin-cash"},
-	{"hash":"f6b9bdbfa064a85f01fa812b962063f919bd7be6950cdb7a5aeace5cf72aae41","isSend":false, "network":"bitcoin-cash"},
-	{"hash":"b0054876934e4800ce0f64970dfa78daff4b5312f726823200617da8e3dfb72a","isSend":true, "network":"bitcoin-cash"},
-	{"hash":"232faf9be7871fcb451db4971ccce884d997f3efe9d15b143827d515e1e2255b","isSend":true, "network":"bitcoin-cash"},
-	{"hash":"dce7a49750b9b981dcdba0a7b2d261c2695fdf85cf1350e5c351d7e4b89ee643","isSend":false, "network":"bitcoin-cash"}]}''';
-      return WalletTransactions.fromMap(
-        jsonDecode(data),
-        coin.toLowerCase() != 'bch',
-      ); */
       return WalletTransactions.fromMap(decode);
     } else {
       return Future.error(decode['message'] ?? '');
