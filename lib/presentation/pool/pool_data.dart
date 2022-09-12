@@ -285,7 +285,7 @@ class _PoolTabState extends State<PoolTab> {
               port1 = '3050';
               port2 = '3060';
               miningAdd = 'litecoin.noonpool.com:3050';
-              stratumUrl = 'stratum+tcp://litecoin.noonpool.com:3060';
+              stratumUrl = 'stratum+tcp://litecoin.noonpool.com:3050';
             });
             getUserData();
           }
@@ -485,19 +485,6 @@ class _PoolTabState extends State<PoolTab> {
                 ),
                 Column(
                   children: [
-                    Text(AppLocalizations.of(context)!.paidEarnings,
-                        style: bodyText2),
-                    const SizedBox(
-                      height: kDefaultMargin / 4,
-                    ),
-                    Text(
-                      workerData.data?.earningsPaid?.toString() ?? '0',
-                      style: style1,
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
                     Text(
                       AppLocalizations.of(context)!.activeMiners,
                       style: bodyText2,
@@ -507,6 +494,19 @@ class _PoolTabState extends State<PoolTab> {
                     ),
                     Text(
                       workerData.data?.minersActive?.toString() ?? '0',
+                      style: style1,
+                    ),
+                  ],
+                ),
+                Column(
+                  children: [
+                    Text(AppLocalizations.of(context)!.paidEarnings,
+                        style: bodyText2),
+                    const SizedBox(
+                      height: kDefaultMargin / 4,
+                    ),
+                    Text(
+                      workerData.data?.earningsPaid?.toString() ?? '0',
                       style: style1,
                     ),
                   ],
