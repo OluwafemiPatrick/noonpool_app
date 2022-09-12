@@ -56,8 +56,9 @@ Future<WorkerData> fetchWorkerData(String pool) async {
     );
 
     debugPrint(response.request?.url.toString());
+    debugPrint(response.body.toString());
     final data = jsonDecode(response.body);
-    debugPrint(data);
+    debugPrint(data.toString());
     if (response.statusCode <= 299) {
       return WorkerData.fromMap(data);
     } else {

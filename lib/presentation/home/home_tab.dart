@@ -210,7 +210,6 @@ class _HomeTabState extends State<HomeTab> {
       _refreshController.refreshCompleted();
     });
   }
-
 }
 
 class _HomeHeader extends StatefulWidget {

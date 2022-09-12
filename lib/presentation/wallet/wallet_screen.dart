@@ -69,6 +69,7 @@ class _WalletTabState extends State<WalletTab> {
     final textTheme = Theme.of(context).textTheme;
     final bodyText1 = textTheme.bodyText1!;
     final bodyText2 = textTheme.bodyText2!;
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -88,9 +89,9 @@ class _WalletTabState extends State<WalletTab> {
           child: Column(
             children: [
               Container(
-                height: MediaQuery.of(context).size.height / 6,
                 width: double.infinity,
-                padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
+                padding: const EdgeInsets.only(
+                    left: 15, right: 15, top: 15, bottom: 15),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -102,7 +103,7 @@ class _WalletTabState extends State<WalletTab> {
                     Row(
                       children: [
                         Text(
-                          "0.0",
+                          getBalance().toString(),
                           style: bodyText1.copyWith(
                             fontSize: 16.0,
                             fontWeight: FontWeight.bold,
@@ -110,7 +111,7 @@ class _WalletTabState extends State<WalletTab> {
                         )
                       ],
                     ),
-                    const Spacer(flex: 1),
+                    const SizedBox(height: 5),
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -158,7 +159,6 @@ class _WalletTabState extends State<WalletTab> {
                             ),
                           ),
                         ]),
-                    const Spacer(flex: 4),
                   ],
                 ),
               ),
@@ -186,6 +186,16 @@ class _WalletTabState extends State<WalletTab> {
         ),
       ),
     );
+  }
+
+  double getBalance() {
+    final walletDatum = walletData.data ?? [];
+    double amount = 0;
+
+    for (final e in walletDatum) {
+      amount += (e.balance ?? 0);
+    }
+    return amount;
   }
 
   ListView buildBody() {

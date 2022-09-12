@@ -5,17 +5,17 @@ import 'package:collection/collection.dart';
 import 'sub_worker.dart';
 
 class Data {
-  double? cumEarnings;
-  double? earningsPaid;
+  int? cumEarnings;
+  int? earningsPaid;
   double? estEarnings;
-  double? hash10min;
-  double? hash1day;
-  double? hash1hr;
-  double? minersActive;
-  double? minersAll;
-  double? sharesInvalid;
-  double? sharesStale;
-  double? sharesValid;
+  int? hash10min;
+  int? hash1day;
+  int? hash1hr;
+  int? minersActive;
+  int? minersAll;
+  int? sharesInvalid;
+  int? sharesStale;
+  int? sharesValid;
   List<SubWorker>? subWorkers;
 
   Data({
@@ -39,17 +39,17 @@ class Data {
   }
 
   factory Data.fromMap(Map<String, dynamic> data) => Data(
-        cumEarnings: (data['cum_earnings'] as num?)?.toDouble(),
-        earningsPaid: (data['earnings_paid'] as num?)?.toDouble(),
+        cumEarnings: (data['cum_earnings'] as int?),
+        earningsPaid: (data['earnings_paid'] as int?),
         estEarnings: (data['est_earnings'] as num?)?.toDouble(),
-        hash10min: (data['hash_10min'] as num?)?.toDouble(),
-        hash1day: (data['hash_1day'] as num?)?.toDouble(),
-        hash1hr: (data['hash_1hr'] as num?)?.toDouble(),
-        minersActive: (data['miners_active'] as num?)?.toDouble(),
-        minersAll: (data['miners_all'] as num?)?.toDouble(),
-        sharesInvalid: (data['shares_invalid'] as num?)?.toDouble(),
-        sharesStale: (data['shares_stale'] as num?)?.toDouble(),
-        sharesValid: (data['shares_valid'] as num?)?.toDouble(),
+        hash10min: (data['hash_10min'] as int?),
+        hash1day: (data['hash_1day'] as int?),
+        hash1hr: (data['hash_1hr'] as int?),
+        minersActive: (data['miners_active'] as int?),
+        minersAll: (data['miners_all'] as int?),
+        sharesInvalid: (data['shares_invalid'] as int?),
+        sharesStale: (data['shares_stale'] as int?),
+        sharesValid: (data['shares_valid'] as int?),
         subWorkers: (data['sub_workers'] as List<dynamic>?)
             ?.map((e) => SubWorker.fromMap(e as Map<String, dynamic>))
             .toList(),
@@ -83,17 +83,17 @@ class Data {
   String toJson() => json.encode(toMap());
 
   Data copyWith({
-    double? cumEarnings,
-    double? earningsPaid,
+    int? cumEarnings,
+    int? earningsPaid,
     double? estEarnings,
-    double? hash10min,
-    double? hash1day,
-    double? hash1hr,
-    double? minersActive,
-    double? minersAll,
-    double? sharesInvalid,
-    double? sharesStale,
-    double? sharesValid,
+    int? hash10min,
+    int? hash1day,
+    int? hash1hr,
+    int? minersActive,
+    int? minersAll,
+    int? sharesInvalid,
+    int? sharesStale,
+    int? sharesValid,
     List<SubWorker>? subWorkers,
   }) {
     return Data(

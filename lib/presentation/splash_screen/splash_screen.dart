@@ -6,6 +6,7 @@ import 'package:noonpool/helpers/constants.dart';
 import 'package:noonpool/helpers/locale_cubit.dart';
 import 'package:noonpool/helpers/page_route.dart';
 import 'package:noonpool/onboarding/onboarding.dart';
+import 'package:noonpool/presentation/settings/update_2fa.dart';
 import 'package:noonpool/presentation/settings/verify_otp.dart';
 
 import '../../helpers/shared_preference_util.dart';
@@ -81,25 +82,9 @@ class _SplashScreenState extends State<SplashScreen>
     final navigatorState = Navigator.of(context);
     if (AppPreferences.onBoardingStatus) {
       if (AppPreferences.loginStatus) {
-        if (AppPreferences.get2faSecurityEnabled) {
-          navigatorState.push(
-            CustomPageRoute(
-              screen: VerifyOtp(
-                id: AppPreferences.userId,
-                backEnaled: false,
-                onNext: (_) {
-                  Navigator.of(context).pushReplacement(
-                      CustomPageRoute(screen: const MainScreen()));
-                },
-              ),
-            ),
-          );
-        } else {
-          navigatorState
-              .pushReplacement(CustomPageRoute(screen: const MainScreen()));
-        }
-
         // user has been previously logged in, redirect to the main page
+        navigatorState
+            .pushReplacement(CustomPageRoute(screen: const Update2FA()));
       } else {
         AppPreferences.setLoginStatus(status: false);
 

@@ -4,7 +4,7 @@ import 'package:collection/collection.dart';
 
 class SubWorker {
   double? estEarning;
-  double? hashrate;
+  int? hashrate;
   String? stat;
   String? workerId;
 
@@ -17,7 +17,7 @@ class SubWorker {
 
   factory SubWorker.fromMap(Map<String, dynamic> data) => SubWorker(
         estEarning: (data['est_earning'] as num?)?.toDouble(),
-        hashrate: (data['hashrate'] as num?)?.toDouble(),
+        hashrate: (data['hashrate'] as int?),
         stat: data['stat'] as String?,
         workerId: data['worker_id'] as String?,
       );
@@ -43,7 +43,7 @@ class SubWorker {
 
   SubWorker copyWith({
     double? estEarning,
-    double? hashrate,
+    int? hashrate,
     String? stat,
     String? workerId,
   }) {

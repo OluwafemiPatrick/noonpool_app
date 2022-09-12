@@ -539,7 +539,7 @@ class _PoolTabState extends State<PoolTab> {
                 ),
                 Expanded(
                   child: Text(
-                    AppLocalizations.of(context)!.validShares,
+                    AppLocalizations.of(context)!.estEarning,
                     style: bodyText2,
                     textAlign: TextAlign.center,
                   ),
@@ -589,10 +589,11 @@ class _PoolTabState extends State<PoolTab> {
       shrinkWrap: true,
       itemBuilder: (_, index) {
         final item = workerData.data?.subWorkers?[index];
+        debugPrint(item.toString());
         return _PoolDataWidget(
           workerId: item?.workerId ?? '',
-          hashrate: item?.hashrate?.toString() ?? '',
-          sharesValid: item?.estEarning?.toString() ?? '',
+          hashrate: item?.hashrate ?? 0,
+          estEarnings: item?.estEarning ?? 0,
           stat: item?.stat ?? '',
         );
       },
@@ -608,8 +609,8 @@ class _PoolTabState extends State<PoolTab> {
       itemBuilder: (_, index) {
         return const _PoolDataWidget(
           workerId: '',
-          hashrate: '',
-          sharesValid: '',
+          hashrate: 0,
+          estEarnings: 0,
           stat: '',
           shimmerEnabled: true,
         );
@@ -662,13 +663,12 @@ class _PoolTabState extends State<PoolTab> {
     _isLoading = false;
     setState(() {});
   }
-
 }
 
 class _PoolDataWidget extends StatelessWidget {
-  final String hashrate;
+  final int hashrate;
   final String workerId;
-  final String sharesValid;
+  final double estEarnings;
   final String stat;
   final bool shimmerEnabled;
   const _PoolDataWidget({
@@ -676,7 +676,7 @@ class _PoolDataWidget extends StatelessWidget {
     this.shimmerEnabled = false,
     required this.workerId,
     required this.hashrate,
-    required this.sharesValid,
+    required this.estEarnings,
     required this.stat,
   }) : super(key: key);
 
@@ -694,7 +694,7 @@ class _PoolDataWidget extends StatelessWidget {
   Widget buildBody(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final bodyText2 = textTheme.bodyText2!;
-    String _workerId, _hashrate;
+    String _workerId;
 
     // format worker_id into proper name
     final split = workerId.split('.');
@@ -710,8 +710,6 @@ class _PoolDataWidget extends StatelessWidget {
     }
 
     // remove decimal figures from hashrate
-    final rate = double.parse(hashrate);
-    _hashrate = rate.toStringAsFixed(0);
 
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -726,22 +724,28 @@ class _PoolDataWidget extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              _hashrate,
+              getHashrate(),
               style: bodyText2,
               textAlign: TextAlign.center,
             ),
           ),
           Expanded(
             child: Text(
-              sharesValid == 'null' ? '0' : sharesValid,
+              estEarnings.toStringAsFixed(6).toString(),
               style: bodyText2,
               textAlign: TextAlign.center,
             ),
           ),
           Expanded(
             child: Text(
-              stat == 'null' ? '0' : stat,
-              style: bodyText2,
+              stat,
+              style: bodyText2.copyWith(
+                color: stat.toLowerCase().trim() == 'active'
+                    ? Colors.green
+                    : stat.toLowerCase().trim() == 'inactive'
+                        ? Colors.red
+                        : bodyText2.color,
+              ),
               textAlign: TextAlign.center,
             ),
           ),
@@ -786,5 +790,83 @@ class _PoolDataWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String getHashrate() {
+    debugPrint(hashrate.toString());
+    String hashrateAsString = '';
+    var diffLength = hashrate.toStringAsFixed(0).length;
+    int mod = diffLength % 3;
+
+    String digit_1 = hashrate.toString()[0];
+    String digit_2 =
+        hashrate.toString().length < 2 ? '0' : hashrate.toString()[1];
+    String digit_3 =
+        hashrate.toString().length < 3 ? '0' : hashrate.toString()[2];
+
+    if (diffLength <= 3) {
+      if (mod == 0) {
+        hashrateAsString = "$digit_1$digit_2$digit_3 H/s";
+      } else if (mod == 1) {
+        hashrateAsString = "$digit_1.$digit_2$digit_3 H/s";
+      } else {
+        hashrateAsString = "$digit_1$digit_2.$digit_3 H/s";
+      }
+    }
+    if (diffLength > 3 && diffLength <= 6) {
+      if (mod == 0) {
+        hashrateAsString = "$digit_1$digit_2$digit_3 KH/s";
+      } else if (mod == 1) {
+        hashrateAsString = "$digit_1.$digit_2$digit_3 KH/s";
+      } else {
+        hashrateAsString = "$digit_1$digit_2.$digit_3 KH/s";
+      }
+    }
+    if (diffLength > 6 && diffLength <= 9) {
+      if (mod == 0) {
+        hashrateAsString = "$digit_1$digit_2$digit_3 MH/s";
+      } else if (mod == 1) {
+        hashrateAsString = "$digit_1.$digit_2$digit_3 MH/s";
+      } else {
+        hashrateAsString = "$digit_1$digit_2.$digit_3 MH/s";
+      }
+    }
+    if (diffLength > 9 && diffLength <= 12) {
+      if (mod == 0) {
+        hashrateAsString = "$digit_1$digit_2$digit_3 GH/s";
+      } else if (mod == 1) {
+        hashrateAsString = "$digit_1.$digit_2$digit_3 GH/s";
+      } else {
+        hashrateAsString = "$digit_1$digit_2.$digit_3 GH/s";
+      }
+    }
+    if (diffLength > 12 && diffLength <= 15) {
+      if (mod == 0) {
+        hashrateAsString = "$digit_1$digit_2$digit_3 TH/s";
+      } else if (mod == 1) {
+        hashrateAsString = "$digit_1.$digit_2$digit_3 TH/s";
+      } else {
+        hashrateAsString = "$digit_1$digit_2.$digit_3 TH/s";
+      }
+    }
+    if (diffLength > 15 && diffLength <= 18) {
+      if (mod == 0) {
+        hashrateAsString = "$digit_1$digit_2$digit_3 PH/s";
+      } else if (mod == 1) {
+        hashrateAsString = "$digit_1.$digit_2$digit_3 PH/s";
+      } else {
+        hashrateAsString = "$digit_1$digit_2.$digit_3 PH/s";
+      }
+    }
+    if (diffLength > 18 && diffLength <= 21) {
+      if (mod == 0) {
+        hashrateAsString = "$digit_1$digit_2$digit_3 EH/s";
+      } else if (mod == 1) {
+        hashrateAsString = "$digit_1.$digit_2$digit_3 EH/s";
+      } else {
+        hashrateAsString = "$digit_1$digit_2.$digit_3 EH/s";
+      }
+    }
+    return hashrateAsString;
   }
 }
