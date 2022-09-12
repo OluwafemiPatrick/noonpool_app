@@ -95,23 +95,19 @@ class _WalletTabState extends State<WalletTab> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${AppLocalizations.of(context)!.estAmount} (BTC)',
+                      '${AppLocalizations.of(context)!.estAmount} (\$)',
                       style: bodyText2.copyWith(fontSize: 12),
                     ),
                     const SizedBox(height: 5),
                     Row(
                       children: [
                         Text(
-                          "0 ",
+                          "0.0",
                           style: bodyText1.copyWith(
                             fontSize: 16.0,
                             fontWeight: FontWeight.bold,
                           ),
-                        ),
-                        Text(
-                          '(\$0.0)',
-                          style: bodyText2.copyWith(fontSize: 16),
-                        ),
+                        )
                       ],
                     ),
                     const Spacer(flex: 1),

@@ -206,54 +206,54 @@ class HomeCoinItem extends StatelessWidget {
       if (mod == 0) {
         difficulty = "$digit_1$digit_2$digit_3 H";
       } else if (mod == 1) {
-        difficulty = "$digit_1$digit_2.$digit_3 H";
-      } else {
         difficulty = "$digit_1.$digit_2$digit_3 H";
+      } else {
+        difficulty = "$digit_1$digit_2.$digit_3 H";
       }
     }
     if (diffLength > 3 && diffLength <= 6) {
       if (mod == 0) {
         difficulty = "$digit_1$digit_2$digit_3 KH";
       } else if (mod == 1) {
-        difficulty = "$digit_1$digit_2.$digit_3 KH";
-      } else {
         difficulty = "$digit_1.$digit_2$digit_3 KH";
+      } else {
+        difficulty = "$digit_1$digit_2.$digit_3 KH";
       }
     }
     if (diffLength > 6 && diffLength <= 9) {
       if (mod == 0) {
         difficulty = "$digit_1$digit_2$digit_3 MH";
       } else if (mod == 1) {
-        difficulty = "$digit_1$digit_2.$digit_3 MH";
-      } else {
         difficulty = "$digit_1.$digit_2$digit_3 MH";
+      } else {
+        difficulty = "$digit_1$digit_2.$digit_3 MH";
       }
     }
     if (diffLength > 9 && diffLength <= 12) {
       if (mod == 0) {
         difficulty = "$digit_1$digit_2$digit_3 GH";
       } else if (mod == 1) {
-        difficulty = "$digit_1$digit_2.$digit_3 GH";
-      } else {
         difficulty = "$digit_1.$digit_2$digit_3 GH";
+      } else {
+        difficulty = "$digit_1$digit_2.$digit_3 GH";
       }
     }
     if (diffLength > 12 && diffLength <= 15) {
       if (mod == 0) {
         difficulty = "$digit_1$digit_2$digit_3 TH";
       } else if (mod == 1) {
-        difficulty = "$digit_1$digit_2.$digit_3 TH";
-      } else {
         difficulty = "$digit_1.$digit_2$digit_3 TH";
+      } else {
+        difficulty = "$digit_1$digit_2.$digit_3 TH";
       }
     }
     if (diffLength > 15 && diffLength <= 18) {
       if (mod == 0) {
         difficulty = "$digit_1$digit_2$digit_3 PH";
       } else if (mod == 1) {
-        difficulty = "$digit_1$digit_2.$digit_3 PH";
-      } else {
         difficulty = "$digit_1.$digit_2$digit_3 PH";
+      } else {
+        difficulty = "$digit_1$digit_2.$digit_3 PH";
       }
     }
 
@@ -273,65 +273,66 @@ class HomeCoinItem extends StatelessWidget {
       if (mod == 0) {
         hashrate = "$digit_1$digit_2$digit_3 H/s";
       } else if (mod == 1) {
-        hashrate = "$digit_1$digit_2.$digit_3 H/s";
-      } else {
         hashrate = "$digit_1.$digit_2$digit_3 H/s";
+      } else {
+        hashrate = "$digit_1$digit_2.$digit_3 H/s";
       }
     }
     if (diffLength > 3 && diffLength <= 6) {
       if (mod == 0) {
         hashrate = "$digit_1$digit_2$digit_3 KH/s";
       } else if (mod == 1) {
-        hashrate = "$digit_1$digit_2.$digit_3 KH/s";
-      } else {
         hashrate = "$digit_1.$digit_2$digit_3 KH/s";
+      } else {
+        hashrate = "$digit_1$digit_2.$digit_3 KH/s";
       }
     }
     if (diffLength > 6 && diffLength <= 9) {
       if (mod == 0) {
         hashrate = "$digit_1$digit_2$digit_3 MH/s";
       } else if (mod == 1) {
-        hashrate = "$digit_1$digit_2.$digit_3 MH/s";
-      } else {
         hashrate = "$digit_1.$digit_2$digit_3 MH/s";
+      } else {
+        hashrate = "$digit_1$digit_2.$digit_3 MH/s";
       }
     }
     if (diffLength > 9 && diffLength <= 12) {
       if (mod == 0) {
         hashrate = "$digit_1$digit_2$digit_3 GH/s";
       } else if (mod == 1) {
-        hashrate = "$digit_1$digit_2.$digit_3 GH/s";
-      } else {
         hashrate = "$digit_1.$digit_2$digit_3 GH/s";
+      } else {
+        hashrate = "$digit_1$digit_2.$digit_3 GH/s";
       }
     }
     if (diffLength > 12 && diffLength <= 15) {
       if (mod == 0) {
         hashrate = "$digit_1$digit_2$digit_3 TH/s";
       } else if (mod == 1) {
-        hashrate = "$digit_1$digit_2.$digit_3 TH/s";
-      } else {
         hashrate = "$digit_1.$digit_2$digit_3 TH/s";
+      } else {
+        hashrate = "$digit_1$digit_2.$digit_3 TH/s";
       }
     }
     if (diffLength > 15 && diffLength <= 18) {
       if (mod == 0) {
         hashrate = "$digit_1$digit_2$digit_3 PH/s";
       } else if (mod == 1) {
-        hashrate = "$digit_1$digit_2.$digit_3 PH/s";
-      } else {
         hashrate = "$digit_1.$digit_2$digit_3 PH/s";
+      } else {
+        hashrate = "$digit_1$digit_2.$digit_3 PH/s";
       }
     }
     if (diffLength > 18 && diffLength <= 21) {
       if (mod == 0) {
         hashrate = "$digit_1$digit_2$digit_3 EH/s";
       } else if (mod == 1) {
-        hashrate = "$digit_1$digit_2.$digit_3 EH/s";
-      } else {
         hashrate = "$digit_1.$digit_2$digit_3 EH/s";
+      } else {
+        hashrate = "$digit_1$digit_2.$digit_3 EH/s";
       }
     }
     return hashrate;
   }
+
 }
