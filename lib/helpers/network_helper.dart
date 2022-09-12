@@ -57,11 +57,12 @@ Future<WorkerData> fetchWorkerData(String pool) async {
 
     debugPrint(response.request?.url.toString());
     final data = jsonDecode(response.body);
+    debugPrint(data);
     if (response.statusCode <= 299) {
       return WorkerData.fromMap(data);
     } else {
       return Future.error(
-          data['message'] ?? 'An error occcurred while fetching worker data');
+          data['message'] ?? 'An error occurred while fetching worker data');
     }
   } catch (exception) {
     return Future.error(exception.toString());

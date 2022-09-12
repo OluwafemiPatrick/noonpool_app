@@ -36,19 +36,11 @@ class _PoolTabState extends State<PoolTab> {
       ];
 
   WorkerData workerData = WorkerData();
-  String coin = 'LTC';
-  String port1 = '3055';
-  String port2 = '3056';
-  String miningAdd = 'litecoin.noonpool.com:3055';
-  String stratumUrl = 'stratum+tcp://litecoin.noonpool.com:3056';
-  String ltcUrl =
-      'http://litecoin.noonpool.com:3055/api/v1/Pool-Litecoin-Dogecoin/';
-
-  String btcUrl = '';
-  String bchUrl =
-      'http://bitcoincash.noonpool.com:3035/api/v1/Pool-BitcoinCash/';
-  String dogeUrl =
-      'http://litecoin.noonpool.com:3055/api/v1/Pool-Litecoin-Dogecoin/';
+  String coin = 'LTC-DOGE';
+  String port1 = '3050';
+  String port2 = '3060';
+  String miningAdd = 'litecoin.noonpool.com:3050';
+  String stratumUrl = 'stratum+tcp://litecoin.noonpool.com:3050';
 
   void _onRefresh() async {
     await getUserData();
@@ -263,7 +255,7 @@ class _PoolTabState extends State<PoolTab> {
   }
 
   Widget dropDown(TextStyle bodyText2) {
-    List<String> _coinList = ['LTC', 'BTC', 'DOGE', 'BCH'];
+    List<String> _coinList = ['LTC-DOGE', 'BCH', 'BTC'];
     String? _selected;
     return SizedBox(
       height: 30,
@@ -286,14 +278,14 @@ class _PoolTabState extends State<PoolTab> {
         }).toList(),
         onChanged: (newValue) {
           _selected = newValue.toString();
-          if (_selected == 'LTC') {
+          if (_selected == 'LTC-DOGE') {
             setState(() {
               workerData = WorkerData();
               coin = _selected!;
-              port1 = '3055';
-              port2 = '3056';
-              miningAdd = 'litecoin.noonpool.com:3055';
-              stratumUrl = 'stratum+tcp://litecoin.noonpool.com:3055';
+              port1 = '3050';
+              port2 = '3060';
+              miningAdd = 'litecoin.noonpool.com:3050';
+              stratumUrl = 'stratum+tcp://litecoin.noonpool.com:3060';
             });
             getUserData();
           }
@@ -301,19 +293,10 @@ class _PoolTabState extends State<PoolTab> {
             setState(() {
               workerData = WorkerData();
               coin = _selected!;
-              port1 = '0';
-              port2 = '0';
-              miningAdd = AppLocalizations.of(context)!.coinNotAvailable;
-              stratumUrl = AppLocalizations.of(context)!.coinNotAvailable;
-            });
-            getUserData();
-          }
-          if (_selected == 'DOGE') {
-            setState(() {
-              workerData = WorkerData();
-              coin = _selected!;
               port1 = '3055';
-              port2 = '3056';
+              port2 = '0';
+              //miningAdd = AppLocalizations.of(context)!.coinNotAvailable;
+              //stratumUrl = AppLocalizations.of(context)!.coinNotAvailable;
               miningAdd = 'litecoin.noonpool.com:3055';
               stratumUrl = 'stratum+tcp://litecoin.noonpool.com:3055';
             });
@@ -323,10 +306,10 @@ class _PoolTabState extends State<PoolTab> {
             setState(() {
               workerData = WorkerData();
               coin = _selected!;
-              port1 = '0';
-              port2 = '0';
-              miningAdd = AppLocalizations.of(context)!.coinNotAvailable;
-              stratumUrl = AppLocalizations.of(context)!.coinNotAvailable;
+              port1 = '3030';
+              port2 = '3040';
+              miningAdd = 'bitcoincash.noonpool.com:3030';
+              stratumUrl = 'stratum+tcp://bitcoincash.noonpool.com:3030';
             });
             getUserData();
           }
@@ -679,6 +662,7 @@ class _PoolTabState extends State<PoolTab> {
     _isLoading = false;
     setState(() {});
   }
+
 }
 
 class _PoolDataWidget extends StatelessWidget {

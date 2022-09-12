@@ -52,4 +52,5 @@ class WorkerData {
 
   @override
   int get hashCode => data.hashCode;
+
 }
