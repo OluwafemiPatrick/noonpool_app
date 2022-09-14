@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:noonpool/model/coin_model/coin_model.dart';
@@ -183,156 +185,155 @@ class HomeCoinItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(getDifficulty(coinModel.difficulty), style: bodyText1),
+        Text(getDifficulty(coinModel.difficulty ?? 0), style: bodyText1),
         const SizedBox(height: kDefaultMargin / 4),
         Text(
-          getHashrate(coinModel.netHashrate),
+          getHashrate(coinModel.netHashrate ?? 0),
           style: lightText,
         )
       ],
     );
   }
 
-  String getDifficulty(var cDifficulty) {
-    String difficulty = '';
-    var diffLength = cDifficulty.toStringAsFixed(0).length;
-    int mod = diffLength! % 3;
-
-    String digit_1 = cDifficulty.toString()[0];
-    String digit_2 = cDifficulty.toString()[1];
-    String digit_3 = cDifficulty.toString()[2];
+  String getDifficulty(double cDifficulty) {
+    String difficultyAsString = '';
+    final diffLength = cDifficulty.toStringAsFixed(0).length;
 
     if (diffLength <= 3) {
-      if (mod == 0) {
-        difficulty = "$digit_1$digit_2$digit_3 H";
-      } else if (mod == 1) {
-        difficulty = "$digit_1.$digit_2$digit_3 H";
-      } else {
-        difficulty = "$digit_1$digit_2.$digit_3 H";
-      }
+      final division = (cDifficulty / pow(10, 0));
+
+      difficultyAsString = division.toString().substring(
+                0,
+                division.toString().length > 4 ? 4 : division.toString().length,
+              ) +
+          ' H';
     }
     if (diffLength > 3 && diffLength <= 6) {
-      if (mod == 0) {
-        difficulty = "$digit_1$digit_2$digit_3 KH";
-      } else if (mod == 1) {
-        difficulty = "$digit_1.$digit_2$digit_3 KH";
-      } else {
-        difficulty = "$digit_1$digit_2.$digit_3 KH";
-      }
+      final division = (cDifficulty / pow(10, 3));
+
+      difficultyAsString = division.toString().substring(
+                0,
+                division.toString().length > 4 ? 4 : division.toString().length,
+              ) +
+          ' KH';
     }
     if (diffLength > 6 && diffLength <= 9) {
-      if (mod == 0) {
-        difficulty = "$digit_1$digit_2$digit_3 MH";
-      } else if (mod == 1) {
-        difficulty = "$digit_1.$digit_2$digit_3 MH";
-      } else {
-        difficulty = "$digit_1$digit_2.$digit_3 MH";
-      }
+      final division = (cDifficulty / pow(10, 6));
+
+      difficultyAsString = division.toString().substring(
+                0,
+                division.toString().length > 4 ? 4 : division.toString().length,
+              ) +
+          ' MH';
     }
     if (diffLength > 9 && diffLength <= 12) {
-      if (mod == 0) {
-        difficulty = "$digit_1$digit_2$digit_3 GH";
-      } else if (mod == 1) {
-        difficulty = "$digit_1.$digit_2$digit_3 GH";
-      } else {
-        difficulty = "$digit_1$digit_2.$digit_3 GH";
-      }
+      final division = (cDifficulty / pow(10, 9));
+
+      difficultyAsString = division.toString().substring(
+                0,
+                division.toString().length > 4 ? 4 : division.toString().length,
+              ) +
+          ' GH';
     }
     if (diffLength > 12 && diffLength <= 15) {
-      if (mod == 0) {
-        difficulty = "$digit_1$digit_2$digit_3 TH";
-      } else if (mod == 1) {
-        difficulty = "$digit_1.$digit_2$digit_3 TH";
-      } else {
-        difficulty = "$digit_1$digit_2.$digit_3 TH";
-      }
+      final division = (cDifficulty / pow(10, 12));
+
+      difficultyAsString = division.toString().substring(
+                0,
+                division.toString().length > 4 ? 4 : division.toString().length,
+              ) +
+          ' TH';
     }
     if (diffLength > 15 && diffLength <= 18) {
-      if (mod == 0) {
-        difficulty = "$digit_1$digit_2$digit_3 PH";
-      } else if (mod == 1) {
-        difficulty = "$digit_1.$digit_2$digit_3 PH";
-      } else {
-        difficulty = "$digit_1$digit_2.$digit_3 PH";
-      }
-    }
+      final division = (cDifficulty / pow(10, 15));
 
-    return difficulty;
-  }
-
-  String getHashrate(var cHashrate) {
-    String hashrate = '';
-    var diffLength = cHashrate.toStringAsFixed(0).length;
-    int mod = diffLength! % 3;
-
-    String digit_1 = cHashrate.toString()[0];
-    String digit_2 = cHashrate.toString()[1];
-    String digit_3 = cHashrate.toString()[2];
-
-    if (diffLength <= 3) {
-      if (mod == 0) {
-        hashrate = "$digit_1$digit_2$digit_3 H/s";
-      } else if (mod == 1) {
-        hashrate = "$digit_1.$digit_2$digit_3 H/s";
-      } else {
-        hashrate = "$digit_1$digit_2.$digit_3 H/s";
-      }
-    }
-    if (diffLength > 3 && diffLength <= 6) {
-      if (mod == 0) {
-        hashrate = "$digit_1$digit_2$digit_3 KH/s";
-      } else if (mod == 1) {
-        hashrate = "$digit_1.$digit_2$digit_3 KH/s";
-      } else {
-        hashrate = "$digit_1$digit_2.$digit_3 KH/s";
-      }
-    }
-    if (diffLength > 6 && diffLength <= 9) {
-      if (mod == 0) {
-        hashrate = "$digit_1$digit_2$digit_3 MH/s";
-      } else if (mod == 1) {
-        hashrate = "$digit_1.$digit_2$digit_3 MH/s";
-      } else {
-        hashrate = "$digit_1$digit_2.$digit_3 MH/s";
-      }
-    }
-    if (diffLength > 9 && diffLength <= 12) {
-      if (mod == 0) {
-        hashrate = "$digit_1$digit_2$digit_3 GH/s";
-      } else if (mod == 1) {
-        hashrate = "$digit_1.$digit_2$digit_3 GH/s";
-      } else {
-        hashrate = "$digit_1$digit_2.$digit_3 GH/s";
-      }
-    }
-    if (diffLength > 12 && diffLength <= 15) {
-      if (mod == 0) {
-        hashrate = "$digit_1$digit_2$digit_3 TH/s";
-      } else if (mod == 1) {
-        hashrate = "$digit_1.$digit_2$digit_3 TH/s";
-      } else {
-        hashrate = "$digit_1$digit_2.$digit_3 TH/s";
-      }
-    }
-    if (diffLength > 15 && diffLength <= 18) {
-      if (mod == 0) {
-        hashrate = "$digit_1$digit_2$digit_3 PH/s";
-      } else if (mod == 1) {
-        hashrate = "$digit_1.$digit_2$digit_3 PH/s";
-      } else {
-        hashrate = "$digit_1$digit_2.$digit_3 PH/s";
-      }
+      difficultyAsString = division.toString().substring(
+                0,
+                division.toString().length > 4 ? 4 : division.toString().length,
+              ) +
+          ' PH';
     }
     if (diffLength > 18 && diffLength <= 21) {
-      if (mod == 0) {
-        hashrate = "$digit_1$digit_2$digit_3 EH/s";
-      } else if (mod == 1) {
-        hashrate = "$digit_1.$digit_2$digit_3 EH/s";
-      } else {
-        hashrate = "$digit_1$digit_2.$digit_3 EH/s";
-      }
+      debugPrint(diffLength.toString());
+      final division = (cDifficulty / pow(10, 18));
+
+      difficultyAsString = division.toString().substring(
+                0,
+                division.toString().length > 4 ? 4 : division.toString().length,
+              ) +
+          ' EH';
     }
-    return hashrate;
+    return difficultyAsString;
   }
 
+  String getHashrate(double hashrate) {
+    String hashrateAsString = '';
+    final diffLength = hashrate.toStringAsFixed(0).length;
+
+    if (diffLength <= 3) {
+      final division = (hashrate / pow(10, 0));
+
+      hashrateAsString = division.toString().substring(
+                0,
+                division.toString().length > 4 ? 4 : division.toString().length,
+              ) +
+          ' H/s';
+    }
+    if (diffLength > 3 && diffLength <= 6) {
+      final division = (hashrate / pow(10, 3));
+
+      hashrateAsString = division.toString().substring(
+                0,
+                division.toString().length > 4 ? 4 : division.toString().length,
+              ) +
+          ' KH/s';
+    }
+    if (diffLength > 6 && diffLength <= 9) {
+      final division = (hashrate / pow(10, 6));
+
+      hashrateAsString = division.toString().substring(
+                0,
+                division.toString().length > 4 ? 4 : division.toString().length,
+              ) +
+          ' MH/s';
+    }
+    if (diffLength > 9 && diffLength <= 12) {
+      final division = (hashrate / pow(10, 9));
+
+      hashrateAsString = division.toString().substring(
+                0,
+                division.toString().length > 4 ? 4 : division.toString().length,
+              ) +
+          ' GH/s';
+    }
+    if (diffLength > 12 && diffLength <= 15) {
+      final division = (hashrate / pow(10, 12));
+
+      hashrateAsString = division.toString().substring(
+                0,
+                division.toString().length > 4 ? 4 : division.toString().length,
+              ) +
+          ' TH/s';
+    }
+    if (diffLength > 15 && diffLength <= 18) {
+      final division = (hashrate / pow(10, 15));
+
+      hashrateAsString = division.toString().substring(
+                0,
+                division.toString().length > 4 ? 4 : division.toString().length,
+              ) +
+          ' PH/s';
+    }
+    if (diffLength > 18 && diffLength <= 21) {
+      debugPrint(diffLength.toString());
+      final division = (hashrate / pow(10, 18));
+
+      hashrateAsString = division.toString().substring(
+                0,
+                division.toString().length > 4 ? 4 : division.toString().length,
+              ) +
+          ' EH/s';
+    }
+    return hashrateAsString;
+  }
 }
