@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
  
+import 'package:flutter/material.dart';
 import 'package:noonpool/helpers/shared_preference_util.dart';
 import 'package:noonpool/model/coin_model/coin_model.dart';
 import 'package:noonpool/model/login_details/login_details.dart';

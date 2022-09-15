@@ -257,7 +257,7 @@ class _PoolTabState extends State<PoolTab> {
   }
 
   Widget dropDown(TextStyle bodyText2) {
-    List<String> _coinList = ['LTC-DOGE', 'BCH', 'BTC'];
+    List<String> _coinList = ['LTC-DOGE', 'BCH', 'BTC', 'LTC'];
     String? _selected;
     return SizedBox(
       height: 30,
@@ -295,10 +295,19 @@ class _PoolTabState extends State<PoolTab> {
             setState(() {
               workerData = WorkerData();
               coin = _selected!;
+              port1 = '0';
+              port2 = '0';
+              miningAdd = AppLocalizations.of(context)!.coinNotAvailable;
+              stratumUrl = AppLocalizations.of(context)!.coinNotAvailable;
+            });
+            getUserData();
+          }
+          if (_selected == 'LTC') {
+            setState(() {
+              workerData = WorkerData();
+              coin = _selected!;
               port1 = '3055';
               port2 = '0';
-              //miningAdd = AppLocalizations.of(context)!.coinNotAvailable;
-              //stratumUrl = AppLocalizations.of(context)!.coinNotAvailable;
               miningAdd = 'litecoin.noonpool.com:3055';
               stratumUrl = 'stratum+tcp://litecoin.noonpool.com:3055';
             });
