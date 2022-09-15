@@ -235,9 +235,7 @@ class _OtpScreenState extends State<OtpScreen> {
             CustomOutlinedButton(
               onPressed: () async {
                 try {
-                  if (await canLaunchUrlString(otpUrl)) {
-                    await launchUrlString(otpUrl);
-                  }
+                  await launchUrlString(otpUrl);
                 } catch (_) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

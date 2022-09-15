@@ -11,8 +11,8 @@ class Data {
   double? hash10min;
   double? hash1day;
   double? hash1hr;
-  double? minersActive;
-  double? minersAll;
+  int? minersActive;
+  int? minersAll;
   double? sharesInvalid;
   double? sharesStale;
   double? sharesValid;
@@ -45,8 +45,8 @@ class Data {
         hash10min: (data['hash_10min'] as num?)?.toDouble(),
         hash1day: (data['hash_1day'] as num?)?.toDouble(),
         hash1hr: (data['hash_1hr'] as num?)?.toDouble(),
-        minersActive: (data['miners_active'] as num?)?.toDouble(),
-        minersAll: (data['miners_all'] as num?)?.toDouble(),
+        minersActive: (data['miners_active'] as int?),
+        minersAll: (data['miners_all'] as int?),
         sharesInvalid: (data['shares_invalid'] as num?)?.toDouble(),
         sharesStale: (data['shares_stale'] as num?)?.toDouble(),
         sharesValid: (data['shares_valid'] as num?)?.toDouble(),
@@ -89,8 +89,8 @@ class Data {
     double? hash10min,
     double? hash1day,
     double? hash1hr,
-    double? minersActive,
-    double? minersAll,
+    int? minersActive,
+    int? minersAll,
     double? sharesInvalid,
     double? sharesStale,
     double? sharesValid,
