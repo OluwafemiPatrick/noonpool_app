@@ -5,6 +5,8 @@ import 'package:noonpool/helpers/page_route.dart';
 import 'package:noonpool/helpers/shared_preference_util.dart';
 import 'package:noonpool/presentation/about_us/about_us_screen.dart';
 import 'package:noonpool/presentation/announcement/announcement_screen.dart';
+import 'package:noonpool/presentation/auth/change_password/change_password.dart';
+import 'package:noonpool/presentation/auth/forgot_password/forgot_password.dart';
 import 'package:noonpool/presentation/calculator/calculator_screen.dart';
 import 'package:noonpool/presentation/language/language_changer.dart';
 import 'package:noonpool/presentation/settings/otp_screen.dart';
@@ -381,13 +383,8 @@ class _SettingsTabState extends State<SettingsTab> {
     try {
       // await forgotPassword(email: email);
       Navigator.of(context).pop();
-      MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.of(context)!
-                .anEmailWithALinkToChangeYourPasswordHasBeenSentToYourAccount,
-          ),
-        ),
+      Navigator.of(context).push(
+        CustomPageRoute(screen: const ChangePasswordScreen()),
       );
     } catch (exception) {
       MyApp.scaffoldMessengerKey.currentState?.showSnackBar(

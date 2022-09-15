@@ -72,7 +72,9 @@ class _LoginScreenState extends State<LoginScreen> {
         proceed() {
           AppPreferences.setUserName(
               username: loginDetails.userDetails?.username ?? '');
-          AppPreferences.setId(id: loginDetails.userDetails?.id ?? '');
+          AppPreferences.setIdAndEmail(
+              id: loginDetails.userDetails?.id ?? '',
+              email: loginDetails.userDetails?.email ?? '');
           AppPreferences.setLoginStatus(status: true);
           AppPreferences.setOnBoardingStatus(status: true);
           AppPreferences.set2faSecurityStatus(
