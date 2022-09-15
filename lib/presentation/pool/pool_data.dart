@@ -591,7 +591,7 @@ class _PoolTabState extends State<PoolTab> {
       shrinkWrap: true,
       itemBuilder: (_, index) {
         final item = workerData.data?.subWorkers?[index];
-        debugPrint(item.toString());
+
         return _PoolDataWidget(
           workerId: item?.workerId ?? '',
           hashrate: item?.hashrate ?? 0,
@@ -854,7 +854,6 @@ String getHashrate(double hashrate) {
         ' PH/s';
   }
   if (diffLength > 18 && diffLength <= 21) {
-    debugPrint(diffLength.toString());
     final division = (hashrate / pow(10, 18));
 
     hashrateAsString = division.toString().substring(

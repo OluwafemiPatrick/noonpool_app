@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:flutter/material.dart';
+ 
 import 'package:noonpool/helpers/shared_preference_util.dart';
 import 'package:noonpool/model/coin_model/coin_model.dart';
 import 'package:noonpool/model/login_details/login_details.dart';
@@ -55,10 +54,8 @@ Future<WorkerData> fetchWorkerData(String pool) async {
           "pool/getPoolPageData?worker_name=$name&pool=${pool.toLowerCase()}"),
     );
 
-    debugPrint(response.request?.url.toString());
-    debugPrint(response.body.toString());
     final data = jsonDecode(response.body);
-    debugPrint(data.toString());
+
     if (response.statusCode <= 299) {
       return WorkerData.fromMap(data);
     } else {
@@ -79,7 +76,7 @@ Future<void> sendUserOTP({required String email}) async {
       }),
       headers: {'Content-Type': 'application/json'},
     );
-    debugPrint(response.body.toString());
+
     if (response.statusCode == 200) {
       return;
     } else {
@@ -109,7 +106,7 @@ Future<void> set2FAStatus({
       }),
       headers: {'Content-Type': 'application/json'},
     );
-    debugPrint(response.body.toString());
+
     if (response.statusCode == 200) {
       return;
     } else {
@@ -129,8 +126,7 @@ Future<UserSecret> get2FAStatus({required String id}) async {
     final response = await http.get(
       Uri.parse(baseUrl + "auth/google_2FA?id=$id"),
       headers: {'Content-Type': 'application/json'},
-    );
-    debugPrint(response.body.toString());
+    ); 
     if (response.statusCode == 200) {
       return UserSecret.fromJson(response.body);
     } else {
@@ -157,14 +153,7 @@ Future<void> verifyUserOTP({
       }),
       headers: {'Content-Type': 'application/json'},
     );
-    debugPrint(response.request?.url.toString());
-    debugPrint(jsonEncode({
-      "email": email,
-      "code": code,
-    }).toString());
-    debugPrint(
-      response.body.toString(),
-    );
+
     if (response.statusCode == 200) {
       return;
     } else {
@@ -187,8 +176,7 @@ Future<bool> checkUsername(String username) async {
       Uri.parse(baseUrl + 'auth/checkUsername?username=$username'),
       headers: {'Content-Type': 'application/json'},
     );
-    debugPrint(response.body.toString());
-    debugPrint(response.statusCode.toString());
+ 
 
     if (response.statusCode == 200) {
       return true;
@@ -252,8 +240,7 @@ Future<LoginDetails> signInToUserAccount({
       }),
       headers: {'Content-Type': 'application/json'},
     );
-    debugPrint(response.request!.url.toString());
-    debugPrint(response.body.toString());
+ 
 
     if (response.statusCode == 200) {
       return LoginDetails.fromJson(response.body);
@@ -284,10 +271,7 @@ Future<void> resetPassword({
         'Content-Type': 'application/json',
       },
     );
-
-    debugPrint(
-      response.body.toString(),
-    );
+ 
     if (response.statusCode == 200) {
       return;
     } else {
@@ -311,9 +295,7 @@ Future<WalletData> getWalletData() async {
       Uri.parse(baseUrl + "wallet/wallet_list?user_id=$userId"),
       headers: {'Content-Type': 'application/json'},
     );
-    debugPrint(response.request?.url.toString());
-    debugPrint(response.body.toString());
-
+ 
     if (response.statusCode == 200) {
       return WalletData.fromJson(response.body);
     } else {
@@ -337,9 +319,7 @@ Future<void> getWalletInformation(WalletDatum walletDatum) async {
           baseUrl + "wallet?id=$userId&network=${walletDatum.coinSymbol}"),
       headers: {'Content-Type': 'application/json'},
     );
-    debugPrint(response.request?.url.toString());
-    debugPrint(response.body.toString());
-
+ 
     if (response.statusCode == 200) {
       return;
     } else {
@@ -367,8 +347,7 @@ Future<WalletTransactions> getSummaryTransactions({
           "wallet/getTransactionList?id=$userId&coin=$coin&last_trx_id=$lastHash&page=$page"),
       headers: {'Content-Type': 'application/json'},
     );
-    debugPrint(response.request?.url.toString());
-    debugPrint(response.body.toString());
+   
     final decode = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
@@ -380,7 +359,7 @@ Future<WalletTransactions> getSummaryTransactions({
     return Future.error(
         'There is either no or a very weak network connection.');
   } catch (exception) {
-    debugPrint(exception.toString());
+ 
     return Future.error('An error occurred while getting data');
   }
 }
@@ -404,8 +383,7 @@ sendFromWallet({
       body: jsonEncode(body),
       headers: {'Content-Type': 'application/json'},
     );
-    debugPrint(response.request?.url.toString());
-    debugPrint(response.body.toString());
+ 
     final decode = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
@@ -432,8 +410,7 @@ Future<RecieveData> walletData({
           baseUrl + "wallet?id=$userId&network=${walletDatum.coinSymbol}"),
       headers: {'Content-Type': 'application/json'},
     );
-    debugPrint(response.request?.url.toString());
-    debugPrint(response.body.toString());
+ 
     final decode = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
