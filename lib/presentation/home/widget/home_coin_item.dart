@@ -254,7 +254,6 @@ class HomeCoinItem extends StatelessWidget {
           ' PH';
     }
     if (diffLength > 18 && diffLength <= 21) {
-      debugPrint(diffLength.toString());
       final division = (cDifficulty / pow(10, 18));
 
       difficultyAsString = division.toString().substring(
@@ -325,7 +324,6 @@ class HomeCoinItem extends StatelessWidget {
           ' PH/s';
     }
     if (diffLength > 18 && diffLength <= 21) {
-      debugPrint(diffLength.toString());
       final division = (hashrate / pow(10, 18));
 
       hashrateAsString = division.toString().substring(

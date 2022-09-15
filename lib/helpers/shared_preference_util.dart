@@ -19,6 +19,7 @@ class AppPreferences {
   static const _localeLanguageCodeKey = 'localeLanguageCode';
   static const defaultLocaleLanguageCode = '---';
   static const _idKey = 'id';
+  static const _emailKey = 'email';
 
   static Future setOnBoardingStatus({required bool status}) async {
     await _preference?.setBool(_onBoardingKey, status);
@@ -40,10 +41,15 @@ class AppPreferences {
     );
   }
 
-  static Future setId({required String id}) async {
+  static Future setIdAndEmail(
+      {required String id, required String email}) async {
     await _preference?.setString(
       _idKey,
       id,
+    );
+    await _preference?.setString(
+      _emailKey,
+      email,
     );
   }
 
@@ -51,7 +57,7 @@ class AppPreferences {
     await _preference?.setBool(_loginInKey, status);
     if (!status) {
       await setUserName(username: '');
-      await setId(id: "");
+      await setIdAndEmail(id: "", email: '');
     }
   }
 
@@ -62,6 +68,7 @@ class AppPreferences {
 
   static bool get loginStatus => _preference?.getBool(_loginInKey) ?? false;
   static String get userId => _preference?.getString(_idKey) ?? '';
+  static String get userEmail => _preference?.getString(_emailKey) ?? '';
   static String get currentLocaleLanguageCode =>
       _preference?.getString(_localeLanguageCodeKey) ??
       defaultLocaleLanguageCode; // --- represents system default

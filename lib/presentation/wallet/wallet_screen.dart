@@ -35,7 +35,6 @@ class _WalletTabState extends State<WalletTab> {
   }
 
   getData() async {
-    debugPrint(AppPreferences.userId);
     setState(() {
       _isLoading = true;
       _hasError = false;

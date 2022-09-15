@@ -72,32 +72,36 @@ class SettingsItem2 extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     final bodyText2 = textTheme.bodyText2!;
-    return Padding(
-      padding: const EdgeInsets.all(kDefaultMargin / 4),
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            alignment: Alignment.center,
-            height: 40,
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(40),
-              color: kLightBackgroud,
+    return InkWell(
+      splashColor: Colors.transparent,
+      onTap: () => onPressed(!value),
+      child: Padding(
+        padding: const EdgeInsets.all(kDefaultMargin / 4),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              alignment: Alignment.center,
+              height: 40,
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(40),
+                color: kLightBackgroud,
+              ),
+              child: Icon(iconLocation, color: kPrimaryColor),
             ),
-            child: Icon(iconLocation, color: kPrimaryColor),
-          ),
-          const SizedBox(width: kDefaultMargin / 4),
-          Expanded(
-            child: Text(title, style: bodyText2),
-          ),
-          const SizedBox(width: kDefaultMargin / 4),
-          Switch.adaptive(
-            value: value,
-            onChanged: onPressed,
-            activeColor: kPrimaryColor,
-          )
-        ],
+            const SizedBox(width: kDefaultMargin / 4),
+            Expanded(
+              child: Text(title, style: bodyText2),
+            ),
+            const SizedBox(width: kDefaultMargin / 4),
+            Switch.adaptive(
+              value: value,
+              onChanged: onPressed,
+              activeColor: kPrimaryColor,
+            )
+          ],
+        ),
       ),
     );
   }

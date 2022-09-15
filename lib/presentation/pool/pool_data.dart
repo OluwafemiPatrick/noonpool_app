@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ffi';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -119,6 +118,7 @@ class _PoolTabState extends State<PoolTab> {
   }
 
   Container buildMiningProfitData(TextStyle bodyText2, SizedBox spacer) {
+    final coinItem = (coin == 'LTC-DOGE') ? 'LTC' : coin;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(
@@ -139,7 +139,7 @@ class _PoolTabState extends State<PoolTab> {
             height: kDefaultMargin / 4,
           ),
           Text(
-            ' ${workerData.data?.estEarnings ?? ''} $coin',
+            ' ${workerData.data?.estEarnings ?? '0.0'} $coinItem',
             style:
                 bodyText2.copyWith(fontSize: 15, fontWeight: FontWeight.w500),
           ),
@@ -152,7 +152,7 @@ class _PoolTabState extends State<PoolTab> {
             height: kDefaultMargin / 4,
           ),
           Text(
-            ' ${workerData.data?.cumEarnings ?? ''} $coin',
+            ' ${workerData.data?.cumEarnings ?? '0.0'} $coinItem',
             style:
                 bodyText2.copyWith(fontSize: 15, fontWeight: FontWeight.w500),
           ),
@@ -591,7 +591,7 @@ class _PoolTabState extends State<PoolTab> {
       shrinkWrap: true,
       itemBuilder: (_, index) {
         final item = workerData.data?.subWorkers?[index];
-        debugPrint(item.toString());
+
         return _PoolDataWidget(
           workerId: item?.workerId ?? '',
           hashrate: item?.hashrate ?? 0,
@@ -854,7 +854,6 @@ String getHashrate(double hashrate) {
         ' PH/s';
   }
   if (diffLength > 18 && diffLength <= 21) {
-    debugPrint(diffLength.toString());
     final division = (hashrate / pow(10, 18));
 
     hashrateAsString = division.toString().substring(
