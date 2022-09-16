@@ -8,6 +8,7 @@ import 'package:noonpool/helpers/page_route.dart';
 import 'package:noonpool/helpers/shared_preference_util.dart';
 import 'package:noonpool/main.dart';
 import 'package:noonpool/model/user_secret.dart';
+import 'package:noonpool/presentation/auth/login/login_sceen.dart';
 import 'package:noonpool/presentation/main/main_screen.dart';
 
 class Update2FA extends StatefulWidget {
@@ -36,11 +37,19 @@ class _Update2FAState extends State<Update2FA> {
     });
     try {
       UserSecret userSecret = await get2FAStatus(id: AppPreferences.userId);
-      if (userSecret.isSecret != null) {
-        AppPreferences.set2faSecurityStatus(isEnabled: userSecret.isSecret!);
-        _hasError = false;
-        Navigator.of(context)
-            .pushReplacement(CustomPageRoute(screen: const MainScreen()));
+      if (userSecret.isSecret != null && userSecret.loginKey != null) {
+        if (userSecret.loginKey == AppPreferences.currentLoginKey) {
+          AppPreferences.set2faSecurityStatus(isEnabled: userSecret.isSecret!);
+          _hasError = false;
+          Navigator.of(context)
+              .pushReplacement(CustomPageRoute(screen: const MainScreen()));
+        } else {
+          AppPreferences.setLoginStatus(status: false);
+          _hasError = false;
+
+          Navigator.of(context)
+              .pushReplacement(CustomPageRoute(screen: const LoginScreen()));
+        }
       } else {
         _hasError = true;
         throw AppLocalizations.of(context)!.anErrorOccurredPleaseRefreshThePage;

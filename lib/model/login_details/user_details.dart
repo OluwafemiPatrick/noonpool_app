@@ -8,6 +8,7 @@ class UserDetails {
   String? mnemonic;
   bool? verified;
   String? secret;
+  String? loginKey;
   bool? g2FAEnabled;
 
   UserDetails({
@@ -18,12 +19,13 @@ class UserDetails {
     this.mnemonic,
     this.verified,
     this.secret,
+    this.loginKey,
     this.g2FAEnabled,
   });
 
   @override
   String toString() {
-    return 'UserDetails(actCreationDate: $actCreationDate, email: $email, id: $id, username: $username, verified: $verified, mnemonic:$mnemonic, secret:$secret, g2FAEnabled:$g2FAEnabled)';
+    return 'UserDetails(actCreationDate: $actCreationDate, email: $email, id: $id, username: $username, verified: $verified, mnemonic:$mnemonic, secret:$secret, g2FAEnabled:$g2FAEnabled, loginKey:$loginKey )';
   }
 
   factory UserDetails.fromMap(Map<String, dynamic> data) => UserDetails(
@@ -31,6 +33,7 @@ class UserDetails {
         email: data['email'] as String?,
         id: data['id'] as String?,
         username: data['username'] as String?,
+        loginKey: data['login_key'] as String?,
         mnemonic: data['mnemonic'] as String?,
         secret: data['secret'] as String?,
         verified: data['verified'] as bool?,
@@ -42,6 +45,7 @@ class UserDetails {
         'email': email,
         'id': id,
         'secret': secret,
+        'login_key': loginKey,
         'username': username,
         'g2FA_enabled': g2FAEnabled,
         'mnemonic': mnemonic,
