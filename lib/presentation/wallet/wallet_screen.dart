@@ -191,7 +191,7 @@ class _WalletTabState extends State<WalletTab> {
     double amount = 0;
 
     for (final e in walletDatum) {
-      amount += (e.balance ?? 0);
+      amount += (e.usdPrice ?? 0);
     }
     return amount;
   }
