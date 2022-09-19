@@ -33,7 +33,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
             if (asyncDataSnapshot.hasData) {
               List<CoinModel> allData = asyncDataSnapshot.data ?? [];
               if (allData.isNotEmpty) {
-                List<String> _coinList = ['LTC', 'BTC', 'DOGE', 'BCH'];
+                List<String> _coinList = ['LTC', 'BCH', 'DOGE', 'BTC'];
                 final selectedCoinData = <CoinModel>[];
                 for (final element in allData) {
                   if (_coinList
@@ -122,7 +122,12 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
     _formKey.currentState?.save();
 
     final hashRate = double.tryParse(_initValues[_validHashRate]) ?? .0;
-    const mswMultiplier = 1000000000000;
+    int mswMultiplier = 1000000000000;
+
+    var coinSym = widget.selectedCoins[selectedCoinIndex].coinSymbol;
+    if (coinSym == 'LTC' || coinSym == 'DOGE'){
+      mswMultiplier = 1000000;
+    }
 
     final firstCal = hashRate *
         (widget.selectedCoins[selectedCoinIndex].reward ?? 0) *
@@ -271,7 +276,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
         margin: const EdgeInsets.only(
             left: kDefaultPadding, right: kDefaultPadding),
         child: Text(
-          widget.selectedCoins[selectedCoinIndex].difficulty.toString(),
+          "${widget.selectedCoins[selectedCoinIndex].difficulty?.toStringAsFixed(2)}",
           style: bodyText2,
         ),
         alignment: Alignment.centerLeft,
@@ -321,6 +326,11 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
   }
 
   List<Widget> buildValidHashRate(TextStyle bodyText2) {
+    String hash = 'TH/s';
+    var coinSym = widget.selectedCoins[selectedCoinIndex].coinSymbol;
+    if (coinSym == 'LTC' || coinSym == 'DOGE'){
+      hash = 'MH/s';
+    }
     return [
       Padding(
         child: Text(
@@ -348,7 +358,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
               margin: const EdgeInsets.only(
                   left: kDefaultMargin / 4, right: kDefaultMargin / 2),
               child: Text(
-                'TH/s',
+                hash,
                 style: bodyText2.copyWith(color: kPrimaryColor),
               ),
             ),

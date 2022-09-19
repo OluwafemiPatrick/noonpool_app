@@ -4,7 +4,6 @@ import 'package:noonpool/helpers/error_widget.dart';
 import 'package:noonpool/helpers/network_helper.dart';
 import 'package:noonpool/helpers/outlined_button.dart';
 import 'package:noonpool/helpers/page_route.dart';
-import 'package:noonpool/helpers/shared_preference_util.dart';
 import 'package:noonpool/main.dart';
 import 'package:noonpool/model/wallet_data/datum.dart';
 import 'package:noonpool/model/wallet_data/wallet_data.dart';
