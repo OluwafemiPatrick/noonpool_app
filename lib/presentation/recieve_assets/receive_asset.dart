@@ -81,7 +81,7 @@ class _ReceiveAssetsState extends State<ReceiveAssets> {
         height: 50,
         width: 50,
         child: CircularProgressIndicator.adaptive(
-          backgroundColor: kLightBackgroud,
+          backgroundColor: kLightBackground,
         ),
       ),
     );

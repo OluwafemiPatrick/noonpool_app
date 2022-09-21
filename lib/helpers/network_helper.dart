@@ -16,7 +16,7 @@ import 'package:noonpool/model/worker_data/worker_data.dart';
 // main app url
 // const String baseUrl = 'https://npool.noonpool.com/api/v2/';
 // dev url
-const String baseUrl = 'http://5.189.137.144:1028/api/v2/';
+const String baseUrl = 'http://5.189.137.144:5000/api/v2/';
 
 Future<List<CoinModel>> getAllCoinDetails() async {
   try {

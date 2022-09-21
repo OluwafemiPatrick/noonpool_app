@@ -196,7 +196,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
     return Card(
       margin:
           const EdgeInsets.only(left: kDefaultMargin, right: kDefaultMargin),
-      color: kLightBackgroud,
+      color: kLightBackground,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -455,7 +455,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
           child: Container(
             padding: const EdgeInsets.all(kDefaultMargin / 4),
             decoration: BoxDecoration(
-              color: kLightBackgroud,
+              color: kLightBackground,
               borderRadius: BorderRadius.circular(kDefaultMargin / 2),
             ),
             child: Row(children: [

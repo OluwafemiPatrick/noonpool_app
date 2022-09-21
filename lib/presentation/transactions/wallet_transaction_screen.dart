@@ -157,7 +157,7 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
     final bodyText2 = textTheme.bodyText2!;
     final topPadding = MediaQuery.of(context).padding.top;
     return Scaffold(
-      backgroundColor: kLightBackgroud,
+      backgroundColor: kLightBackground,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
