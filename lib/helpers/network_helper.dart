@@ -7,6 +7,7 @@ import 'package:noonpool/model/login_details/login_details.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:noonpool/model/recieve_data/recieve_data.dart';
+import 'package:noonpool/model/send_creation_model/send_creation_model.dart';
 import 'package:noonpool/model/user_secret.dart';
 import 'package:noonpool/model/wallet_data/datum.dart';
 import 'package:noonpool/model/wallet_data/wallet_data.dart';
@@ -363,7 +364,7 @@ Future<WalletTransactions> getSummaryTransactions({
   }
 }
 
-sendFromWallet({
+Future<SendCreationModel> createSendTransaction({
   required String network,
   required String reciever,
   required double amount,
@@ -379,7 +380,41 @@ sendFromWallet({
     };
 
     final response = await http.post(
-      Uri.parse(baseUrl + "wallet/send"),
+      Uri.parse(baseUrl + "wallet/createTransaction"),
+      body: jsonEncode(body),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    final decode = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      return SendCreationModel.fromMap(decode);
+    } else {
+      return Future.error(decode['message'] ?? '');
+    }
+  } on SocketException {
+    return Future.error(
+        'There is either no or a very weak network connection.');
+  } catch (exception) {
+    return Future.error('An error occurred while processing your request');
+  }
+}
+
+sendFromWallet({
+  required SendCreationModel creationModel,
+  required String network,
+}) async {
+  final userId = AppPreferences.userId;
+
+  try {
+    final body = <String, dynamic>{
+      "id": userId,
+      "network": network,
+      "rawTrx": creationModel.message?.rawTrx ?? '',
+    };
+
+    final response = await http.post(
+      Uri.parse(baseUrl + "wallet/pushTransaction"),
       body: jsonEncode(body),
       headers: {'Content-Type': 'application/json'},
     );

@@ -7,6 +7,7 @@ class Transaction {
   String? network;
   String? amount;
   String? date;
+  String? url;
   String? hash;
   bool? isSend;
 
@@ -15,6 +16,7 @@ class Transaction {
     this.amount,
     this.network,
     this.date,
+    this.url,
     this.hash,
     this.isSend,
   });
@@ -44,7 +46,7 @@ class Transaction {
 
   @override
   String toString() {
-    return 'Transaction(address: $address, amount: $amount, date: $date, hash: $hash, isSend: $isSend, network: $network)';
+    return 'Transaction(address: $address, amount: $amount, date: $date, hash: $hash, isSend: $isSend, network: $network,  url: $url)';
   }
 
   factory Transaction.fromMap(Map<String, dynamic> data) => Transaction(
@@ -53,6 +55,7 @@ class Transaction {
         date: data['date'] as String?,
         hash: data['hash'] as String?,
         network: data['network'] as String?,
+        url: data['trx_url'] as String?,
         isSend: data['isSend'] as bool?,
       );
 
@@ -63,6 +66,7 @@ class Transaction {
         'network': network,
         'hash': hash,
         'isSend': isSend,
+        'trx_url': url,
       };
 
   /// `dart:convert`

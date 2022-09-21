@@ -125,7 +125,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
     int mswMultiplier = 1000000000000;
 
     var coinSym = widget.selectedCoins[selectedCoinIndex].coinSymbol;
-    if (coinSym == 'LTC' || coinSym == 'DOGE'){
+    if (coinSym == 'LTC' || coinSym == 'DOGE') {
       mswMultiplier = 1000000;
     }
 
@@ -328,7 +328,7 @@ class _CalculatorTabBodyState extends State<_CalculatorTabBody> {
   List<Widget> buildValidHashRate(TextStyle bodyText2) {
     String hash = 'TH/s';
     var coinSym = widget.selectedCoins[selectedCoinIndex].coinSymbol;
-    if (coinSym == 'LTC' || coinSym == 'DOGE'){
+    if (coinSym == 'LTC' || coinSym == 'DOGE') {
       hash = 'MH/s';
     }
     return [

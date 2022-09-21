@@ -253,6 +253,7 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
       screen: TransactionView(
         name: widget.walletDatum.coinName ?? '',
         hash: trxSummary.hash ?? '',
+        url: trxSummary.url ?? '',
       ),
     ));
   }

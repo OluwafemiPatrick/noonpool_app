@@ -4,9 +4,11 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 class TransactionView extends StatefulWidget {
   final String hash;
   final String name;
+  final String url;
   const TransactionView({
     Key? key,
     required this.hash,
+    required this.url,
     required this.name,
   }) : super(key: key);
 
@@ -72,14 +74,12 @@ class _TransactionViewState extends State<TransactionView> {
   }
 
   RotatedBox buildBody() {
-    final name = widget.name.toLowerCase().trim().replaceAll(' ', '-');
-    final url = 'https://blockchair.com/$name/transaction/${widget.hash}';
     return RotatedBox(
       quarterTurns: _isRotated ? 3 : 0,
       child: InAppWebView(
         key: webViewKey,
         initialUrlRequest: URLRequest(
-          url: Uri.parse(url),
+          url: Uri.parse(widget.url),
         ),
         initialOptions: options,
         onWebViewCreated: (controller) {

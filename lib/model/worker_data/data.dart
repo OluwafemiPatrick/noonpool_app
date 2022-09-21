@@ -19,7 +19,6 @@ class Data {
   List? hashList;
   List<SubWorker>? subWorkers;
 
-
   Data({
     this.cumEarnings,
     this.earningsPaid,

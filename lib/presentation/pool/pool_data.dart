@@ -47,7 +47,7 @@ class _PoolTabState extends State<PoolTab> {
 
   List<Color> gradientColors = [
     const Color(0xffdf73ff),
-  //  const Color(0xffb666d2),
+    //  const Color(0xffb666d2),
     kPrimaryColor
   ];
 
@@ -112,7 +112,7 @@ class _PoolTabState extends State<PoolTab> {
               padding: const EdgeInsets.only(
                   left: kDefaultMargin, right: kDefaultMargin),
             ),
-            const SizedBox(height: 10.0),
+            const SizedBox(height: kDefaultMargin / 2),
             buildMiningProfitData(bodyText2, spacer),
             spacer,
             Padding(
@@ -123,7 +123,7 @@ class _PoolTabState extends State<PoolTab> {
               padding: const EdgeInsets.only(
                   left: kDefaultMargin, right: kDefaultMargin),
             ),
-            const SizedBox(height: 10.0),
+            const SizedBox(height: kDefaultMargin / 2),
             buildHashrateTrend(bodyText2, spacer),
             spacer,
             buildHashrateChart(bodyText2, spacer),
@@ -247,19 +247,19 @@ class _PoolTabState extends State<PoolTab> {
 
   Container buildHashrateChart(TextStyle bodyText2, SizedBox spacer) {
     return Container(
-      width: double.infinity,
-      height: 320.0,
-      padding: const EdgeInsets.only(left: 5.0, bottom: 5.0, right: 10.0, top: 10.0),
-      margin: const EdgeInsets.only(
-        left: kDefaultMargin / 2,
-        right: kDefaultMargin / 2,
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(kDefaultMargin / 2),
-        color: kLightBackground,
-      ),
-      child: LineChart(_lineChartData())
-    );
+        width: double.infinity,
+        height: 320.0,
+        padding: const EdgeInsets.only(
+            left: 5.0, bottom: 5.0, right: 10.0, top: 10.0),
+        margin: const EdgeInsets.only(
+          left: kDefaultMargin / 2,
+          right: kDefaultMargin / 2,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(kDefaultMargin / 2),
+          color: kLightBackground,
+        ),
+        child: LineChart(_lineChartData()));
   }
 
   AppBar buildAppBar(TextStyle? bodyText1, TextStyle bodyText2) {
@@ -294,7 +294,7 @@ class _PoolTabState extends State<PoolTab> {
   }
 
   Widget dropDown(TextStyle bodyText2) {
-    List<String> _coinList = ['LTC-DOGE', 'BCH', 'BTC', 'LTC'];
+    List<String> _coinList = ['LTC-DOGE', 'BCH', 'BTC'];
     String? _selected;
     return SizedBox(
       height: 30,
@@ -723,13 +723,11 @@ class _PoolTabState extends State<PoolTab> {
     double cHash;
 
     if (hashList?.isNotEmpty == true) {
-
       for (var data in hashList!) {
         i += 1;
         if (data > 0) {
-
           String dts = data.toString();
-          int dtd = int.parse(dts[0]+dts[1]+dts[2]);
+          int dtd = int.parse(dts[0] + dts[1] + dts[2]);
           cHash = dtd / 100;
         } else {
           cHash = 0;
@@ -738,15 +736,12 @@ class _PoolTabState extends State<PoolTab> {
         chartList.add(chartSpot);
       }
       return chartList;
-
-    } else{
+    } else {
       return null;
     }
-
   }
 
   LineChartData _lineChartData() {
-
     return LineChartData(
       gridData: FlGridData(
         show: true,
@@ -827,11 +822,11 @@ class _PoolTabState extends State<PoolTab> {
   }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
-
     DateTime now = DateTime.now();
     int cHour = int.parse(DateFormat('kk').format(now));
     List timeList = ['00.00', '06:00', '12:00', '18:00'];
-    final bodyText2 = Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 12.0);
+    final bodyText2 =
+        Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 12.0);
     Widget text;
 
     if (cHour >= 0 && cHour < 6) {
@@ -873,9 +868,8 @@ class _PoolTabState extends State<PoolTab> {
   }
 
   Widget leftTitleWidgets(double value, TitleMeta meta) {
-    final bodyText = Theme.of(context).textTheme.bodyText2?.copyWith(
-        fontSize: 10.0
-    );
+    final bodyText =
+        Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 10.0);
     String hash = 'H/s';
     if (coin == 'BCH' || coin == 'BTC') {
       hash = 'TH/s';
@@ -906,7 +900,6 @@ class _PoolTabState extends State<PoolTab> {
 
     return Text(text, style: bodyText, textAlign: TextAlign.center);
   }
-
 }
 
 class _PoolDataWidget extends StatelessWidget {

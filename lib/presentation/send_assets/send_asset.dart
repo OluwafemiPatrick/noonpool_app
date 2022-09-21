@@ -5,6 +5,7 @@ import 'package:noonpool/helpers/error_widget.dart';
 import 'package:noonpool/helpers/network_helper.dart';
 import 'package:noonpool/helpers/shared_preference_util.dart';
 import 'package:noonpool/main.dart';
+import 'package:noonpool/model/send_creation_model/send_creation_model.dart';
 import 'package:noonpool/model/wallet_data/datum.dart';
 import 'package:noonpool/presentation/settings/verify_otp.dart';
 
@@ -31,7 +32,8 @@ class _SendAssetState extends State<SendAsset> {
   bool _isLoading = false;
   bool _isFetchingPrice = true;
   bool _priceFetchHasError = false;
-  double noonPoolFee = 0;
+
+  SendCreationModel sendCreationModel = SendCreationModel();
   @override
   void initState() {
     super.initState();
@@ -45,7 +47,14 @@ class _SendAssetState extends State<SendAsset> {
     });
 
     try {
-      //
+      final reciever = widget.recipientAddress;
+      final network = widget.assetDatum.coinSymbol ?? '';
+      final amount = widget.amount;
+      sendCreationModel = await createSendTransaction(
+        reciever: reciever,
+        amount: amount,
+        network: network,
+      );
       _priceFetchHasError = false;
     } catch (exception) {
       MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
@@ -103,17 +112,14 @@ class _SendAssetState extends State<SendAsset> {
   }
 
   Future showSendAssetStatus() async {
-    final reciever = widget.recipientAddress;
     final network = widget.assetDatum.coinSymbol ?? '';
-    final amount = widget.amount;
 
     setState(() {
       _isLoading = true;
     });
     try {
       await sendFromWallet(
-        reciever: reciever,
-        amount: amount,
+        creationModel: sendCreationModel,
         network: network,
       );
 
@@ -191,7 +197,7 @@ class _SendAssetState extends State<SendAsset> {
         height: 50,
         width: 50,
         child: CircularProgressIndicator.adaptive(
-          backgroundColor: kLightBackgroud,
+          backgroundColor: kLightBackground,
         ),
       ),
     );
@@ -258,18 +264,17 @@ class _SendAssetState extends State<SendAsset> {
               heading: AppLocalizations.of(context)!.asset,
               tailingText:
                   "${widget.assetDatum.coinName} (${widget.assetDatum.coinSymbol})"),
-
           ReceiptDetailsTab(
               heading: AppLocalizations.of(context)!.to,
-              tailingText: widget.recipientAddress),
+              tailingText: sendCreationModel.message?.reciepient ?? ''),
           ReceiptDetailsTab(
               heading: AppLocalizations.of(context)!.noonPoolFee,
-              tailingText: '-$noonPoolFee ${widget.assetDatum.coinSymbol}'),
-          // const ReceiptDetailsTab( heading: 'Neutron Fee', tailingText: '\$ 0.5'),
+              tailingText:
+                  '-${sendCreationModel.message?.fee} ${widget.assetDatum.coinSymbol}'),
           ReceiptDetailsTab(
               heading: AppLocalizations.of(context)!.totalAmount,
               tailingText:
-                  '-${widget.amount - noonPoolFee} ${widget.assetDatum.coinSymbol}'),
+                  '-${widget.amount - (double.tryParse(sendCreationModel.message?.fee ?? '0.0') ?? 0)} ${widget.assetDatum.coinSymbol}'),
           const SizedBox(
             height: 40,
           ),
