@@ -167,7 +167,7 @@
 "transactionStatus":"交易状态",
 "asset":"资产",
 "to":"至",
-"maxTotal":"最大总数",
+ "totalAmount":"总金额",
 "continueH":"继续",
 "amount":"数量",
 "max":"最大限度",
@@ -177,7 +177,7 @@
 "recipientAdddress":"收件人地址",
 "pleaseProvideTheRecipientAddress":"请提供收件人地址。",
 "permissionsNotGranted":"未授予权限",
-
+"noonPoolFee":"中午泳池费用",
 "updateSuccessful":"更新成功",
 "requestProcessing":"请求处理",
 "pleaseBePatientWhileWeProcessYourRequest":"在我们处理您的请求时请耐心等待。"

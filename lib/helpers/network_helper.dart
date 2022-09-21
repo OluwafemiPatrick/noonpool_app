@@ -369,10 +369,11 @@ sendFromWallet({
   required double amount,
 }) async {
   final userId = AppPreferences.userId;
+  final newReceiver = reciever.replaceAll("bitcoincash:", "").trim();
   try {
     final body = <String, dynamic>{
       "user_id": userId,
-      "reciepient": reciever,
+      "reciepient": newReceiver,
       "amount": amount,
       "network": network,
     };
@@ -394,7 +395,7 @@ sendFromWallet({
     return Future.error(
         'There is either no or a very weak network connection.');
   } catch (exception) {
-    return Future.error('An error occurred while getting data');
+    return Future.error('An error occurred while processing your request');
   }
 }
 

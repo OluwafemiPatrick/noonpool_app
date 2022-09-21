@@ -165,8 +165,8 @@
 "confirm":"يتأكد",
 "transactionStatus":"حالة عملية",
 "asset":"أصل",
-"to":"إلى",
-"maxTotal":"ماكس إجمالي",
+"to":"إلى", 
+"totalAmount":"المبلغ الإجمالي",
 "continueH":"يكمل",
 "amount":"مقدار",
 "max":"الأعلى",
@@ -176,7 +176,7 @@
 "recipientAdddress":"عنوان المستلم",
 "pleaseProvideTheRecipientAddress":"يرجى تقديم عنوان المستلم.",
 "permissionsNotGranted":"لم يتم منح الأذونات",
-
+"noonPoolFee":"رسوم NoonPool",
 "updateSuccessful":"تم التحديث بنجاح",
 "requestProcessing":"طلب المعالجة",
 "pleaseBePatientWhileWeProcessYourRequest":"يرجى التحلي بالصبر بينما نعالج طلبك."

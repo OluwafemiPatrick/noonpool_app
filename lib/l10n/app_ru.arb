@@ -166,7 +166,7 @@
 "transactionStatus":"Статус транзакции",
 "asset":"Актив",
 "to":"К",
-"maxTotal":"Макс. Всего",
+"totalAmount":"Итого",
 "continueH":"Продолжать",
 "amount":"Количество",
 "max":"Максимум",
@@ -176,7 +176,7 @@
 "recipientAdddress":"Адрес получателя",
 "pleaseProvideTheRecipientAddress":"Укажите адрес получателя.",
 "permissionsNotGranted":"Разрешения не предоставлены",
-
+"noonPoolFee":"Плата за полдень",
 "updateSuccessful":"Обновление успешно",
 "requestProcessing":"Обработка запроса",
 "pleaseBePatientWhileWeProcessYourRequest":"Пожалуйста, будьте терпеливы в то время как мы обрабатываем Ваш запрос."

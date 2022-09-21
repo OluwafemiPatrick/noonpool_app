@@ -167,7 +167,7 @@
 "transactionStatus":"وضعیت تراکنش",
 "asset":"دارایی",
 "to":"به",
-"maxTotal":"حداکثر مجموع",
+"totalAmount":"مقدار کل",
 "continueH":"ادامه هید",
 "amount":"میزان",
 "max":"حداکثر",
@@ -177,7 +177,7 @@
 "recipientAdddress":"آدرس گیرنده",
 "pleaseProvideTheRecipientAddress":"لطفا آدرس گیرنده را بفرمایید",
 "permissionsNotGranted":"مجوزها داده نشده است",
-
+"noonPoolFee":"هزینه NoonPool",
 "updateSuccessful":"بروز رسانی موفق",
 "requestProcessing":"پردازش درخواست",
 "pleaseBePatientWhileWeProcessYourRequest":"لطفا در مدت زمانی که ما درخواست شما را بررسی می کنیم صبور باشید."

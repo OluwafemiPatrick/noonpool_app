@@ -49,6 +49,16 @@ class _PoolTabState extends State<PoolTab> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      setState(() {
+        coin = AppPreferences.currentPoolItem;
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final bodyText1 = textTheme.bodyText1!;
@@ -284,6 +294,7 @@ class _PoolTabState extends State<PoolTab> {
             setState(() {
               workerData = WorkerData();
               coin = _selected!;
+              AppPreferences.setCurrrentPoolItem(poolName: _selected!);
               port1 = '3050';
               port2 = '3060';
               miningAdd = 'litecoin.noonpool.com:3050';
@@ -295,6 +306,7 @@ class _PoolTabState extends State<PoolTab> {
             setState(() {
               workerData = WorkerData();
               coin = _selected!;
+              AppPreferences.setCurrrentPoolItem(poolName: _selected!);
               port1 = '0';
               port2 = '0';
               miningAdd = AppLocalizations.of(context)!.coinNotAvailable;
@@ -306,6 +318,7 @@ class _PoolTabState extends State<PoolTab> {
             setState(() {
               workerData = WorkerData();
               coin = _selected!;
+              AppPreferences.setCurrrentPoolItem(poolName: _selected!);
               port1 = '3055';
               port2 = '0';
               miningAdd = 'litecoin.noonpool.com:3055';
@@ -317,6 +330,7 @@ class _PoolTabState extends State<PoolTab> {
             setState(() {
               workerData = WorkerData();
               coin = _selected!;
+              AppPreferences.setCurrrentPoolItem(poolName: _selected!);
               port1 = '3030';
               port2 = '3040';
               miningAdd = 'bitcoincash.noonpool.com:3030';

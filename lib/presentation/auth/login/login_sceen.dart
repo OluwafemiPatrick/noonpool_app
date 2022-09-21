@@ -6,6 +6,7 @@ import 'package:noonpool/presentation/auth/forgot_password/forgot_password.dart'
 import 'package:noonpool/presentation/auth/register/register_sceen.dart';
 
 import 'package:noonpool/main.dart';
+import 'package:noonpool/presentation/language/language_changer.dart';
 import 'package:noonpool/presentation/settings/verify_otp.dart';
 import '../../../helpers/constants.dart';
 import '../../../helpers/page_route.dart';
@@ -287,10 +288,33 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(
                   height: kDefaultMargin / 2,
                 ),
-                buildRegisterButton(bodyText2)
+                buildRegisterButton(bodyText2),
+                const SizedBox(
+                  height: kDefaultMargin / 2,
+                ),
+                buildLanuguageButton(bodyText2),
               ],
             ),
           )),
+        ),
+      ),
+    );
+  }
+
+  Container buildLanuguageButton(TextStyle bodyText2) {
+    return Container(
+      alignment: Alignment.center,
+      child: TextButton(
+        onPressed: () {
+          Navigator.of(context).push(CustomPageRoute(
+            screen: const LanguageChanger(),
+          ));
+        },
+        child: Text(
+          AppLocalizations.of(context)!.language,
+        ),
+        style: TextButton.styleFrom(
+          textStyle: bodyText2,
         ),
       ),
     );

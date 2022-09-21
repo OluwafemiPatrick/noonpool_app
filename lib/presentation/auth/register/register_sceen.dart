@@ -4,6 +4,7 @@ import 'package:noonpool/helpers/elevated_button.dart';
 import 'package:noonpool/helpers/network_helper.dart';
 import 'package:noonpool/helpers/text_button.dart';
 import 'package:noonpool/presentation/auth/register/registration_confirmation_screen.dart';
+import 'package:noonpool/presentation/language/language_changer.dart';
 
 import '../../../helpers/constants.dart';
 import '../../../helpers/page_route.dart';
@@ -205,9 +206,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(
                   height: kDefaultMargin / 2,
                 ),
+                buildLanuguageButton(bodyText2),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Container buildLanuguageButton(TextStyle bodyText2) {
+    return Container(
+      alignment: Alignment.center,
+      child: TextButton(
+        onPressed: () {
+          Navigator.of(context).push(CustomPageRoute(
+            screen: const LanguageChanger(),
+          ));
+        },
+        child: Text(
+          AppLocalizations.of(context)!.language,
+        ),
+        style: TextButton.styleFrom(
+          textStyle: bodyText2,
         ),
       ),
     );

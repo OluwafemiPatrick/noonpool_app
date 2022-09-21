@@ -167,7 +167,7 @@
 "transactionStatus":"Transaction Status",
 "asset":"Asset",
 "to":"To",
-"maxTotal":"Max Total",
+"totalAmount":"Total Amount",
 "continueH":"Continue",
 "amount":"Amount",
 "max":"Max",
@@ -177,7 +177,7 @@
 "recipientAdddress":"Recipient Adddress",
 "pleaseProvideTheRecipientAddress":"Please provide the recipient address.",
 "permissionsNotGranted":"Permissions not granted",
-
+"noonPoolFee":"NoonPool Fee",
 "updateSuccessful":"Update Successful",
 "requestProcessing":"Request Processing",
 "pleaseBePatientWhileWeProcessYourRequest":"Please be patient while we process your request."

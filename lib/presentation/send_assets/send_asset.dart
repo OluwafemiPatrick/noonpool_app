@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:noonpool/helpers/constants.dart';
 import 'package:noonpool/helpers/elevated_button.dart';
+import 'package:noonpool/helpers/error_widget.dart';
 import 'package:noonpool/helpers/network_helper.dart';
 import 'package:noonpool/helpers/shared_preference_util.dart';
+import 'package:noonpool/main.dart';
 import 'package:noonpool/model/wallet_data/datum.dart';
 import 'package:noonpool/presentation/settings/verify_otp.dart';
 
@@ -27,6 +29,39 @@ class SendAsset extends StatefulWidget {
 
 class _SendAssetState extends State<SendAsset> {
   bool _isLoading = false;
+  bool _isFetchingPrice = true;
+  bool _priceFetchHasError = false;
+  double noonPoolFee = 0;
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, getData);
+  }
+
+  getData() async {
+    setState(() {
+      _isFetchingPrice = true;
+      _priceFetchHasError = false;
+    });
+
+    try {
+      //
+      _priceFetchHasError = false;
+    } catch (exception) {
+      MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
+        SnackBar(
+          content: Text(
+            exception.toString(),
+          ),
+        ),
+      );
+      _priceFetchHasError = true;
+    }
+
+    setState(() {
+      _isFetchingPrice = false;
+    });
+  }
 
   AppBar buildAppBar(
     TextStyle? bodyText1,
@@ -150,6 +185,18 @@ class _SendAssetState extends State<SendAsset> {
     );
   }
 
+  buildProgressBar() {
+    return const Center(
+      child: SizedBox(
+        height: 50,
+        width: 50,
+        child: CircularProgressIndicator.adaptive(
+          backgroundColor: kLightBackgroud,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -158,7 +205,16 @@ class _SendAssetState extends State<SendAsset> {
 
     return Scaffold(
       appBar: buildAppBar(bodyText1),
-      body: buildBody(bodyText2, bodyText1),
+      body: _isFetchingPrice
+          ? buildProgressBar()
+          : _priceFetchHasError
+              ? CustomErrorWidget(
+                  error: AppLocalizations.of(context)!
+                      .anErrorOccurredWithTheDataFetchPleaseTryAgain,
+                  onRefresh: () {
+                    getData();
+                  })
+              : buildBody(bodyText2, bodyText1),
     );
   }
 
@@ -206,11 +262,14 @@ class _SendAssetState extends State<SendAsset> {
           ReceiptDetailsTab(
               heading: AppLocalizations.of(context)!.to,
               tailingText: widget.recipientAddress),
-          // const ReceiptDetailsTab(     heading: 'Network Fee', tailingText: '0.00012 BCH = \$ 0.12'),
+          ReceiptDetailsTab(
+              heading: AppLocalizations.of(context)!.noonPoolFee,
+              tailingText: '-$noonPoolFee ${widget.assetDatum.coinSymbol}'),
           // const ReceiptDetailsTab( heading: 'Neutron Fee', tailingText: '\$ 0.5'),
           ReceiptDetailsTab(
-              heading: AppLocalizations.of(context)!.maxTotal,
-              tailingText: '-${widget.amount} ${widget.assetDatum.coinSymbol}'),
+              heading: AppLocalizations.of(context)!.totalAmount,
+              tailingText:
+                  '-${widget.amount - noonPoolFee} ${widget.assetDatum.coinSymbol}'),
           const SizedBox(
             height: 40,
           ),

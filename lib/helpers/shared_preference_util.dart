@@ -21,12 +21,20 @@ class AppPreferences {
   static const _idKey = 'id';
   static const _emailKey = 'email';
   static const _currentLoginKey = 'currentLogin';
+  static const _currentPoolItemKey = 'currentPoolItem';
   static Future setOnBoardingStatus({required bool status}) async {
     await _preference?.setBool(_onBoardingKey, status);
   }
 
   static Future set2faSecurityStatus({required bool isEnabled}) async {
     await _preference?.setBool(_2faSecurityEnabled, isEnabled);
+  }
+
+  static Future setCurrrentPoolItem({required String poolName}) async {
+    await _preference?.setString(
+      _currentPoolItemKey,
+      poolName,
+    );
   }
 
   static Future setLocaleLanguageCode(
@@ -77,6 +85,8 @@ class AppPreferences {
 
   static bool get loginStatus => _preference?.getBool(_loginInKey) ?? false;
   static String get userId => _preference?.getString(_idKey) ?? '';
+  static String get currentPoolItem =>
+      _preference?.getString(_currentPoolItemKey) ?? 'LTC-DOGE';
   static String get userEmail => _preference?.getString(_emailKey) ?? '';
   static String get currentLocaleLanguageCode =>
       _preference?.getString(_localeLanguageCodeKey) ??

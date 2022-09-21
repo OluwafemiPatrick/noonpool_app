@@ -167,7 +167,7 @@
 "transactionStatus":"İşlem Durumu",
 "asset":"Varlık",
 "to":"İle",
-"maxTotal":"Maksimum Toplam",
+"totalAmount":"Toplam tutar",
 "continueH":"Devam et",
 "amount":"Tutar",
 "max":"Maks.",
@@ -177,7 +177,7 @@
 "recipientAdddress":"Alıcı Adresi",
 "pleaseProvideTheRecipientAddress":"Lütfen alıcı adresini belirtin.",
 "permissionsNotGranted":"İzinler verilmedi",
-
+"noonPoolFee":"ÖğlenHavuz Ücreti",
 "updateSuccessful":"Güncelleme Başarılı",
 "requestProcessing":"Talep İşleme",
 "pleaseBePatientWhileWeProcessYourRequest":"Talebinizi işleme koyarken lütfen sabırlı olun."
