@@ -72,13 +72,14 @@ class _TransactionViewState extends State<TransactionView> {
   }
 
   RotatedBox buildBody() {
+    final name = widget.name.toLowerCase().trim().replaceAll(' ', '-');
+    final url = 'https://blockchair.com/$name/transaction/${widget.hash}';
     return RotatedBox(
       quarterTurns: _isRotated ? 3 : 0,
       child: InAppWebView(
         key: webViewKey,
         initialUrlRequest: URLRequest(
-          url: Uri.parse(
-              "https://blockchair.com/${widget.name.toLowerCase()}/transaction/${widget.hash}"),
+          url: Uri.parse(url),
         ),
         initialOptions: options,
         onWebViewCreated: (controller) {
