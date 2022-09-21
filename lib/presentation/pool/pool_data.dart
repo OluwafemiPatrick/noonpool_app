@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:focus_detector/focus_detector.dart';
+import 'package:intl/intl.dart';
 import 'package:noonpool/helpers/error_widget.dart';
 import 'package:noonpool/helpers/shared_preference_util.dart';
 import 'package:noonpool/main.dart';
@@ -12,6 +13,7 @@ import 'package:noonpool/model/worker_data/worker_data.dart';
 import 'package:noonpool/presentation/pool/widget/pool_statistics_title.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 import '../../helpers/constants.dart';
 import '../../helpers/svg_image.dart';
@@ -42,6 +44,12 @@ class _PoolTabState extends State<PoolTab> {
   String port2 = '3060';
   String miningAdd = 'litecoin.noonpool.com:3050';
   String stratumUrl = 'stratum+tcp://litecoin.noonpool.com:3050';
+
+  List<Color> gradientColors = [
+    const Color(0xffdf73ff),
+  //  const Color(0xffb666d2),
+    kPrimaryColor
+  ];
 
   void _onRefresh() async {
     await getUserData();
@@ -108,6 +116,8 @@ class _PoolTabState extends State<PoolTab> {
             const SizedBox(height: 10.0),
             buildHashrateTrend(bodyText2, spacer),
             spacer,
+            buildHashrateChart(bodyText2, spacer),
+            const SizedBox(height: kDefaultMargin * 2),
             buildStatistics(bodyText1),
             const SizedBox(height: 10.0),
             buildPoolData(bodyText2, spacer),
@@ -129,7 +139,7 @@ class _PoolTabState extends State<PoolTab> {
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(kDefaultMargin / 2),
-        color: kLightBackgroud,
+        color: kLightBackground,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -172,7 +182,7 @@ class _PoolTabState extends State<PoolTab> {
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(kDefaultMargin / 2),
-        color: kLightBackgroud,
+        color: kLightBackground,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -225,6 +235,23 @@ class _PoolTabState extends State<PoolTab> {
     );
   }
 
+  Container buildHashrateChart(TextStyle bodyText2, SizedBox spacer) {
+    return Container(
+      width: double.infinity,
+      height: 320.0,
+      padding: const EdgeInsets.only(left: 5.0, bottom: 5.0, right: 10.0, top: 10.0),
+      margin: const EdgeInsets.only(
+        left: kDefaultMargin / 2,
+        right: kDefaultMargin / 2,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(kDefaultMargin / 2),
+        color: kLightBackground,
+      ),
+      child: LineChart(_lineChartData())
+    );
+  }
+
   AppBar buildAppBar(TextStyle? bodyText1, TextStyle bodyText2) {
     return AppBar(
       elevation: 0,
@@ -239,7 +266,7 @@ class _PoolTabState extends State<PoolTab> {
           child: Container(
             padding: const EdgeInsets.all(kDefaultMargin / 4),
             decoration: BoxDecoration(
-              color: kLightBackgroud,
+              color: kLightBackground,
               borderRadius: BorderRadius.circular(kDefaultMargin / 2),
             ),
             child: Row(children: [
@@ -470,7 +497,7 @@ class _PoolTabState extends State<PoolTab> {
           left: kDefaultMargin / 2, right: kDefaultMargin / 2, bottom: 10.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(kDefaultMargin / 2),
-        color: kLightBackgroud,
+        color: kLightBackground,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -674,6 +701,198 @@ class _PoolTabState extends State<PoolTab> {
     _isLoading = false;
     setState(() {});
   }
+
+  List<FlSpot>? getHashList() {
+    List? hashList = workerData.data?.hashList;
+    List<FlSpot> chartList = [];
+    double i = 0.0;
+    double cHash;
+
+    if (hashList?.isNotEmpty == true) {
+
+      for (var data in hashList!) {
+        i += 1;
+        if (data > 0) {
+
+          String dts = data.toString();
+          int dtd = int.parse(dts[0]+dts[1]+dts[2]);
+          cHash = dtd / 100;
+        } else {
+          cHash = 0;
+        }
+        var chartSpot = FlSpot(i, cHash);
+        chartList.add(chartSpot);
+      }
+      return chartList;
+
+    } else{
+      return null;
+    }
+
+  }
+
+  LineChartData _lineChartData() {
+
+    return LineChartData(
+      gridData: FlGridData(
+        show: true,
+        drawVerticalLine: true,
+        drawHorizontalLine: true,
+        horizontalInterval: 1,
+        verticalInterval: 2,
+        getDrawingHorizontalLine: (value) {
+          return FlLine(
+            color: kLightText,
+            strokeWidth: 0.25,
+          );
+        },
+        getDrawingVerticalLine: (value) {
+          return FlLine(
+            color: kLightText,
+            strokeWidth: 0.1,
+          );
+        },
+      ),
+      titlesData: FlTitlesData(
+        show: true,
+        rightTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        topTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 22,
+            interval: 1,
+            getTitlesWidget: bottomTitleWidgets,
+          ),
+        ),
+        leftTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            interval: 1,
+            getTitlesWidget: leftTitleWidgets,
+            reservedSize: 25,
+          ),
+        ),
+      ),
+      borderData: FlBorderData(show: false),
+      minX: 0,
+      maxX: 48,
+      minY: 0,
+      maxY: 10,
+      lineBarsData: [
+        LineChartBarData(
+          spots: getHashList() ?? [],
+          isCurved: true,
+          gradient: LinearGradient(
+            colors: gradientColors,
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+          ),
+          barWidth: 2,
+          isStrokeCapRound: true,
+          dotData: FlDotData(
+            show: false,
+          ),
+          belowBarData: BarAreaData(
+            show: true,
+            gradient: LinearGradient(
+              colors: gradientColors
+                  .map((color) => color.withOpacity(0.3))
+                  .toList(),
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget bottomTitleWidgets(double value, TitleMeta meta) {
+
+    DateTime now = DateTime.now();
+    int cHour = int.parse(DateFormat('kk').format(now));
+    List timeList = ['00.00', '06:00', '12:00', '18:00'];
+    final bodyText2 = Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 12.0);
+    Widget text;
+
+    if (cHour >= 0 && cHour < 6) {
+      timeList = ['06:00', '12:00', '18:00', '00:00'];
+    }
+    if (cHour >= 6 && cHour < 12) {
+      timeList = ['12:00', '18:00', '00:00', '06:00'];
+    }
+    if (cHour >= 12 && cHour < 18) {
+      timeList = ['18:00', '00.00', '06:00', '12:00'];
+    }
+    if (cHour >= 18 && cHour < 23) {
+      timeList = ['00.00', '06:00', '12:00', '18:00'];
+    }
+
+    switch (value.toInt()) {
+      case 6:
+        text = Text(timeList[0].toString(), style: bodyText2);
+        break;
+      case 18:
+        text = Text(timeList[1].toString(), style: bodyText2);
+        break;
+      case 30:
+        text = Text(timeList[2].toString(), style: bodyText2);
+        break;
+      case 42:
+        text = Text(timeList[3].toString(), style: bodyText2);
+        break;
+      default:
+        text = Text('', style: bodyText2);
+        break;
+    }
+
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      space: 8.0,
+      child: text,
+    );
+  }
+
+  Widget leftTitleWidgets(double value, TitleMeta meta) {
+    final bodyText = Theme.of(context).textTheme.bodyText2?.copyWith(
+        fontSize: 10.0
+    );
+    String hash = 'H/s';
+    if (coin == 'BCH' || coin == 'BTC') {
+      hash = 'TH/s';
+    } else {
+      hash = 'MH/s';
+    }
+
+    String text;
+    switch (value.toInt()) {
+      case 1:
+        text = '10 $hash';
+        break;
+      case 3:
+        text = '30 $hash';
+        break;
+      case 5:
+        text = '50 $hash';
+        break;
+      case 7:
+        text = '70 $hash';
+        break;
+      case 9:
+        text = '90 $hash';
+        break;
+      default:
+        return Container();
+    }
+
+    return Text(text, style: bodyText, textAlign: TextAlign.center);
+  }
+
 }
 
 class _PoolDataWidget extends StatelessWidget {

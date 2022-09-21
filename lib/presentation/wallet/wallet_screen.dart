@@ -83,7 +83,7 @@ class _WalletTabState extends State<WalletTab> {
         controller: _refreshController,
         onRefresh: _onRefresh,
         child: Container(
-          color: kLightBackgroud,
+          color: kLightBackground,
           child: Column(
             children: [
               Container(

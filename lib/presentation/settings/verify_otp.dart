@@ -128,7 +128,7 @@ class _VerifyOtpState extends State<VerifyOtp> {
         height: 50,
         width: 50,
         child: CircularProgressIndicator.adaptive(
-          backgroundColor: kLightBackgroud,
+          backgroundColor: kLightBackground,
         ),
       ),
     );

@@ -94,7 +94,7 @@ class _Update2FAState extends State<Update2FA> {
         height: 50,
         width: 50,
         child: CircularProgressIndicator.adaptive(
-          backgroundColor: kLightBackgroud,
+          backgroundColor: kLightBackground,
         ),
       ),
     );

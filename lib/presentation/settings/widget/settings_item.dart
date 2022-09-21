@@ -33,7 +33,7 @@ class SettingsItem extends StatelessWidget {
               clipBehavior: Clip.antiAliasWithSaveLayer,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(40),
-                color: kLightBackgroud,
+                color: kLightBackground,
               ),
               child: SvgImage(
                   iconLocation: iconLocation,
@@ -86,7 +86,7 @@ class SettingsItem2 extends StatelessWidget {
               clipBehavior: Clip.antiAliasWithSaveLayer,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(40),
-                color: kLightBackgroud,
+                color: kLightBackground,
               ),
               child: Icon(iconLocation, color: kPrimaryColor),
             ),
