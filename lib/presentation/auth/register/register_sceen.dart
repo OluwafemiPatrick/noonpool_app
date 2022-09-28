@@ -1,10 +1,13 @@
 import 'package:async/async.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:noonpool/helpers/elevated_button.dart';
 import 'package:noonpool/helpers/network_helper.dart';
 import 'package:noonpool/helpers/text_button.dart';
+import 'package:noonpool/main.dart';
 import 'package:noonpool/presentation/auth/register/registration_confirmation_screen.dart';
 import 'package:noonpool/presentation/language/language_changer.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../helpers/constants.dart';
 import '../../../helpers/page_route.dart';
@@ -23,6 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   static const _retypePassword = "retypePassword";
   bool _isHidden = true;
   bool _isLoading = false;
+  bool _hasAcceptedTandC = false;
   CancelableOperation? cancelableFuture;
   final _emailFocusNode = FocusNode();
   final _passwordFocusNode = FocusNode();
@@ -67,6 +71,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if ((isValid ?? false) == false || _isLoading) {
       return;
     }
+
+    if (!_hasAcceptedTandC) {
+      MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
+        SnackBar(
+          content: Text(
+            (AppLocalizations.of(context)?.pleaseAcceptTAndC ?? ''),
+          ),
+        ),
+      );
+      return;
+    }
+
     _formKey.currentState?.save();
     showRegistrationStatus();
   }
@@ -202,6 +218,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(
                   height: kDefaultMargin,
                 ),
+                buildTAndC(bodyText2),
+                const SizedBox(
+                  height: kDefaultMargin,
+                ),
                 buildSignUpButton(bodyText2),
                 const SizedBox(
                   height: kDefaultMargin / 2,
@@ -213,6 +233,74 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
+  }
+
+  Row buildTAndC(TextStyle bodyText2) {
+    return Row(
+      children: [
+        InkWell(
+          splashColor: Colors.transparent,
+          onTap: () {
+            setState(() {
+              _hasAcceptedTandC = !_hasAcceptedTandC;
+            });
+          },
+          child: Container(
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            width: 25,
+            height: 25,
+            decoration: BoxDecoration(
+              color: _hasAcceptedTandC ? kPrimaryColor : Colors.transparent,
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(
+                color: kPrimaryColor,
+              ),
+            ),
+            child: Icon(
+              Icons.check_rounded,
+              size: 18,
+              color: _hasAcceptedTandC ? kLightBackground : Colors.transparent,
+            ),
+          ),
+        ),
+        const SizedBox(
+          width: kDefaultMargin / 2,
+        ),
+        RichText(
+          text: TextSpan(children: [
+            TextSpan(
+                text: (AppLocalizations.of(context)?.iAgreeeToThe ?? '') + ' ',
+                style: bodyText2),
+            TextSpan(
+              text: (AppLocalizations.of(context)?.terms ?? '') + ' ',
+              style: bodyText2.copyWith(color: kPrimaryColor),
+              recognizer: TapGestureRecognizer()
+                ..onTap = () =>
+                    onLinkClicked('https://noonpool.com/terms-of-service/'),
+            ),
+            TextSpan(
+                text: (AppLocalizations.of(context)?.and ?? '') + ' ',
+                style: bodyText2),
+            TextSpan(
+              text: (AppLocalizations.of(context)?.privacyPolicy ?? ''),
+              style: bodyText2.copyWith(color: kPrimaryColor),
+              recognizer: TapGestureRecognizer()
+                ..onTap =
+                    () => onLinkClicked('https://noonpool.com/privacy-policy/'),
+            ),
+            TextSpan(text: " of use", style: bodyText2),
+          ], style: bodyText2),
+          textAlign: TextAlign.center,
+          textScaleFactor: MediaQuery.of(context).textScaleFactor,
+        ),
+      ],
+    );
+  }
+
+  onLinkClicked(String url) async {
+    if (await canLaunchUrlString(url)) {
+      await launchUrlString(url);
+    }
   }
 
   Container buildLanuguageButton(TextStyle bodyText2) {

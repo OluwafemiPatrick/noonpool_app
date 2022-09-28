@@ -180,6 +180,13 @@
 "noonPoolFee":"هزینه NoonPool",
 "updateSuccessful":"بروز رسانی موفق",
 "requestProcessing":"پردازش درخواست",
-"pleaseBePatientWhileWeProcessYourRequest":"لطفا در مدت زمانی که ما درخواست شما را بررسی می کنیم صبور باشید."
+"pleaseBePatientWhileWeProcessYourRequest":"لطفا در مدت زمانی که ما درخواست شما را بررسی می کنیم صبور باشید.",
+
+"pleaseAcceptTAndC": "لطفاً برای ادامه، شرایط برنامه و خط مشی رازداری را بپذیرید",
+ "iAgreeeToThe":"من موافقم",
+ "terms": "مقررات",
+ "and":"و",
+ "privacyPolicy" : "سیاست حفظ حریم خصوصی",
+ "ofUse":"استفاده"
  
 }

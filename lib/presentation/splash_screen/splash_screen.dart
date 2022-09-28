@@ -7,11 +7,9 @@ import 'package:noonpool/helpers/locale_cubit.dart';
 import 'package:noonpool/helpers/page_route.dart';
 import 'package:noonpool/onboarding/onboarding.dart';
 import 'package:noonpool/presentation/settings/update_2fa.dart';
-import 'package:noonpool/presentation/settings/verify_otp.dart';
 
 import '../../helpers/shared_preference_util.dart';
 import '../auth/login/login_sceen.dart';
-import '../main/main_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);

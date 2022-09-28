@@ -6,7 +6,6 @@ import 'package:noonpool/helpers/shared_preference_util.dart';
 import 'package:noonpool/presentation/about_us/about_us_screen.dart';
 import 'package:noonpool/presentation/announcement/announcement_screen.dart';
 import 'package:noonpool/presentation/auth/change_password/change_password.dart';
-import 'package:noonpool/presentation/auth/forgot_password/forgot_password.dart';
 import 'package:noonpool/presentation/calculator/calculator_screen.dart';
 import 'package:noonpool/presentation/language/language_changer.dart';
 import 'package:noonpool/presentation/settings/otp_screen.dart';
@@ -14,6 +13,7 @@ import 'package:noonpool/presentation/settings/widget/settings_item.dart';
 import 'package:noonpool/presentation/splash_screen/splash_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:noonpool/main.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../../helpers/constants.dart';
 import 'verify_otp.dart';
 
@@ -128,6 +128,10 @@ class _SettingsTabState extends State<SettingsTab> {
         mainAxisSize: MainAxisSize.min,
         children: [
           buildAboutItem(),
+          divider,
+          buildTerms(),
+          divider,
+          buildPrivacy(),
           divider,
           buildHelpCenterItem(),
           divider,
@@ -292,6 +296,29 @@ class _SettingsTabState extends State<SettingsTab> {
         },
         title: AppLocalizations.of(context)!.aboutNoonpool,
         iconLocation: 'assets/icons/about.svg');
+  }
+
+  SettingsItem buildTerms() {
+    return SettingsItem(
+        onPressed: () =>
+            onLinkClicked('https://noonpool.com/terms-of-service/'),
+        title: AppLocalizations.of(context)!.terms +
+            " " +
+            AppLocalizations.of(context)!.ofUse,
+        iconLocation: 'assets/icons/security.svg');
+  }
+
+  SettingsItem buildPrivacy() {
+    return SettingsItem(
+        onPressed: () => onLinkClicked('https://noonpool.com/privacy-policy/'),
+        title: AppLocalizations.of(context)!.privacyPolicy,
+        iconLocation: 'assets/icons/security.svg');
+  }
+
+  onLinkClicked(String url) async {
+    if (await canLaunchUrlString(url)) {
+      await launchUrlString(url);
+    }
   }
 
   Card buildFirstCard(Divider divider) {

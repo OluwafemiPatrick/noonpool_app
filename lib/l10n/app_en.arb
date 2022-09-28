@@ -180,8 +180,15 @@
 "noonPoolFee":"NoonPool Fee",
 "updateSuccessful":"Update Successful",
 "requestProcessing":"Request Processing",
-"pleaseBePatientWhileWeProcessYourRequest":"Please be patient while we process your request."
- 
+"pleaseBePatientWhileWeProcessYourRequest":"Please be patient while we process your request.",
+
+
+"pleaseAcceptTAndC": "Please accept the application terms and privacy policy to proceed",
+ "iAgreeeToThe":"I agree to the",
+ "terms": "Terms",
+ "and":"and",
+ "privacyPolicy" : "Privacy Policy",
+ "ofUse":"of use"
 
 
 }

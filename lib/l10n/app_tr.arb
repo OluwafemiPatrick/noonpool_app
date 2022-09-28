@@ -180,6 +180,13 @@
 "noonPoolFee":"ÖğlenHavuz Ücreti",
 "updateSuccessful":"Güncelleme Başarılı",
 "requestProcessing":"Talep İşleme",
-"pleaseBePatientWhileWeProcessYourRequest":"Talebinizi işleme koyarken lütfen sabırlı olun."
+"pleaseBePatientWhileWeProcessYourRequest":"Talebinizi işleme koyarken lütfen sabırlı olun.",
+
+"pleaseAcceptTAndC": "Devam etmek için lütfen başvuru şartlarını ve gizlilik politikasını kabul edin",
+ "iAgreeeToThe":"Katılıyorum",
+ "terms": "Şartlar",
+ "and":"ve",
+ "privacyPolicy" : "Gizlilik Politikası",
+ "ofUse":"kullanım"
  
 }

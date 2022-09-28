@@ -121,11 +121,13 @@
 "stat":"ستات",
 "noWorkerData":"لا توجد بيانات عامل",
 "aNewOtpHasBeenSentToYourAccount":"تم إرسال كلمة مرور OTP جديدة إلى حسابك",
+
 "miningProfit":"ربح التعدين",
 "hashrateTrend":"اتجاه الهاشرات",
 "cummulativeEarnings":"الأرباح التراكمية",
 "h24Profit":"ربح 24 ساعة",
 "estEarning":"EST. أرباح", 
+"h10Min":"10 دقائق",
 "h1Hour":"1 ساعة",
 "h1Day":"يوم 1",
 "statistics":"إحصائيات",
@@ -179,7 +181,14 @@
 "noonPoolFee":"رسوم NoonPool",
 "updateSuccessful":"تم التحديث بنجاح",
 "requestProcessing":"طلب المعالجة",
-"pleaseBePatientWhileWeProcessYourRequest":"يرجى التحلي بالصبر بينما نعالج طلبك."
+"pleaseBePatientWhileWeProcessYourRequest":"يرجى التحلي بالصبر بينما نعالج طلبك.",
+
+"pleaseAcceptTAndC": "يرجى قبول شروط التطبيق وسياسة الخصوصية للمتابعة",
+ "iAgreeeToThe":"أنا أوافق على",
+ "terms": "شروط",
+ "and":"و",
+ "privacyPolicy" : "سياسة الخصوصية",
+ "ofUse":"من الاستخدام"
  
 
 }

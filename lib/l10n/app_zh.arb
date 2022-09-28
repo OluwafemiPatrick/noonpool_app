@@ -180,6 +180,13 @@
 "noonPoolFee":"中午泳池费用",
 "updateSuccessful":"更新成功",
 "requestProcessing":"请求处理",
-"pleaseBePatientWhileWeProcessYourRequest":"在我们处理您的请求时请耐心等待。"
+"pleaseBePatientWhileWeProcessYourRequest":"在我们处理您的请求时请耐心等待。",
+
+"pleaseAcceptTAndC": "请接受申请条款和隐私政策以继续",
+ "iAgreeeToThe":"我同意",
+ "terms": "条款",
+ "and":"和",
+ "privacyPolicy" : "隐私政策",
+ "ofUse":"使用"
  
 }

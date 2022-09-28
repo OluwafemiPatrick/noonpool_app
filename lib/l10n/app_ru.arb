@@ -179,7 +179,13 @@
 "noonPoolFee":"Плата за полдень",
 "updateSuccessful":"Обновление успешно",
 "requestProcessing":"Обработка запроса",
-"pleaseBePatientWhileWeProcessYourRequest":"Пожалуйста, будьте терпеливы в то время как мы обрабатываем Ваш запрос."
- 
+"pleaseBePatientWhileWeProcessYourRequest":"Пожалуйста, будьте терпеливы в то время как мы обрабатываем Ваш запрос.",
+
+ "pleaseAcceptTAndC": "Пожалуйста, примите условия приложения и политику конфиденциальности, чтобы продолжить",
+ "iAgreeeToThe":"я согласен с",
+ "terms": "Условия",
+ "and":"а также",
+ "privacyPolicy" : "Политика конфиденциальности",
+ "ofUse":"использования"
 }
 
