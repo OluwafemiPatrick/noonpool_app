@@ -54,7 +54,7 @@ android {
         applicationId "com.noonpool.app"
         minSdkVersion 21
         targetSdkVersion 32
-        versionCode 7
+        versionCode 9
         versionName flutterVersionName
         multiDexEnabled true
     }
