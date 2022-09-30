@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:new_version/new_version.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -56,8 +56,8 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void showNetworkDialog() {
-    var theme = Theme.of(context).textTheme;
-    var bodyText2 = theme.bodyText2;
+    final theme = Theme.of(context).textTheme;
+    final bodyText2 = theme.bodyText2;
 
     Dialog dialog = Dialog(
       shape: const RoundedRectangleBorder(
@@ -125,6 +125,8 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final newVersion = NewVersion(); //todo remover
+    newVersion.showAlertIfNecessary(context: context);
     List<Map<String, dynamic>> bottomNavItems = [
       {
         "title": AppLocalizations.of(context)!.home,
