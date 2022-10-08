@@ -791,7 +791,7 @@ class _PoolTabState extends State<PoolTab> {
       minX: 0,
       maxX: 48,
       minY: 0,
-      maxY: 10,
+      maxY: 11,
       lineBarsData: [
         LineChartBarData(
           spots: getHashList() ?? [],

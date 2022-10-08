@@ -1,39 +1,40 @@
 import 'dart:convert';
 
 class Message {
-  String? amount;
   String? fee;
   String? rawTrx;
   String? reciepient;
   String? status;
+  String? value;
 
   Message({
-    this.amount,
     this.fee,
     this.rawTrx,
     this.reciepient,
     this.status,
+    this.value
   });
+
 
   @override
   String toString() {
-    return 'Message(amount: $amount, fee: $fee, rawTrx: $rawTrx, reciepient: $reciepient, status: $status)';
+    return 'Message(value: $value, fee: $fee, rawTrx: $rawTrx, reciepient: $reciepient, status: $status)';
   }
 
   factory Message.fromMap(Map<String, dynamic> data) => Message(
-        amount: data['amount'] as String?,
         fee: data['fee'] as String?,
         rawTrx: data['rawTrx'] as String?,
         reciepient: data['reciepient'] as String?,
         status: data['status'] as String?,
+        value: data['value'] as String?,
       );
 
   Map<String, dynamic> toMap() => {
-        'amount': amount,
         'fee': fee,
         'rawTrx': rawTrx,
         'reciepient': reciepient,
         'status': status,
+        'value': value,
       };
 
   /// `dart:convert`
@@ -49,14 +50,14 @@ class Message {
   String toJson() => json.encode(toMap());
 
   Message copyWith({
-    String? amount,
+    String? value,
     String? fee,
     String? rawTrx,
     String? reciepient,
     String? status,
   }) {
     return Message(
-      amount: amount ?? this.amount,
+      value: value ?? this.value,
       fee: fee ?? this.fee,
       rawTrx: rawTrx ?? this.rawTrx,
       reciepient: reciepient ?? this.reciepient,

@@ -30,6 +30,7 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
   final ScrollController _scrollController = ScrollController();
   int currentPage = 0;
   List<Transaction> allTransactions = [];
+
   @override
   void initState() {
     super.initState();
@@ -71,8 +72,8 @@ class _WalletTransactionsScreenState extends State<WalletTransactionsScreen> {
 
       _hasError = false;
 
-// runnig another get request to prevent error on loading more data on page scroll.
-//Page scroll requires that there is enough data for initial scrool.
+// running another get request to prevent error on loading more data on page scroll.
+//Page scroll requires that there is enough data for initial scroll.
       if (allTransactions.isNotEmpty) {
         await getData2();
       }

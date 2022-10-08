@@ -366,11 +366,12 @@ Future<WalletTransactions> getSummaryTransactions({
 
 Future<SendCreationModel> createSendTransaction({
   required String network,
-  required String reciever,
+  required String receiver,
   required double amount,
 }) async {
   final userId = AppPreferences.userId;
-  final newReceiver = reciever.replaceAll("bitcoincash:", "").trim();
+  final newReceiver = receiver.replaceAll("bitcoincash:", "").trim();
+
   try {
     final body = <String, dynamic>{
       "user_id": userId,

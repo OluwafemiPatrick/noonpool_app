@@ -16,7 +16,7 @@ class SubWorker {
   }
 
   factory SubWorker.fromMap(Map<String, dynamic> data) => SubWorker(
-        estEarning: (data['est_earning'] as num?)?.toDouble(),
+        estEarning: (data['est_earnings'] as num?)?.toDouble(),
         hashrate: (data['hashrate'] as num?)?.toDouble(),
         stat: data['stat'] as String?,
         workerId: data['worker_id'] as String?,

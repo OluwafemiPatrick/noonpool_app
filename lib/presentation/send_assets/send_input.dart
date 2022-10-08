@@ -59,12 +59,13 @@ class _SendInputScreenState extends State<SendInputScreen> {
   }
 
   Future showSendAssetStatus() async {
-    final reciever = _initValues[_recipientAddress] ?? '';
+    final receiver = _initValues[_recipientAddress] ?? '';
     final amount = double.tryParse(_initValues[_amount] ?? '') ?? 0;
+
     Navigator.of(context).pushReplacement(CustomPageRoute(
       screen: SendAsset(
         assetDatum: widget.walletDatum,
-        recipientAddress: reciever,
+        recipientAddress: receiver,
         amount: amount,
       ),
     ));

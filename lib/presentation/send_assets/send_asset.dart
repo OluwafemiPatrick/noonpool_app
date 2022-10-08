@@ -34,6 +34,8 @@ class _SendAssetState extends State<SendAsset> {
   bool _priceFetchHasError = false;
 
   SendCreationModel sendCreationModel = SendCreationModel();
+
+
   @override
   void initState() {
     super.initState();
@@ -47,14 +49,15 @@ class _SendAssetState extends State<SendAsset> {
     });
 
     try {
-      final reciever = widget.recipientAddress;
+      final receiver = widget.recipientAddress;
       final network = widget.assetDatum.coinSymbol ?? '';
       final amount = widget.amount;
       sendCreationModel = await createSendTransaction(
-        reciever: reciever,
+        receiver: receiver,
         amount: amount,
         network: network,
       );
+
       _priceFetchHasError = false;
     } catch (exception) {
       MyApp.scaffoldMessengerKey.currentState?.showSnackBar(
@@ -72,9 +75,7 @@ class _SendAssetState extends State<SendAsset> {
     });
   }
 
-  AppBar buildAppBar(
-    TextStyle? bodyText1,
-  ) {
+  AppBar buildAppBar(TextStyle? bodyText1) {
     return AppBar(
       elevation: 0,
       backgroundColor: Colors.transparent,
@@ -224,10 +225,8 @@ class _SendAssetState extends State<SendAsset> {
     );
   }
 
-  SingleChildScrollView buildBody(
-    TextStyle bodyText2,
-    TextStyle? bodyText1,
-  ) {
+  SingleChildScrollView buildBody(TextStyle bodyText2, TextStyle? bodyText1,) {
+
     return SingleChildScrollView(
       padding: const EdgeInsets.only(
         top: 10,
@@ -297,4 +296,5 @@ class _SendAssetState extends State<SendAsset> {
       ),
     );
   }
+
 }
