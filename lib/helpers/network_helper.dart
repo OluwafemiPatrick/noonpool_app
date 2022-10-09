@@ -411,7 +411,7 @@ sendFromWallet({
     final body = <String, dynamic>{
       "id": userId,
       "network": network,
-      "rawTrx": creationModel.message?.rawTrx ?? '',
+      "rawTrx": creationModel.rawTrx ?? '',
     };
 
     final response = await http.post(

@@ -35,7 +35,6 @@ class _SendAssetState extends State<SendAsset> {
 
   SendCreationModel sendCreationModel = SendCreationModel();
 
-
   @override
   void initState() {
     super.initState();
@@ -225,8 +224,10 @@ class _SendAssetState extends State<SendAsset> {
     );
   }
 
-  SingleChildScrollView buildBody(TextStyle bodyText2, TextStyle? bodyText1,) {
-
+  SingleChildScrollView buildBody(
+    TextStyle bodyText2,
+    TextStyle? bodyText1,
+  ) {
     return SingleChildScrollView(
       padding: const EdgeInsets.only(
         top: 10,
@@ -265,15 +266,15 @@ class _SendAssetState extends State<SendAsset> {
                   "${widget.assetDatum.coinName} (${widget.assetDatum.coinSymbol})"),
           ReceiptDetailsTab(
               heading: AppLocalizations.of(context)!.to,
-              tailingText: sendCreationModel.message?.reciepient ?? ''),
+              tailingText: sendCreationModel.reciepient ?? ''),
           ReceiptDetailsTab(
               heading: AppLocalizations.of(context)!.noonPoolFee,
               tailingText:
-                  '-${sendCreationModel.message?.fee} ${widget.assetDatum.coinSymbol}'),
+                  '-${sendCreationModel.fee} ${widget.assetDatum.coinSymbol}'),
           ReceiptDetailsTab(
               heading: AppLocalizations.of(context)!.totalAmount,
               tailingText:
-                  '-${widget.amount - (double.tryParse(sendCreationModel.message?.fee ?? '0.0') ?? 0)} ${widget.assetDatum.coinSymbol}'),
+                  '-${widget.amount - (double.tryParse(sendCreationModel.fee ?? '0.0') ?? 0)} ${widget.assetDatum.coinSymbol}'),
           const SizedBox(
             height: 40,
           ),
@@ -296,5 +297,4 @@ class _SendAssetState extends State<SendAsset> {
       ),
     );
   }
-
 }
