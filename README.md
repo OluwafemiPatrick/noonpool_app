@@ -24,6 +24,14 @@ This project is the mobile interface that allows users to connect to the pool an
 
 Splash Screen                 | Welcome Screen |  Info Page
 :-------------------------:|:--------------:|:-------------------------:
-![](https://github.com/OluwafemiPatrick/noonpool_app/assets/47748923/ae39f196-0551-4db3-88ad-6774d4742fca)|  ![](https://github.com/OluwafemiPatrick/noonpool_app/assets/47748923/ae39f196-0551-4db3-88ad-6774d4742fca)   |![](https://github.com/OluwafemiPatrick/noonpool_app/assets/47748923/7393d715-897c-4a93-bce0-155b2305b306)
+![](https://github.com/OluwafemiPatrick/noonpool_app/assets/47748923/14c9b32e-607c-45ee-ad98-82c5cddf1a5c)|  ![](https://github.com/OluwafemiPatrick/noonpool_app/assets/47748923/53b32f8d-0ce9-402c-9abf-69960ecf0d51)   |![](https://github.com/OluwafemiPatrick/noonpool_app/assets/47748923/9e103794-e5b0-4ed8-8981-891f36cc1f49)
+
+
+
+
+
+
+
+
 
 
