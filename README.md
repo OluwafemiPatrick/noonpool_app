@@ -17,11 +17,13 @@ A mobile app was also developed using Flutter which provides many functionalitie
 - in-built crypto wallet to safely store and transfer user assets.
 - mining calculator to estimate the average earning from devices based on factors such as mining hashrate, network difficulty, electricity usage, etc.
 
-This project is the mobile interface which allows users to connect to the pool and monitor their assets
+This project is the mobile interface that allows users to connect to the pool and monitor their assets
 
 
 ## App Screenshots
 
 Splash Screen                 | Welcome Screen |  Info Page
 :-------------------------:|:--------------:|:-------------------------:
-![](link_1)|  ![](link_2)   |![](link_3)
+![](https://github.com/OluwafemiPatrick/noonpool_app/assets/47748923/ae39f196-0551-4db3-88ad-6774d4742fca)|  ![](https://github.com/OluwafemiPatrick/noonpool_app/assets/47748923/ae39f196-0551-4db3-88ad-6774d4742fca)   |![](https://github.com/OluwafemiPatrick/noonpool_app/assets/47748923/7393d715-897c-4a93-bce0-155b2305b306)
+
+
