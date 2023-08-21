@@ -1,10 +1,14 @@
-import 'package:firebase_core/firebase_core.dart';
+///
+/// Copyright @ Oluwafemi Patrick
+/// Jan 2022
+///
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:noonpool/helpers/locale_cubit.dart';
 import 'package:noonpool/presentation/splash_screen/splash_screen.dart';
-import 'firebase_options.dart';
 import 'helpers/constants.dart';
 import 'helpers/shared_preference_util.dart';
 
@@ -21,7 +25,6 @@ void main() async {
   ));
   //init shared preferences
   await AppPreferences.init();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(
     BlocProvider(
@@ -48,9 +51,8 @@ class MyApp extends StatelessWidget {
       fontFamily: manrope,
       iconTheme: ThemeData.light().iconTheme.copyWith(color: kTextColor),
       textTheme: ThemeData.light().textTheme.copyWith(
-            bodyText1: const TextStyle(
-                fontSize: 15, color: kTextColor, fontWeight: FontWeight.w500),
-            bodyText2: const TextStyle(fontSize: 13, color: kTextColor),
+            bodyLarge: const TextStyle(fontSize: 15, color: kTextColor, fontWeight: FontWeight.w500),
+            bodyMedium: const TextStyle(fontSize: 13, color: kTextColor),
           ),
     );
 

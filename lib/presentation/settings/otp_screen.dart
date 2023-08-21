@@ -216,7 +216,7 @@ class _OtpScreenState extends State<OtpScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            QrImage(
+            QrImageView(
               data: otpUrl,
               version: QrVersions.auto,
               size: 250,

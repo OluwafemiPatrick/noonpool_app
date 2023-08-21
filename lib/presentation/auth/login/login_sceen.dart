@@ -64,24 +64,20 @@ class _LoginScreenState extends State<LoginScreen> {
           loginDetails.userDetails!.verified == null ||
           loginDetails.userDetails!.id == null) {
         MyApp.scaffoldMessengerKey.currentState?.showSnackBar(SnackBar(
-            content: Text(
-                AppLocalizations.of(context)!.anErrorOccurredWhileLogginIn)));
+            content: Text(AppLocalizations.of(context)!.anErrorOccurredWhileLogginIn)));
         return;
       }
 
       if (loginDetails.userDetails!.verified!) {
         proceed() {
-          AppPreferences.setUserName(
-              username: loginDetails.userDetails?.username ?? '');
+          AppPreferences.setUserName(username: loginDetails.userDetails?.username ?? '');
           AppPreferences.setUserLoginData(
               id: loginDetails.userDetails?.id ?? '',
               email: loginDetails.userDetails?.email ?? '',
               currentLoginKey: loginDetails.userDetails?.loginKey ?? '');
           AppPreferences.setLoginStatus(status: true);
           AppPreferences.setOnBoardingStatus(status: true);
-          AppPreferences.set2faSecurityStatus(
-            isEnabled: loginDetails.userDetails!.g2FAEnabled ?? false,
-          );
+          AppPreferences.set2faSecurityStatus(isEnabled: loginDetails.userDetails!.g2FAEnabled ?? false,);
 
           Navigator.of(context).pushAndRemoveUntil(
             CustomPageRoute(
