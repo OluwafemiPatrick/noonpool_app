@@ -1,6 +1,7 @@
 ///
-/// Copyright @ Oluwafemi Patrick
-/// Jan 2022
+/// Written & Developed by Oluwafemi Patrick
+/// Copyright @ Jan 2022
+/// oopatrickk@gmail.com
 ///
 
 
